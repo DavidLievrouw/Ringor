@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <RootNamespace>Dalion.Ringor</RootNamespace>
+  </PropertyGroup>
+
+  <Target Name="InitVersion" BeforeTargets="BeforeBuild">
+    <ReadLinesFromFile File="../Ringor/version.txt">
+      <Output TaskParameter="Lines" PropertyName="ApplicationVersion" />
+    </ReadLinesFromFile>
+    <PropertyGroup>
+      <ProductVersion Condition="'$(ProductVersion)'==''">$(ApplicationVersion).0</ProductVersion>
+      <Version>$(ProductVersion)</Version>
+      <InformationalVersion>$(ProductVersion)</InformationalVersion>
+    </PropertyGroup>
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="CompareNETObjects" Version="4.57.0" />
+    <PackageReference Include="FakeItEasy" Version="5.0.1" />
+    <PackageReference Include="FluentAssertions" Version="5.6.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ringor.Api\Ringor.Api.csproj" />
+    <ProjectReference Include="..\Ringor\Ringor.csproj" />
+  </ItemGroup>
+
+</Project>

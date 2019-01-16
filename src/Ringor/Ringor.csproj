@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <RootNamespace>Dalion.Ringor</RootNamespace>
+  </PropertyGroup>
+
+  <Target Name="InitVersion" BeforeTargets="BeforeBuild">
+    <ReadLinesFromFile File="version.txt">
+      <Output TaskParameter="Lines" PropertyName="ApplicationVersion" />
+    </ReadLinesFromFile>
+    <PropertyGroup>
+      <ProductVersion Condition="'$(ProductVersion)'==''">$(ApplicationVersion).0</ProductVersion>
+      <Version>$(ProductVersion)</Version>
+      <InformationalVersion>$(ProductVersion)</InformationalVersion>
+    </PropertyGroup>
+  </Target>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.Production.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ringor.Api\Ringor.Api.csproj" />
+  </ItemGroup>
+
+  <!-- Delete appsettings.{Environment}.json that are not applicable to the specified environment -->
+  <Target Name="DeleteUnusedAppsettingsFiles" AfterTargets="AfterPublish" Condition="$(PublishEnvironment) != ''">
+    <Message Text="Publish environment: $(PublishEnvironment)" Importance="High" />
+    <Delete Files="$(PublishDir)appsettings.Development.json" Condition="Exists('$(PublishDir)appsettings.Development.json') And $(PublishEnvironment) != 'Development'" />
+    <Delete Files="$(PublishDir)appsettings.Production.json" Condition="Exists('$(PublishDir)appsettings.Production.json') And $(PublishEnvironment) != 'Production'" />
+    <Delete Files="$(PublishUrl)appsettings.Development.json" Condition="Exists('$(PublishUrl)appsettings.Development.json') And $(PublishEnvironment) != 'Development'" />
+    <Delete Files="$(PublishUrl)appsettings.Production.json" Condition="Exists('$(PublishUrl)appsettings.Production.json') And $(PublishEnvironment) != 'Production'" />
+  </Target>
+
+</Project>

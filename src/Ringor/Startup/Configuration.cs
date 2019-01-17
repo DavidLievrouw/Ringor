@@ -6,11 +6,11 @@ namespace Dalion.Ringor.Startup {
         public static IConfigurationRoot BuildConfiguration(BootstrapperSettings settings, string[] args) {
             return new ConfigurationBuilder()
                 .SetBasePath(Path.GetDirectoryName(settings.EntryAssembly.Location))
-                .AddCommandLine(args)
-                .AddEnvironmentVariables()
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{settings.EnvironmentName}.json", true, true)
                 .AddUserSecrets<Program>()
+                .AddCommandLine(args)
+                .AddEnvironmentVariables()
                 .Build();
         }
     }

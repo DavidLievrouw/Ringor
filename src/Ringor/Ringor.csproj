@@ -5,6 +5,7 @@
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>Dalion.Ringor</RootNamespace>
+    <UserSecretsId>a696471a-0078-4da7-a0b4-9e03d13fb1d3</UserSecretsId>
   </PropertyGroup>
 
   <Target Name="InitVersion" BeforeTargets="BeforeBuild">

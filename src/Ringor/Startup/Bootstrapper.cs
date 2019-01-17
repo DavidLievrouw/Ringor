@@ -73,7 +73,7 @@ namespace Dalion.Ringor.Startup {
                     s.AddSingleton(settings);
                 })
                 .UseStartup<WebHostStartup>()
-                .ConfigureServices((ctx, s) => Composition.ConfigureServices(s, ctx, configuration))
+                .ConfigureServices((ctx, s) => Composition.ConfigureServices(s, ctx, configuration, settings))
                 .Build();
         }
     }

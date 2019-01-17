@@ -8,6 +8,14 @@
     <UserSecretsId>a696471a-0078-4da7-a0b4-9e03d13fb1d3</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Workspace\Ringor\src\Ringor\Ringor.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Workspace\Ringor\src\Ringor\Ringor.xml</DocumentationFile>
+  </PropertyGroup>
+
   <Target Name="InitVersion" BeforeTargets="BeforeBuild">
     <ReadLinesFromFile File="version.txt">
       <Output TaskParameter="Lines" PropertyName="ApplicationVersion" />
@@ -34,6 +42,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>

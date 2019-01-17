@@ -33,7 +33,10 @@ namespace Dalion.Ringor.Startup {
         public void Configure(IApplicationBuilder app) {
             if (_environment.IsDevelopmentOrDebug()) app.UseDeveloperExceptionPage();
 
-            app.UseMvc();
+            app
+                .UseMvc()
+                .UseStaticFiles()
+                .UseSwagger();
         }
     }
 }

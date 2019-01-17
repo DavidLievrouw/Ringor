@@ -13,11 +13,6 @@ namespace Dalion.Ringor.Startup {
                     c.SwaggerEndpoint("/swagger/v" + appVersion.ToString(2) + "/swagger.json", "Ringor API v" + appVersion.ToString(2));
                     c.OAuthClientId(authenticationSettings.ClientId);
                     c.OAuthAppName("Ringor Swagger UI");
-
-                    //c.OAuthClientSecret("test-secret");
-                    c.OAuthRealm("ringor-realm");
-                    c.OAuthScopeSeparator(" ");
-                    c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
                 });
         }
     }

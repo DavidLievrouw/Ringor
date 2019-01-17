@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
+using Dalion.Ringor.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -57,7 +58,7 @@ namespace Dalion.Ringor.Startup {
             return services;
         }
 
-        public static IServiceCollection AddSwagger(this IServiceCollection services, BootstrapperSettings bootstrapperSettings) {
+        public static IServiceCollection AddSwagger(this IServiceCollection services, BootstrapperSettings bootstrapperSettings, AuthenticationSettings authSettings) {
             var appVersion = bootstrapperSettings.EntryAssembly.GetName().Version;
             return services.AddSwaggerGen(c => {
                 c.SwaggerDoc(
@@ -73,6 +74,16 @@ namespace Dalion.Ringor.Startup {
                 c.IncludeXmlComments(Path.Combine(pathToContentRoot, assemblyName + ".xml"));
                 c.DescribeAllEnumsAsStrings();
                 c.DescribeStringEnumsInCamelCase();
+
+                var authority = (authSettings.SignInEndpoint?.AbsoluteUri?.TrimEnd('/') ?? string.Empty) + '/' + (authSettings.Tenant ?? string.Empty);
+                c.AddSecurityDefinition("oauth2", new OAuth2Scheme {
+                    Flow = "implicit",
+                    AuthorizationUrl = $"{authority}/oauth2/authorize",
+                    Scopes = new Dictionary<string, string> {
+                        {"ringor_api", "Ringor API - full access"}
+                    }
+                });
+                c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
         }
     }

@@ -14,7 +14,7 @@ namespace Dalion.Ringor.Startup {
             // Features and services
             services
                 .AddAzureAdAuthentication(authSettings)
-                .AddSwagger(bootstrapperSettings)
+                .AddSwagger(bootstrapperSettings, authSettings)
                 .AddApplicationInfo();
         }
     }

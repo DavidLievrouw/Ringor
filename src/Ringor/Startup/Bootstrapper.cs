@@ -61,8 +61,9 @@ namespace Dalion.Ringor.Startup {
 
         private static IWebHost BuildWebHost(IConfigurationRoot configuration, BootstrapperSettings settings) {
             return new WebHostBuilder()
-                .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseKestrel()
+                .UseIIS()
                 .UseIISIntegration()
                 .CaptureStartupErrors(true)
                 .UseSetting(WebHostDefaults.DetailedErrorsKey, settings.UseDetailedErrors.ToString())

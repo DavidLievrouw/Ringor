@@ -7,8 +7,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Dalion.Ringor.Swagger {
     internal class AuthorizeCheckOperationFilter : IOperationFilter {
         public void Apply(Operation operation, OperationFilterContext context) {
-            var hasAuthorizeAttribute = context.MethodInfo
-                .GetCustomAttributes(typeof(AuthorizeAttribute), true)
+            var hasAuthorizeAttribute = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
+                .Union(context.MethodInfo.GetCustomAttributes(true))
                 .OfType<AuthorizeAttribute>()
                 .Any();
 

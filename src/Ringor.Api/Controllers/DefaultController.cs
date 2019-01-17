@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dalion.Ringor.Api.Controllers {
     [Route("api")]
-    [Authorize]
+    [AllowAnonymous]
     public class DefaultController : Controller {
         private readonly IApplicationInfoProvider _applicationInfoProvider;
 
@@ -15,7 +15,6 @@ namespace Dalion.Ringor.Api.Controllers {
         }
 
         [HttpGet("")]
-        [AllowAnonymous]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ApplicationInfo), 200)]
         public IActionResult GetDefault() {

@@ -70,8 +70,7 @@ namespace Dalion.Ringor.Startup {
                     "v" + appVersion.ToString(2),
                     new Info {
                         Title = "Ringor API",
-                        Version = appVersion.ToString(2),
-                        TermsOfService = "None"
+                        Version = appVersion.ToString(2)
                     });
                 var pathToAddOn = bootstrapperSettings.EntryAssembly.Location;
                 var pathToContentRoot = Path.GetDirectoryName(pathToAddOn);

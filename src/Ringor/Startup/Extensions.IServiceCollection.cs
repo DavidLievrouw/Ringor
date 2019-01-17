@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
 using Dalion.Ringor.Swagger;
@@ -75,13 +76,11 @@ namespace Dalion.Ringor.Startup {
                 c.DescribeAllEnumsAsStrings();
                 c.DescribeStringEnumsInCamelCase();
 
-                var authority = (authSettings.SignInEndpoint?.AbsoluteUri?.TrimEnd('/') ?? string.Empty) + '/' + (authSettings.Tenant ?? string.Empty);
+                var authority = (authSettings.Swagger.SignInEndpoint?.AbsoluteUri?.TrimEnd('/') ?? string.Empty) + '/' + (authSettings.Swagger.Tenant ?? string.Empty);
                 c.AddSecurityDefinition("oauth2", new OAuth2Scheme {
                     Flow = "implicit",
                     AuthorizationUrl = $"{authority}/oauth2/authorize",
-                    Scopes = new Dictionary<string, string> {
-                        {"ringor_api", "Ringor API - full access"}
-                    }
+                    Scopes = authSettings.Swagger.Scopes?.ToDictionary(s => s.Scope, s => s.Description)
                 });
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
             });

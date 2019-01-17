@@ -1,4 +1,5 @@
 ﻿using Dalion.Ringor.Configuration;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ namespace Dalion.Ringor.Startup {
 
             // Features and services
             services
+                .AddHttpsRedirection(options => {})
                 .AddAzureAdAuthentication(authSettings)
                 .AddSwagger(bootstrapperSettings, authSettings)
                 .AddApplicationInfo();

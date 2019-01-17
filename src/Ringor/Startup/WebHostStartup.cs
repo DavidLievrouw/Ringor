@@ -35,6 +35,7 @@ namespace Dalion.Ringor.Startup {
             if (_environment.IsDevelopmentOrDebug()) app.UseDeveloperExceptionPage();
 
             app
+                .UseHttpsRedirection()
                 .UseMvc()
                 .UseStaticFiles()
                 .UseSwagger(app.ApplicationServices.GetService<AuthenticationSettings>());

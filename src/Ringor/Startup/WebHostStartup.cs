@@ -36,6 +36,7 @@ namespace Dalion.Ringor.Startup {
 
             app
                 .UseHttpsRedirection()
+                .UseAuthentication() // Very important that this is called before anything that will require authentication
                 .UseMvc()
                 .UseStaticFiles()
                 .UseSwagger(app.ApplicationServices.GetService<AuthenticationSettings>());

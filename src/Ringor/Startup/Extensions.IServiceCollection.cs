@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Dalion.Ringor.Api.Security;
 using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
 using Dalion.Ringor.Swagger;
@@ -40,7 +41,10 @@ namespace Dalion.Ringor.Startup {
             if (authSettings == null) throw new ArgumentNullException(nameof(authSettings));
 
             services
-                .AddAuthorization()
+                .AddAuthorization(options => {
+                    options.AddPolicy(AuthorizationPolicies.RequireApiAccess, policy => policy.RequireClaim(Constants.ClaimTypes.Scope, "Api.FullAccess"));
+                    options.DefaultPolicy = options.GetPolicy(AuthorizationPolicies.RequireApiAccess);
+                })
                 .AddAuthentication(o => { o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
                 .AddJwtBearer(o => {
                     o.Authority = (authSettings.SignInEndpoint?.AbsoluteUri?.TrimEnd('/') ?? string.Empty) + '/' + (authSettings.Tenant ?? string.Empty);

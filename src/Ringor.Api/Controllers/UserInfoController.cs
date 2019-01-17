@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Dalion.Ringor.Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,8 @@ namespace Dalion.Ringor.Api.Controllers {
         [ProducesResponseType(404)]
         public IActionResult GetUserClaimsByType(string claimType) {
             if (string.IsNullOrEmpty(claimType)) return NotFound();
+
+            claimType = WebUtility.UrlDecode(claimType);
 
             var allClaimValues = User.Claims
                 .Select(c => new {

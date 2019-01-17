@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +31,8 @@ namespace Dalion.Ringor.Api.Controllers {
                 var actual = _sut.GetUserClaims();
                 actual.Should().BeOfType<OkObjectResult>();
                 var expectedPayload = new[] {
-                    new {Type = "c1", Value = "v1"},
-                    new {Type = "c2", Value = "v2"}
+                    new Models.Claim {Type = "c1", Value = "v1"},
+                    new Models.Claim {Type = "c2", Value = "v2"}
                 };
                 actual.As<OkObjectResult>().Value.Should().BeEquivalentTo(expectedPayload);
             }
@@ -71,7 +72,7 @@ namespace Dalion.Ringor.Api.Controllers {
                 actual.Should().BeOfType<OkObjectResult>();
                 var actualPayload = actual.As<OkObjectResult>().Value;
                 var expectedPayload = new[] {
-                    new {Type = "c1", Value = "v1"}
+                    new Models.Claim {Type = "c1", Value = "v1"}
                 };
                 actualPayload.Should().BeEquivalentTo(expectedPayload);
             }
@@ -82,10 +83,24 @@ namespace Dalion.Ringor.Api.Controllers {
                 actual.Should().BeOfType<OkObjectResult>();
                 var actualPayload = actual.As<OkObjectResult>().Value;
                 var expectedPayload = new[] {
-                    new {Type = "c2", Value = "v2"},
-                    new {Type = "c2", Value = "v3"}
+                    new Models.Claim {Type = "c2", Value = "v2"},
+                    new Models.Claim {Type = "c2", Value = "v3"}
                 };
-                actual.As<OkObjectResult>().Value.Should().BeEquivalentTo(expectedPayload);
+                actualPayload.Should().BeEquivalentTo(expectedPayload);
+            }
+
+            [Fact]
+            public void UrlDecodesClaimType() {
+                _sut.ControllerContext.HttpContext.User.Identities.First()
+                    .AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", "test@recomatics.com"));
+                var actual = _sut.GetUserClaimsByType("http:%2F%2Fschemas.xmlsoap.org%2Fws%2F2005%2F05%2Fidentity%2Fclaims%2Femailaddress");
+
+                actual.Should().BeOfType<OkObjectResult>();
+                var actualPayload = actual.As<OkObjectResult>().Value;
+                var expectedPayload = new[] {
+                    new Models.Claim {Type = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", Value = "test@recomatics.com"}
+                };
+                actualPayload.Should().BeEquivalentTo(expectedPayload);
             }
         }
     }

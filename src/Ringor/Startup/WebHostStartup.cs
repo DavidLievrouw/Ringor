@@ -1,5 +1,6 @@
 ﻿using System;
 using Dalion.Ringor.Api.Controllers;
+using Dalion.Ringor.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace Dalion.Ringor.Startup {
             app
                 .UseMvc()
                 .UseStaticFiles()
-                .UseSwagger();
+                .UseSwagger(app.ApplicationServices.GetService<AuthenticationSettings>());
         }
     }
 }

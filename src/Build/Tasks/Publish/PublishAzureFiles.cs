@@ -7,13 +7,13 @@ using Cake.Frosting;
 using Dalion.Ringor.Build.Tasks.Restore;
 
 namespace Dalion.Ringor.Build.Tasks.Publish {
-    [TaskName(nameof(PublishAzure))]
+    [TaskName(nameof(PublishAzureFiles))]
     [Dependency(typeof(RestorePackages))]
-    public sealed class PublishAzure : FrostingTask<Context> {
+    public sealed class PublishAzureFiles : FrostingTask<Context> {
         public override void Run(Context context) {
             var msBuildSettings = new DotNetCoreMSBuildSettings();
             msBuildSettings.Properties.Add("PublishEnvironment", new[] {context.Ringor.Arguments.Environment});
-            msBuildSettings.Properties.Add("PublishProfile", new[] {"Properties\\PublishProfiles\\Azure.pubxml"});
+            msBuildSettings.Properties.Add("PublishProfile", new[] {"Properties\\PublishProfiles\\AzureFiles.pubxml"});
 
             // Suppress warning for conflicting dependency versions. 
             // This warning is not applicable for NETSTANDARD projects, apparently.

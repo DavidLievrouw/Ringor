@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Dalion.Ringor.Api</RootNamespace>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>.\bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <Target Name="InitVersion" BeforeTargets="BeforeBuild">
@@ -14,6 +21,7 @@
       <Version>$(ProductVersion)</Version>
       <InformationalVersion>$(ProductVersion)</InformationalVersion>
     </PropertyGroup>
+    <Message Text="The Ringor application version is '$(ApplicationVersion)'." Importance="High" />
   </Target>
   
   <ItemGroup>

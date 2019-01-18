@@ -13,8 +13,8 @@ namespace Dalion.Ringor.Swagger {
                 .Any();
 
             if (hasAuthorizeAttribute) {
-                operation.Responses.Add("401", new Response {Description = "Unauthorized"});
-                operation.Responses.Add("403", new Response {Description = "Forbidden"});
+                operation.Responses.Add("401", new Response {Description = "When there is no authenticated user or the authentication failed (Unauthorized)."});
+                operation.Responses.Add("403", new Response {Description = "When the authenticated user is not allowed to perform this request (Forbidden)"});
 
                 operation.Security = new List<IDictionary<string, IEnumerable<string>>> {
                     new Dictionary<string, IEnumerable<string>> {{"oauth2", new[] {"ringor_api"}}}

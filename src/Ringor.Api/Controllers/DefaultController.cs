@@ -13,7 +13,12 @@ namespace Dalion.Ringor.Api.Controllers {
         public DefaultController(IApplicationInfoProvider applicationInfoProvider) {
             _applicationInfoProvider = applicationInfoProvider ?? throw new ArgumentNullException(nameof(applicationInfoProvider));
         }
-
+        
+        /// <summary>
+        /// Get the general application information.
+        /// </summary>
+        /// <returns>The general application information.</returns>
+        /// <response code="200">Returns the general application info.</response>
         [HttpGet("")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ApplicationInfo), 200)]

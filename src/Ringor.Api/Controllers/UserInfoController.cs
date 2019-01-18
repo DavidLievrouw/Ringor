@@ -9,6 +9,11 @@ namespace Dalion.Ringor.Api.Controllers {
     [Route("api/userinfo")]
     [Authorize]
     public class UserInfoController : Controller {
+        /// <summary>
+        /// Get the claims of the current authenticated user.
+        /// </summary>
+        /// <returns>The claims of the current authenticated user.</returns>
+        /// <response code="200">Returns the claims of the current authenticated user.</response>
         [HttpGet("")]
         [Authorize]
         [Produces("application/json")]
@@ -20,6 +25,13 @@ namespace Dalion.Ringor.Api.Controllers {
             }));
         }
 
+        /// <summary>
+        /// Get the claims of the specified type of the current authenticated user.
+        /// </summary>
+        /// <param name="claimType">The type of the claims to query.</param>
+        /// <returns>The claims of the current authenticated user of the specified type.</returns>
+        /// <response code="200">Returns the claims of the current authenticated user of the specified type.</response>
+        /// <response code="404">When the authenticated user has no claims of the specified type.</response>
         [HttpGet("{claimType}")]
         [Authorize]
         [Produces("application/json")]

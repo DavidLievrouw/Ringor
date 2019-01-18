@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Dalion.Ringor.Api.Controllers;
 using Dalion.Ringor.Api.Security;
 using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
@@ -76,6 +77,8 @@ namespace Dalion.Ringor.Startup {
                 var pathToContentRoot = Path.GetDirectoryName(pathToAddOn);
                 var assemblyName = Path.GetFileNameWithoutExtension(pathToAddOn);
                 c.IncludeXmlComments(Path.Combine(pathToContentRoot, assemblyName + ".xml"));
+                var apiAssemblyName = Path.GetFileNameWithoutExtension(typeof(DefaultController).Assembly.Location);
+                c.IncludeXmlComments(Path.Combine(pathToContentRoot, apiAssemblyName + ".xml"));
                 c.DescribeAllEnumsAsStrings();
                 c.DescribeStringEnumsInCamelCase();
 

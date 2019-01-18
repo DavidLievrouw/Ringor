@@ -45,6 +45,8 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+    
+    <DotNetCliToolReference Include="Microsoft.DotNet.Xdt.Tools" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,6 +60,19 @@
     <Delete Files="$(PublishDir)appsettings.Production.json" Condition="'$(PublishDir)' != '' And Exists('$(PublishDir)appsettings.Production.json') And '$(PublishEnvironment)' != 'Production'" />
     <Delete Files="$(PublishUrl)appsettings.Development.json" Condition="'$(PublishUrl)' != '' And Exists('$(PublishUrl)appsettings.Development.json') And '$(PublishEnvironment)' != 'Development'" />
     <Delete Files="$(PublishUrl)appsettings.Production.json" Condition="'$(PublishUrl)' != '' And Exists('$(PublishUrl)appsettings.Production.json') And '$(PublishEnvironment)' != 'Production'" />
+  </Target>
+
+  <!-- Transform web.config using web.{Environment}.config -->
+  <Target Name="ApplyXdtConfigTransformBefore" BeforeTargets="_TransformWebConfig" Condition="'$(PublishEnvironment)' != ''">
+    <Message Text="Configuration for web.config transformation: $(PublishEnvironment)" Importance="High" />
+    <PropertyGroup>
+      <_SourceWebConfig>$(MSBuildProjectDirectory)\web.config</_SourceWebConfig>
+      <_XdtTransform>$(MSBuildProjectDirectory)\web.$(PublishEnvironment).config</_XdtTransform>
+      <_TargetWebConfig>$(PublishDir)web.config</_TargetWebConfig>
+    </PropertyGroup>
+    <Exec Command="dotnet transform-xdt --xml &quot;$(_SourceWebConfig)&quot; --transform &quot;$(_XdtTransform)&quot; --output &quot;$(_TargetWebConfig)&quot;" Condition="Exists('$(_XdtTransform)')" />
+    <Delete Files="$(PublishDir)web.Development.config" Condition="Exists('$(PublishDir)web.Development.config')" />
+    <Delete Files="$(PublishDir)web.Production.config" Condition="Exists('$(PublishDir)web.Production.config')" />
   </Target>
 
 </Project>

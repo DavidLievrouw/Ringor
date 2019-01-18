@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Build": {
+      "commandName": "Project",
+      "commandLineArgs": "--interactive",
+      "workingDirectory": "C:\\Workspace\\Ringor"
+    }
+  }
+}

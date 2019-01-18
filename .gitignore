@@ -319,3 +319,6 @@ ASALocalRun/
 
 # git merges
 *.orig
+
+# Publish targets
+dist/

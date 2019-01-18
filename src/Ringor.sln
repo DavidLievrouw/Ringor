@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ringor", "Ringor\Ringor.csproj", "{59357730-9495-4F38-BF94-DB822FC33FDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ringor", "Ringor\Ringor.csproj", "{59357730-9495-4F38-BF94-DB822FC33FDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ringor.Tests", "Ringor.Tests\Ringor.Tests.csproj", "{69650B8C-A080-47EF-80D4-8FF110CF71E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ringor.Tests", "Ringor.Tests\Ringor.Tests.csproj", "{69650B8C-A080-47EF-80D4-8FF110CF71E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ringor.Api", "Ringor.Api\Ringor.Api.csproj", "{37D4A4CF-321E-4AD8-A892-7BA3B20D2C09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ringor.Api", "Ringor.Api\Ringor.Api.csproj", "{37D4A4CF-321E-4AD8-A892-7BA3B20D2C09}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Build", "Build\Build.csproj", "{0AC810AC-C061-4016-ABB8-47411ED8D402}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,14 @@ Global
 		{37D4A4CF-321E-4AD8-A892-7BA3B20D2C09}.Release|x64.Build.0 = Release|Any CPU
 		{37D4A4CF-321E-4AD8-A892-7BA3B20D2C09}.Release|x86.ActiveCfg = Release|Any CPU
 		{37D4A4CF-321E-4AD8-A892-7BA3B20D2C09}.Release|x86.Build.0 = Release|Any CPU
+		{0AC810AC-C061-4016-ABB8-47411ED8D402}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{0AC810AC-C061-4016-ABB8-47411ED8D402}.Debug|x64.ActiveCfg = Debug|x64
+		{0AC810AC-C061-4016-ABB8-47411ED8D402}.Debug|x64.Build.0 = Debug|x64
+		{0AC810AC-C061-4016-ABB8-47411ED8D402}.Debug|x86.ActiveCfg = Debug|x64
+		{0AC810AC-C061-4016-ABB8-47411ED8D402}.Release|Any CPU.ActiveCfg = Release|x64
+		{0AC810AC-C061-4016-ABB8-47411ED8D402}.Release|x64.ActiveCfg = Release|x64
+		{0AC810AC-C061-4016-ABB8-47411ED8D402}.Release|x64.Build.0 = Release|x64
+		{0AC810AC-C061-4016-ABB8-47411ED8D402}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

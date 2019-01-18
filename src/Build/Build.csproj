@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net471</TargetFramework>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <RootNamespace>Dalion.Ringor.Build</RootNamespace>
+    <AssemblyName>Build</AssemblyName>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="tools\**" />
+    <EmbeddedResource Remove="tools\**" />
+    <None Remove="tools\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Cake.Compression" Version="0.2.1" />
+    <PackageReference Include="Cake.FileHelpers" Version="3.1.0" />
+    <PackageReference Include="Cake.Frosting" Version="0.31.0" />
+    <PackageReference Include="CommandLineParser" Version="2.3.65" />
+  </ItemGroup>
+</Project>

@@ -52,12 +52,12 @@
   </ItemGroup>
 
   <!-- Delete appsettings.{Environment}.json that are not applicable to the specified environment -->
-  <Target Name="DeleteUnusedAppsettingsFiles" AfterTargets="AfterPublish" Condition="$(PublishEnvironment) != ''">
+  <Target Name="DeleteUnusedAppsettingsFiles" AfterTargets="AfterPublish" Condition="'$(PublishEnvironment)' != ''">
     <Message Text="Publish environment: $(PublishEnvironment)" Importance="High" />
-    <Delete Files="$(PublishDir)appsettings.Development.json" Condition="Exists('$(PublishDir)appsettings.Development.json') And $(PublishEnvironment) != 'Development'" />
-    <Delete Files="$(PublishDir)appsettings.Production.json" Condition="Exists('$(PublishDir)appsettings.Production.json') And $(PublishEnvironment) != 'Production'" />
-    <Delete Files="$(PublishUrl)appsettings.Development.json" Condition="Exists('$(PublishUrl)appsettings.Development.json') And $(PublishEnvironment) != 'Development'" />
-    <Delete Files="$(PublishUrl)appsettings.Production.json" Condition="Exists('$(PublishUrl)appsettings.Production.json') And $(PublishEnvironment) != 'Production'" />
+    <Delete Files="$(PublishDir)appsettings.Development.json" Condition="'$(PublishDir)' != '' And Exists('$(PublishDir)appsettings.Development.json') And '$(PublishEnvironment)' != 'Development'" />
+    <Delete Files="$(PublishDir)appsettings.Production.json" Condition="'$(PublishDir)' != '' And Exists('$(PublishDir)appsettings.Production.json') And '$(PublishEnvironment)' != 'Production'" />
+    <Delete Files="$(PublishUrl)appsettings.Development.json" Condition="'$(PublishUrl)' != '' And Exists('$(PublishUrl)appsettings.Development.json') And '$(PublishEnvironment)' != 'Development'" />
+    <Delete Files="$(PublishUrl)appsettings.Production.json" Condition="'$(PublishUrl)' != '' And Exists('$(PublishUrl)appsettings.Production.json') And '$(PublishEnvironment)' != 'Production'" />
   </Target>
 
 </Project>

@@ -1,5 +1,5 @@
 ﻿namespace Dalion.Ringor.Api.Models.Links {
-    public enum ApplicationInfoHyperlinkType {
+    public enum ApiHomeResponseHyperlinkType {
         Self,
         GetUserInfo
     }

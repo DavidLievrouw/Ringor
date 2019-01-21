@@ -95,7 +95,7 @@ namespace Dalion.Ringor.Startup {
             return services
                 .AddSingleton<IApplicationUriResolver, ApplicationUriResolver>()
                 .AddSingleton<IHyperlinkFactory, HyperlinkFactory>()
-                .AddSingleton<IApplicationInfoLinksCreatorFactory, ApplicationInfoLinksCreatorFactory>();
+                .AddSingleton<IApiHomeResponseLinksCreatorFactory, ApiHomeResponseLinksCreatorFactory>();
         }
     }
 }

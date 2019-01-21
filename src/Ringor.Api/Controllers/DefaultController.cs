@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Dalion.Ringor.Api.Models;
 using Dalion.Ringor.Api.Models.Links;
 using Dalion.Ringor.Api.Services;
@@ -10,24 +11,27 @@ namespace Dalion.Ringor.Api.Controllers {
     [AllowAnonymous]
     public class DefaultController : Controller {
         private readonly IApplicationInfoProvider _applicationInfoProvider;
-        private readonly IApplicationInfoLinksCreatorFactory _applicationInfoLinksCreatorFactory;
+        private readonly IApiHomeResponseLinksCreatorFactory _apiHomeResponseLinksCreatorFactory;
 
-        public DefaultController(IApplicationInfoProvider applicationInfoProvider, IApplicationInfoLinksCreatorFactory applicationInfoLinksCreatorFactory) {
+        public DefaultController(IApplicationInfoProvider applicationInfoProvider, IApiHomeResponseLinksCreatorFactory apiHomeResponseLinksCreatorFactory) {
             _applicationInfoProvider = applicationInfoProvider ?? throw new ArgumentNullException(nameof(applicationInfoProvider));
-            _applicationInfoLinksCreatorFactory = applicationInfoLinksCreatorFactory ?? throw new ArgumentNullException(nameof(applicationInfoLinksCreatorFactory));
+            _apiHomeResponseLinksCreatorFactory = apiHomeResponseLinksCreatorFactory ?? throw new ArgumentNullException(nameof(apiHomeResponseLinksCreatorFactory));
         }
         
         /// <summary>
-        /// Get the general application information.
+        /// Get the API root, including the general application information.
         /// </summary>
-        /// <returns>The general application information.</returns>
-        /// <response code="200">Returns the general application info.</response>
+        /// <returns>The API root, including the general application information.</returns>
+        /// <response code="200">Returns the API root, including the general application information.</response>
         [HttpGet("")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ApplicationInfo), 200)]
-        public IActionResult GetDefault() {
-            var applicationInfo = _applicationInfoProvider.Provide();
-            return Ok();
+        [ProducesResponseType(typeof(ApiHomeResponse), 200)]
+        public async Task<IActionResult> GetDefault() {
+            var response = new ApiHomeResponse {
+                ApplicationInfo = _applicationInfoProvider.Provide()
+            };
+            await _apiHomeResponseLinksCreatorFactory.Create().CreateLinksFor(response);
+            return Ok(response);
         }
     }
 }

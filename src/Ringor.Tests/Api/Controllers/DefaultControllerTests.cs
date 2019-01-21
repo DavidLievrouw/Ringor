@@ -1,4 +1,7 @@
-﻿using Dalion.Ringor.Api.Models;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
+using Dalion.Ringor.Api.Models;
+using Dalion.Ringor.Api.Models.Links;
 using Dalion.Ringor.Api.Services;
 using FakeItEasy;
 using FluentAssertions;
@@ -7,12 +10,13 @@ using Xunit;
 
 namespace Dalion.Ringor.Api.Controllers {
     public class DefaultControllerTests {
+        private readonly IApiHomeResponseLinksCreatorFactory _apiHomeResponseLinksCreatorFactory;
         private readonly IApplicationInfoProvider _applicationInfoProvider;
         private readonly DefaultController _sut;
 
         public DefaultControllerTests() {
-            FakeFactory.Create(out _applicationInfoProvider);
-            _sut = new DefaultController(_applicationInfoProvider);
+            FakeFactory.Create(out _applicationInfoProvider, out _apiHomeResponseLinksCreatorFactory);
+            _sut = new DefaultController(_applicationInfoProvider, _apiHomeResponseLinksCreatorFactory);
         }
 
         public class GetDefault : DefaultControllerTests {
@@ -32,10 +36,28 @@ namespace Dalion.Ringor.Api.Controllers {
             }
 
             [Fact]
-            public void ReturnsOkWithApplicationInfo() {
-                var actual = _sut.GetDefault();
+            public async Task ReturnsOkWithExpectedApiHomeResponse() {
+                var linksCreator = A.Fake<ILinksCreator<ApiHomeResponse>>();
+                A.CallTo(() => _apiHomeResponseLinksCreatorFactory.Create())
+                    .Returns(linksCreator);
+                var links = new[] {
+                    new Hyperlink<ApiHomeResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api", ApiHomeResponseHyperlinkType.Self),
+                    new Hyperlink<ApiHomeResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api/userinfo", ApiHomeResponseHyperlinkType.GetUserInfo)
+                };
+                A.CallTo(() => linksCreator.CreateLinksFor(A<ApiHomeResponse>._))
+                    .Invokes(call => {
+                        var response = call.GetArgument<ApiHomeResponse>(0);
+                        response.Links = links;
+                    });
+
+                var actual = await _sut.GetDefault();
+
                 actual.Should().BeOfType<OkObjectResult>();
-                actual.As<OkObjectResult>().Value.Should().BeEquivalentTo(_applicationInfo);
+                var expected = new ApiHomeResponse {
+                    ApplicationInfo = _applicationInfo,
+                    Links = links
+                };
+                actual.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected);
             }
         }
     }

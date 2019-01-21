@@ -12,13 +12,13 @@ export class App extends React.Component {
     };
   }
 
-  callApiEndpoint(url, secure) {
+  callApiEndpoint(url) {
     this.setState({
       callResult: null,
       isLoading: true
     });
 
-    this.apiClient.get(url, null, secure)
+    this.apiClient.get(url, null)
       .then(result => {
         if (!result.ok) throw new Error(`Call to ${url} failed: ${result.status} - ${result.statusText}.`);
         return result.json();
@@ -52,7 +52,7 @@ export class App extends React.Component {
       <div>
         <h1>Hi!</h1>
         <div className="container">
-          <div className="item"><button onClick={() => this.callApiEndpoint('/api', false)}>Call the api home endpoint (unsecure)</button></div>
+          <div className="item"><button onClick={() => this.callApiEndpoint('/api')}>Call the api home endpoint (unsecure)</button></div>
         </div>
         <div className="container">
           <div className="item">{callResultElement}</div>

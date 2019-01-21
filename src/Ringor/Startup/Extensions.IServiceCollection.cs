@@ -4,6 +4,7 @@ using System.IO;
 using Dalion.Ringor.Api.Controllers;
 using Dalion.Ringor.Api.Models.Links;
 using Dalion.Ringor.Api.Security;
+using Dalion.Ringor.Api.Serialization;
 using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
 using Dalion.Ringor.Swagger;
@@ -96,6 +97,15 @@ namespace Dalion.Ringor.Startup {
                 .AddSingleton<IApplicationUriResolver, ApplicationUriResolver>()
                 .AddSingleton<IHyperlinkFactory, HyperlinkFactory>()
                 .AddSingleton<IApiHomeResponseLinksCreatorFactory, ApiHomeResponseLinksCreatorFactory>();
+        }
+
+        public static IServiceCollection AddPreconfiguredJsonSerializer(this IServiceCollection services) {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+
+            var jsonSerializer = PreConfiguredJsonSerializer.Create();
+            services.AddSingleton(jsonSerializer);
+
+            return services;
         }
     }
 }

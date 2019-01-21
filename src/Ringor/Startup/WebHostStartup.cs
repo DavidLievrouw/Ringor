@@ -1,5 +1,6 @@
 ﻿using System;
 using Dalion.Ringor.Api.Controllers;
+using Dalion.Ringor.Api.Serialization;
 using Dalion.Ringor.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +24,7 @@ namespace Dalion.Ringor.Startup {
             services
                 .AddRouting(options => options.LowercaseUrls = true)
                 .AddMvc()
+                .AddJsonOptions(config => PreConfiguredJsonSerializerSettings.Apply(config.SerializerSettings))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddApplicationPart(typeof(DefaultController).Assembly)
                 .AddControllersAsServices();

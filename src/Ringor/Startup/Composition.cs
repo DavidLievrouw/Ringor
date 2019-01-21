@@ -6,7 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dalion.Ringor.Startup {
     internal static class Composition {
-        public static void ConfigureServices(IServiceCollection services, WebHostBuilderContext context, IConfiguration configuration, BootstrapperSettings bootstrapperSettings) {
+        public static void ConfigureServices(
+            IServiceCollection services,
+            WebHostBuilderContext context,
+            IConfiguration configuration,
+            BootstrapperSettings bootstrapperSettings) {
             // Configuration
             var ringSettings = services.ConfigureSettings<RingSettings>(configuration.GetSection("RingSettings"));
             var sftpSettings = services.ConfigureSettings<SftpSettings>(configuration.GetSection("SftpSettings"));
@@ -17,6 +21,7 @@ namespace Dalion.Ringor.Startup {
                 .AddHttpsRedirection(options => {})
                 .AddAzureAdAuthentication(authSettings)
                 .AddSwagger(bootstrapperSettings, authSettings)
+                .AddPreconfiguredJsonSerializer()
                 .AddApplicationInfo()
                 .AddAllLinksCreators();
         }

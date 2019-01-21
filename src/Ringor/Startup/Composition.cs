@@ -17,7 +17,8 @@ namespace Dalion.Ringor.Startup {
                 .AddHttpsRedirection(options => {})
                 .AddAzureAdAuthentication(authSettings)
                 .AddSwagger(bootstrapperSettings, authSettings)
-                .AddApplicationInfo();
+                .AddApplicationInfo()
+                .AddAllLinksCreators();
         }
     }
 }

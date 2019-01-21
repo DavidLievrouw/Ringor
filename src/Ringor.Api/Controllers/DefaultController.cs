@@ -1,5 +1,6 @@
 ﻿using System;
 using Dalion.Ringor.Api.Models;
+using Dalion.Ringor.Api.Models.Links;
 using Dalion.Ringor.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,11 @@ namespace Dalion.Ringor.Api.Controllers {
     [AllowAnonymous]
     public class DefaultController : Controller {
         private readonly IApplicationInfoProvider _applicationInfoProvider;
+        private readonly IApplicationInfoLinksCreatorFactory _applicationInfoLinksCreatorFactory;
 
-        public DefaultController(IApplicationInfoProvider applicationInfoProvider) {
+        public DefaultController(IApplicationInfoProvider applicationInfoProvider, IApplicationInfoLinksCreatorFactory applicationInfoLinksCreatorFactory) {
             _applicationInfoProvider = applicationInfoProvider ?? throw new ArgumentNullException(nameof(applicationInfoProvider));
+            _applicationInfoLinksCreatorFactory = applicationInfoLinksCreatorFactory ?? throw new ArgumentNullException(nameof(applicationInfoLinksCreatorFactory));
         }
         
         /// <summary>
@@ -23,7 +26,8 @@ namespace Dalion.Ringor.Api.Controllers {
         [Produces("application/json")]
         [ProducesResponseType(typeof(ApplicationInfo), 200)]
         public IActionResult GetDefault() {
-            return Ok(_applicationInfoProvider.Provide());
+            var applicationInfo = _applicationInfoProvider.Provide();
+            return Ok();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Dalion.Ringor.Api.Controllers;
+using Dalion.Ringor.Api.Models.Links;
 using Dalion.Ringor.Api.Security;
 using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
@@ -88,6 +89,13 @@ namespace Dalion.Ringor.Startup {
                 });
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
+        }
+
+        public static IServiceCollection AddAllLinksCreators(this IServiceCollection services) {
+            return services
+                .AddSingleton<IApplicationUriResolver, ApplicationUriResolver>()
+                .AddSingleton<IHyperlinkFactory, HyperlinkFactory>()
+                .AddSingleton<IApplicationInfoLinksCreatorFactory, ApplicationInfoLinksCreatorFactory>();
         }
     }
 }

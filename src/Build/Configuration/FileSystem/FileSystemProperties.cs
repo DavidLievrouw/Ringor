@@ -1,9 +1,9 @@
 using System;
 using Cake.Core;
 using Cake.Core.IO;
-using Dalion.Ringor.Build.Properties.FileSystem.ProjectsAndSolutions;
+using Dalion.Ringor.Build.Configuration.FileSystem.ProjectsAndSolutions;
 
-namespace Dalion.Ringor.Build.Properties.FileSystem {
+namespace Dalion.Ringor.Build.Configuration.FileSystem {
     public class FileSystemProperties : Properties<FileSystemProperties> {
         private readonly RingorProperties _container;
 
@@ -22,7 +22,7 @@ namespace Dalion.Ringor.Build.Properties.FileSystem {
             ? Context.GetAbsoluteDirectoryPath(RepoRootDirectory + "/dist")
             : Context.GetAbsoluteDirectoryPath(_container.Arguments.PublishDirectory);
 
-        public DirectoryPath UnitTestTargetDirectory => Context.GetAbsoluteDirectoryPath(DistDirectory + "/Test");
+        public DirectoryPath CSharpUnitTestTargetDirectory => Context.GetAbsoluteDirectoryPath(DistDirectory + "/Test");
 
         public DirectoryPath ReleaseTargetDirectory => Context.GetAbsoluteDirectoryPath(DistDirectory + "/Release");
 

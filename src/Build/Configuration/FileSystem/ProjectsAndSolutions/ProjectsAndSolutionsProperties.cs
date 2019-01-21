@@ -2,11 +2,11 @@ using System;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Dalion.Ringor.Build.Properties.FileSystem.ProjectsAndSolutions {
+namespace Dalion.Ringor.Build.Configuration.FileSystem.ProjectsAndSolutions {
     public class ProjectsAndSolutionsProperties : Properties<ProjectsAndSolutionsProperties> {
-        private readonly Properties.RingorProperties _container;
+        private readonly Configuration.RingorProperties _container;
 
-        public ProjectsAndSolutionsProperties(ICakeContext context, Properties.RingorProperties container) : base(context) {
+        public ProjectsAndSolutionsProperties(ICakeContext context, Configuration.RingorProperties container) : base(context) {
             _container = container ?? throw new ArgumentNullException(nameof(container));
             Ringor = new RingorProperties(context, container);
         }

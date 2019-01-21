@@ -1,8 +1,8 @@
 using Cake.Core;
-using Dalion.Ringor.Build.Properties.Arguments;
-using Dalion.Ringor.Build.Properties.FileSystem;
+using Dalion.Ringor.Build.Configuration.Arguments;
+using Dalion.Ringor.Build.Configuration.FileSystem;
 
-namespace Dalion.Ringor.Build.Properties {
+namespace Dalion.Ringor.Build.Configuration {
     public class RingorProperties : Properties<RingorProperties> {
         public RingorProperties(ICakeContext context) : base(context) {
             Arguments = new ArgumentsProperties(context, this);

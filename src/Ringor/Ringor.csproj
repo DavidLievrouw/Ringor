@@ -28,10 +28,11 @@
     </PropertyGroup>
   </Target>
 
-  <!-- Compile React app, if it has not been compiled yet -->
-  <Target Name="BuildWebPackIfNeeded" BeforeTargets="BeforeBuild" Condition="!Exists('wwwroot\App')">
+  <Target Name="BuildWebPackIfNeeded" BeforeTargets="BeforeBuild" Condition="!Exists('wwwroot\App') Or '$(IsPublishing)' == 'true'">
     <Exec Command="npm install" WorkingDirectory="App" />
-    <Exec Command="npm run bundle:debug" WorkingDirectory="App" />
+    <Exec Command="npm run clean" WorkingDirectory="App" />
+    <Exec Command="npm run bundle:debug" WorkingDirectory="App" Condition="'$(Configuration)' != 'Release'" />
+    <Exec Command="npm run bundle:release" WorkingDirectory="App" Condition="'$(Configuration)' == 'Release'" />
   </Target>
 
   <ItemGroup>
@@ -85,17 +86,6 @@
     <Exec Command="dotnet transform-xdt --xml &quot;$(_SourceWebConfig)&quot; --transform &quot;$(_XdtTransform)&quot; --output &quot;$(_TargetWebConfig)&quot;" Condition="Exists('$(_XdtTransform)')" />
     <Delete Files="$(PublishDir)web.Development.config" Condition="Exists('$(PublishDir)web.Development.config')" />
     <Delete Files="$(PublishDir)web.Production.config" Condition="Exists('$(PublishDir)web.Production.config')" />
-  </Target>
-
-  <!-- Compile and include React app bundle in publish output -->
-  <Target Name="IncludeWebPackOutputOnPublish" BeforeTargets="PrepareForPublish">
-    <Exec Command="npm install" WorkingDirectory="App" />
-    <Exec Command="npm run clean" WorkingDirectory="App" />
-    <Exec Command="npm run bundle:release" WorkingDirectory="App" />
-    <ItemGroup>
-      <_WebpackFiles Include="wwwroot\App\**" />
-      <ContentWithTargetPath Include="@(_WebpackFiles->'%(FullPath)')" RelativePath="%(_WebpackFiles.Identity)" TargetPath="%(_WebpackFiles.Identity)" CopyToPublishDirectory="Always" />
-    </ItemGroup>
   </Target>
 
 </Project>

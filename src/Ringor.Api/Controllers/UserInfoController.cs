@@ -25,7 +25,7 @@ namespace Dalion.Ringor.Api.Controllers {
         [HttpGet("")]
         [Authorize]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(IEnumerable<Claim>), 200)]
+        [ProducesResponseType(typeof(UserInfoResponse), 200)]
         public IActionResult GetUserClaims() {
             var response = new UserInfoResponse {
                 Claims = User.Claims.Select(c => new Claim {

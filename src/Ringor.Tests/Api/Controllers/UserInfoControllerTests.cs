@@ -1,16 +1,23 @@
 ﻿using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
+using Dalion.Ringor.Api.Models;
+using Dalion.Ringor.Api.Models.Links;
+using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
+using Claim = System.Security.Claims.Claim;
 
 namespace Dalion.Ringor.Api.Controllers {
     public class UserInfoControllerTests {
+        private readonly IUserInfoResponseLinksCreatorFactory _userInfoResponseLinksCreatorFactory;
         private readonly UserInfoController _sut;
 
         public UserInfoControllerTests() {
-            _sut = new UserInfoController();
+            FakeFactory.Create(out _userInfoResponseLinksCreatorFactory);
+            _sut = new UserInfoController(_userInfoResponseLinksCreatorFactory);
         }
 
         public class GetUserClaims : UserInfoControllerTests {
@@ -28,11 +35,28 @@ namespace Dalion.Ringor.Api.Controllers {
 
             [Fact]
             public void ReturnsOkWithUserClaims() {
+                var linksCreator = A.Fake<ILinksCreator<UserInfoResponse>>();
+                A.CallTo(() => _userInfoResponseLinksCreatorFactory.Create())
+                    .Returns(linksCreator);
+                var links = new[] {
+                    new Hyperlink<UserInfoResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api/userinfo", UserInfoResponseHyperlinkType.Self),
+                    new Hyperlink<UserInfoResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api", UserInfoResponseHyperlinkType.GetApiRoot)
+                };
+                A.CallTo(() => linksCreator.CreateLinksFor(A<UserInfoResponse>._))
+                    .Invokes(call => {
+                        var response = call.GetArgument<UserInfoResponse>(0);
+                        response.Links = links;
+                    });
+
                 var actual = _sut.GetUserClaims();
+
                 actual.Should().BeOfType<OkObjectResult>();
-                var expectedPayload = new[] {
-                    new Models.Claim {Type = "c1", Value = "v1"},
-                    new Models.Claim {Type = "c2", Value = "v2"}
+                var expectedPayload = new UserInfoResponse {
+                    Claims = new[] {
+                        new Models.Claim {Type = "c1", Value = "v1"},
+                        new Models.Claim {Type = "c2", Value = "v2"}
+                    },
+                    Links = links
                 };
                 actual.As<OkObjectResult>().Value.Should().BeEquivalentTo(expectedPayload);
             }

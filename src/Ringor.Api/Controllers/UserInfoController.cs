@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Dalion.Ringor.Api.Models;
+using Dalion.Ringor.Api.Models.Links;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,8 +11,14 @@ namespace Dalion.Ringor.Api.Controllers {
     [Route("api/userinfo")]
     [Authorize]
     public class UserInfoController : Controller {
+        private readonly IUserInfoResponseLinksCreatorFactory _userInfoResponseLinksCreatorFactory;
+
+        public UserInfoController(IUserInfoResponseLinksCreatorFactory userInfoResponseLinksCreatorFactory) {
+            _userInfoResponseLinksCreatorFactory = userInfoResponseLinksCreatorFactory ?? throw new ArgumentNullException(nameof(userInfoResponseLinksCreatorFactory));
+        }
+
         /// <summary>
-        /// Get the claims of the current authenticated user.
+        ///     Get the claims of the current authenticated user.
         /// </summary>
         /// <returns>The claims of the current authenticated user.</returns>
         /// <response code="200">Returns the claims of the current authenticated user.</response>
@@ -19,14 +27,18 @@ namespace Dalion.Ringor.Api.Controllers {
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<Claim>), 200)]
         public IActionResult GetUserClaims() {
-            return Ok(User.Claims.Select(c => new Claim {
-                Type = c.Type,
-                Value = c.Value
-            }));
+            var response = new UserInfoResponse {
+                Claims = User.Claims.Select(c => new Claim {
+                    Type = c.Type,
+                    Value = c.Value
+                }).ToArray()
+            };
+            _userInfoResponseLinksCreatorFactory.Create().CreateLinksFor(response);
+            return Ok(response);
         }
 
         /// <summary>
-        /// Get the claims of the specified type of the current authenticated user.
+        ///     Get the claims of the specified type of the current authenticated user.
         /// </summary>
         /// <param name="claimType">The type of the claims to query.</param>
         /// <returns>The claims of the current authenticated user of the specified type.</returns>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Dalion.Ringor.Api.Controllers;
 using Dalion.Ringor.Api.Security;
 using Dalion.Ringor.Api.Services;
@@ -85,8 +84,7 @@ namespace Dalion.Ringor.Startup {
                 var authority = (authSettings.Swagger.SignInEndpoint?.AbsoluteUri?.TrimEnd('/') ?? string.Empty) + '/' + (authSettings.Swagger.Tenant ?? string.Empty);
                 c.AddSecurityDefinition("oauth2", new OAuth2Scheme {
                     Flow = "implicit",
-                    AuthorizationUrl = $"{authority}/oauth2/authorize",
-                    Scopes = authSettings.Swagger.Scopes?.ToDictionary(s => s.Scope, s => s.Description)
+                    AuthorizationUrl = $"{authority}/oauth2/authorize"
                 });
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
             });

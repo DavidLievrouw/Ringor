@@ -49,6 +49,24 @@ namespace Dalion.Ringor.Api.Models.Links {
                 var differences = _claim.CompareTo(expected);
                 differences.AreEqual.Should().BeTrue(because: differences.DifferencesString);
             }
+
+            [Fact]
+            public async Task UrlEncodesClaimsInLinks() {
+                var claimThatRequiresEncoding = new Claim {Type = "http://schemas.microsoft.com/claims/authnclassreference", Value = "v1"};
+
+                await _sut.CreateLinksFor(claimThatRequiresEncoding);
+
+                var expected = new Claim {
+                    Type = claimThatRequiresEncoding.Type,
+                    Value = claimThatRequiresEncoding.Value,
+                    Links = new[] {
+                        new Hyperlink<ClaimHyperlinkType>(HttpMethod.Get, "https://dalion.eu/testing/api/userinfo/http%3A%2F%2Fschemas.microsoft.com%2Fclaims%2Fauthnclassreference", ClaimHyperlinkType.EnumerateAllClaimsOfThisType),
+                        new Hyperlink<ClaimHyperlinkType>(HttpMethod.Get, "https://dalion.eu/testing/api/userinfo", ClaimHyperlinkType.GetUserInfo)
+                    }
+                };
+                var differences = claimThatRequiresEncoding.CompareTo(expected);
+                differences.AreEqual.Should().BeTrue(because: differences.DifferencesString);
+            }
         }
     }
 }

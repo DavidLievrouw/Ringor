@@ -97,7 +97,8 @@ namespace Dalion.Ringor.Startup {
                 .AddSingleton<IApplicationUriResolver, ApplicationUriResolver>()
                 .AddSingleton<IHyperlinkFactory, HyperlinkFactory>()
                 .AddSingleton<IApiHomeResponseLinksCreatorFactory, ApiHomeResponseLinksCreatorFactory>()
-                .AddSingleton<IUserInfoResponseLinksCreatorFactory, UserInfoResponseLinksCreatorFactory>();
+                .AddSingleton<IUserInfoResponseLinksCreatorFactory, UserInfoResponseLinksCreatorFactory>()
+                .AddSingleton<IClaimLinksCreatorFactory, ClaimLinksCreatorFactory>();
         }
 
         public static IServiceCollection AddPreconfiguredJsonSerializer(this IServiceCollection services) {

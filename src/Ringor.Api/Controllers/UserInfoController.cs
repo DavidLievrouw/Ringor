@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Dalion.Ringor.Api.Models;
 using Dalion.Ringor.Api.Models.Links;
 using Microsoft.AspNetCore.Authorization;
@@ -11,10 +12,14 @@ namespace Dalion.Ringor.Api.Controllers {
     [Route("api/userinfo")]
     [Authorize]
     public class UserInfoController : Controller {
+        private readonly IClaimLinksCreatorFactory _claimLinksCreatorFactory;
         private readonly IUserInfoResponseLinksCreatorFactory _userInfoResponseLinksCreatorFactory;
 
-        public UserInfoController(IUserInfoResponseLinksCreatorFactory userInfoResponseLinksCreatorFactory) {
+        public UserInfoController(
+            IUserInfoResponseLinksCreatorFactory userInfoResponseLinksCreatorFactory,
+            IClaimLinksCreatorFactory claimLinksCreatorFactory) {
             _userInfoResponseLinksCreatorFactory = userInfoResponseLinksCreatorFactory ?? throw new ArgumentNullException(nameof(userInfoResponseLinksCreatorFactory));
+            _claimLinksCreatorFactory = claimLinksCreatorFactory ?? throw new ArgumentNullException(nameof(claimLinksCreatorFactory));
         }
 
         /// <summary>
@@ -49,7 +54,7 @@ namespace Dalion.Ringor.Api.Controllers {
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<Claim>), 200)]
         [ProducesResponseType(404)]
-        public IActionResult GetUserClaimsByType(string claimType) {
+        public async Task<IActionResult> GetUserClaimsByType(string claimType) {
             if (string.IsNullOrEmpty(claimType)) return NotFound();
 
             claimType = WebUtility.UrlDecode(claimType);
@@ -64,7 +69,11 @@ namespace Dalion.Ringor.Api.Controllers {
                 .ToList();
             if (!allClaimValues.Any()) return NotFound();
 
-            return Ok(allClaimValues.Select(_ => new Claim {Type = claimType, Value = _}));
+            var linksCreator = _claimLinksCreatorFactory.Create();
+            var claims = allClaimValues.Select(_ => new Claim {Type = claimType, Value = _}).ToList();
+            await claims.ForEachAsync(c => linksCreator.CreateLinksFor(c));
+
+            return Ok(claims);
         }
     }
 }

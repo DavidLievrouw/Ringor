@@ -6,11 +6,28 @@ using System.Threading.Tasks;
 
 namespace Dalion.Ringor.Api {
     public static partial class Extensions {
+        public static async Task ForEachAsync<T>(this IEnumerable<T> source, Func<T, Task> action) {
+            if (source == null) return;
+            if (action == null) return;
+            foreach (var element in source) {
+                await action(element);
+            }
+        }
+        
+        public static async Task ForEachAsync<T>(this IEnumerable<T> source, Func<T, int, Task> action) {
+            if (source == null) return;
+            if (action == null) return;
+            var index = 0;
+            foreach (var element in source) {
+                await action(element, index++);
+            }
+        }
+
         public static async Task ForEach<T>(this IEnumerable<T> source, Func<T, Task> action) {
             if (source == null) return;
             if (action == null) return;
             foreach (var element in source) {
-                await action(element).ConfigureAwait(false);
+                await action(element);
             }
         }
 
@@ -19,7 +36,7 @@ namespace Dalion.Ringor.Api {
             if (action == null) return;
             var index = 0;
             foreach (var element in source) {
-                await action(element, index++).ConfigureAwait(false);
+                await action(element, index++);
             }
         }
 

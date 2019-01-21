@@ -8,7 +8,7 @@ namespace Dalion.Ringor.Startup {
     internal static class Composition {
         public static void ConfigureServices(
             IServiceCollection services,
-            WebHostBuilderContext context,
+            IHostingEnvironment hostingEnv,
             IConfiguration configuration,
             BootstrapperSettings bootstrapperSettings) {
             // Configuration

@@ -23,6 +23,9 @@ namespace Dalion.Ringor.Api.Controllers {
         }
 
         public class GetUserClaims : UserInfoControllerTests {
+            private readonly Hyperlink<UserInfoResponseHyperlinkType>[] _userInfoResponseLinks;
+            private readonly Hyperlink<ClaimHyperlinkType>[] _claimLinks;
+
             public GetUserClaims() {
                 var httpContext = new DefaultHttpContext();
                 var claimsIdentity = new ClaimsIdentity(new[] {
@@ -33,32 +36,44 @@ namespace Dalion.Ringor.Api.Controllers {
                 _sut.ControllerContext = new ControllerContext {
                     HttpContext = httpContext
                 };
-            }
 
-            [Fact]
-            public void ReturnsOkWithUserClaims() {
-                var linksCreator = A.Fake<ILinksCreator<UserInfoResponse>>();
+                var userInfoResponseLinksCreator = A.Fake<ILinksCreator<UserInfoResponse>>();
                 A.CallTo(() => _userInfoResponseLinksCreatorFactory.Create())
-                    .Returns(linksCreator);
-                var links = new[] {
+                    .Returns(userInfoResponseLinksCreator);
+                _userInfoResponseLinks = new[] {
                     new Hyperlink<UserInfoResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api/userinfo", UserInfoResponseHyperlinkType.Self),
                     new Hyperlink<UserInfoResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api", UserInfoResponseHyperlinkType.GetApiRoot)
                 };
-                A.CallTo(() => linksCreator.CreateLinksFor(A<UserInfoResponse>._))
+                A.CallTo(() => userInfoResponseLinksCreator.CreateLinksFor(A<UserInfoResponse>._))
                     .Invokes(call => {
                         var response = call.GetArgument<UserInfoResponse>(0);
-                        response.Links = links;
+                        response.Links = _userInfoResponseLinks;
                     });
 
-                var actual = _sut.GetUserClaims();
+                var claimLinksCreator = A.Fake<ILinksCreator<Claim>>();
+                A.CallTo(() => _claimLinksCreatorFactory.Create())
+                    .Returns(claimLinksCreator);
+                _claimLinks = new[] {
+                    new Hyperlink<ClaimHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api/userinfo", ClaimHyperlinkType.GetUserInfo)
+                };
+                A.CallTo(() => claimLinksCreator.CreateLinksFor(A<Claim>._))
+                    .Invokes(call => {
+                        var response = call.GetArgument<Claim>(0);
+                        response.Links = _claimLinks;
+                    });
+            }
+
+            [Fact]
+            public async Task ReturnsOkWithUserClaims() {
+                var actual = await _sut.GetUserClaims();
 
                 actual.Should().BeOfType<OkObjectResult>();
                 var expectedPayload = new UserInfoResponse {
                     Claims = new[] {
-                        new Claim {Type = "c1", Value = "v1"},
-                        new Claim {Type = "c2", Value = "v2"}
+                        new Claim {Type = "c1", Value = "v1", Links = _claimLinks},
+                        new Claim {Type = "c2", Value = "v2", Links = _claimLinks}
                     },
-                    Links = links
+                    Links = _userInfoResponseLinks
                 };
                 actual.As<OkObjectResult>().Value.Should().BeEquivalentTo(expectedPayload);
             }

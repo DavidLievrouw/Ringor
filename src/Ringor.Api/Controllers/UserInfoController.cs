@@ -31,14 +31,19 @@ namespace Dalion.Ringor.Api.Controllers {
         [Authorize]
         [Produces("application/json")]
         [ProducesResponseType(typeof(UserInfoResponse), 200)]
-        public IActionResult GetUserClaims() {
+        public async Task<IActionResult> GetUserClaims() {
             var response = new UserInfoResponse {
                 Claims = User.Claims.Select(c => new Claim {
                     Type = c.Type,
                     Value = c.Value
                 }).ToArray()
             };
-            _userInfoResponseLinksCreatorFactory.Create().CreateLinksFor(response);
+
+            var linksCreator = _claimLinksCreatorFactory.Create();
+            await linksCreator.CreateLinksFor(response.Claims);
+
+            await _userInfoResponseLinksCreatorFactory.Create().CreateLinksFor(response);
+
             return Ok(response);
         }
 

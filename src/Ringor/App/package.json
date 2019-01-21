@@ -1,0 +1,59 @@
+{
+  "name": "ringor",
+  "version": "1.0.0",
+  "sideEffects": [
+    "*.less",
+    "*.css"
+  ],
+  "scripts": {
+    "clean": "node ./npm-scripts/clean.js --target=build-output --target=tests",
+    "clean:tests": "node ./npm-scripts/clean.js --target=tests",
+    "clean:all": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=node-modules",
+    "bundle:release": "node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
+    "bundle:debug": "npm run bundle",
+    "bundle": "node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
+    "bundle:tests": "node ./npm-scripts/bundle.js --action=bundle --configuration=test --target=./_tests",
+    "watch": "node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App",
+    "test": "jest",
+    "watch:tests": "node ./npm-scripts/clean.js --target=tests-contents && concurrently --kill-others \"node ./npm-scripts/bundle.js --action=watch --configuration=test --target=./_tests\" \"jest --watchAll\""
+  },
+  "jest": {
+    "roots": [
+      "_tests"
+    ],
+    "testMatch": [
+      "**/_tests/tests.js"
+    ]
+  },
+  "dependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.4",
+    "clean-webpack-plugin": "^1.0.0",
+    "colors": "^1.3.3",
+    "command-line-args": "^5.0.2",
+    "concurrently": "^4.1.0",
+    "css-loader": "^2.1.0",
+    "glob": "^7.1.3",
+    "jest": "^23.6.0",
+    "jest-cli": "^23.6.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "mini-css-extract-plugin": "^0.5.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "progress-bar-webpack-plugin": "^1.11.0",
+    "rimraf": "^2.6.2",
+    "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "webpack": "^4.8.0",
+    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-cli": "^3.0.0",
+    "webpack-encoding-plugin": "^0.2.1"
+  }
+}

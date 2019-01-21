@@ -322,3 +322,8 @@ ASALocalRun/
 
 # Publish targets
 dist/
+
+# Node
+node_modules/
+**/wwwroot/App
+**/App/_tests

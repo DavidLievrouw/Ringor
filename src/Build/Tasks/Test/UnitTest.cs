@@ -6,6 +6,6 @@ namespace Dalion.Ringor.Build.Tasks.Test {
     [Dependency(typeof(InitVersion))]
     [Dependency(typeof(RestorePackages))]
     [Dependency(typeof(UnitTestCSharp))]
-    [Dependency(typeof(UnitTestJS))]
+    [Dependency(typeof(UnitTestJs))]
     public sealed class UnitTest : FrostingTask<Context> { }
 }

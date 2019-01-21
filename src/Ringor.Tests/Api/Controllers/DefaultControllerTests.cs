@@ -25,7 +25,8 @@ namespace Dalion.Ringor.Api.Controllers {
             public GetDefault() {
                 _applicationInfo = new ApplicationInfo {
                     Version = "1.2.3",
-                    Message = "For unit tests",
+                    Company = "Dalion",
+                    Product = "Ringor unit tests",
                     UrlInfo = new ApplicationInfo.ApplicationUrlInfo {
                         SiteUrl = "https://www.dalion.eu/",
                         AppUrl = "Ringor"

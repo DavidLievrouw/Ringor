@@ -7,9 +7,11 @@ using Dalion.Ringor.Api.Serialization;
 using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
 using FluentAssertions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Xunit;
 
@@ -38,8 +40,12 @@ namespace Dalion.Ringor.Startup {
             
             // Add registrations that are performed by the WebHostStartup
             serviceCollection
+                .AddSingleton<IHostingEnvironment>(hostingEnvironment)
+                .AddSingleton(bootstrapperSettings)
                 .AddMvc()
                 .AddApplicationPart(typeof(DefaultController).Assembly)
+                .AddControllersAsServices()
+                .AddApplicationPart(typeof(Controllers.DefaultController).Assembly)
                 .AddControllersAsServices();
 
             // Build service provider
@@ -52,12 +58,22 @@ namespace Dalion.Ringor.Startup {
 
         [Fact]
         public void CanRegisterAllMvcControllers() {
-            var controllerAssembly = typeof(DefaultController).Assembly;
-            var controllers = controllerAssembly.GetTypes()
+            var apiAssembly = typeof(DefaultController).Assembly;
+            var apiControllers = apiAssembly.GetTypes()
                 .Where(t => typeof(Controller).IsAssignableFrom(t))
                 .Where(t => t.IsClass && !t.IsAbstract)
                 .ToList();
-            controllers.ForEach(c => {
+            apiControllers.ForEach(c => {
+                var instance = _serviceProvider.GetRequiredService(c);
+                instance.Should().NotBeNull().And.BeAssignableTo(c);
+            });
+
+            var uiAssembly = typeof(Controllers.DefaultController).Assembly;
+            var uiControllers = uiAssembly.GetTypes()
+                .Where(t => typeof(Controller).IsAssignableFrom(t))
+                .Where(t => t.IsClass && !t.IsAbstract)
+                .ToList();
+            uiControllers.ForEach(c => {
                 var instance = _serviceProvider.GetRequiredService(c);
                 instance.Should().NotBeNull().And.BeAssignableTo(c);
             });
@@ -70,6 +86,8 @@ namespace Dalion.Ringor.Startup {
         [InlineData(typeof(IApplicationUriResolver))]
         [InlineData(typeof(IJsonSerializer))]
         [InlineData(typeof(IApplicationInfoProvider))]
+        [InlineData(typeof(IFileProvider))]
+        [InlineData(typeof(BootstrapperSettings))]
         public void CanResolveType(Type requestedType) {
             var instance = _serviceProvider.GetRequiredService(requestedType);
             instance.Should().NotBeNull().And.BeAssignableTo(requestedType);

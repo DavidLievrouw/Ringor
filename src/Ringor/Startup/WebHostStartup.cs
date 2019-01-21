@@ -2,6 +2,7 @@
 using Dalion.Ringor.Api.Controllers;
 using Dalion.Ringor.Api.Serialization;
 using Dalion.Ringor.Configuration;
+using Dalion.Ringor.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,9 @@ namespace Dalion.Ringor.Startup {
             // Mvc
             services
                 .AddRouting(options => options.LowercaseUrls = true)
-                .AddMvc()
+                .AddMvc(options => {
+                    options.Filters.Add<SetViewDataApplicationInfoFilter>();
+                })
                 .AddJsonOptions(config => PreConfiguredJsonSerializerSettings.Apply(config.SerializerSettings))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddApplicationPart(typeof(DefaultController).Assembly)

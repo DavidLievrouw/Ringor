@@ -16,9 +16,9 @@ namespace Dalion.Ringor.Api.Models.Links {
             public CreateLinksFor() {
                 _linksCreator = A.Fake<ILinksCreator<ApiHomeResponse>>();
                 _appInfos = new[] {
-                    new ApiHomeResponse {ApplicationInfo = new ApplicationInfo {Message = Guid.NewGuid().ToString()}},
-                    new ApiHomeResponse {ApplicationInfo = new ApplicationInfo {Message = Guid.NewGuid().ToString()}},
-                    new ApiHomeResponse {ApplicationInfo = new ApplicationInfo {Message = Guid.NewGuid().ToString()}}
+                    new ApiHomeResponse {ApplicationInfo = new ApplicationInfo {Product = Guid.NewGuid().ToString()}},
+                    new ApiHomeResponse {ApplicationInfo = new ApplicationInfo {Product = Guid.NewGuid().ToString()}},
+                    new ApiHomeResponse {ApplicationInfo = new ApplicationInfo {Product = Guid.NewGuid().ToString()}}
                 };
             }
 

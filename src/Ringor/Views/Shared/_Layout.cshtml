@@ -1,0 +1,31 @@
+@using Dalion.Ringor.Api.Models
+@using Dalion.Ringor.Api.Serialization
+@inject IJsonSerializer JsonSerializer;
+@{
+  var productName = "Ringor";
+  var pageTitle = ViewData["Title"];
+  var title = string.Join(" - ", new[] {productName, pageTitle}.Where(s => s != null));
+  var applicationInfo = ViewData["Dalion-ApplicationInfo"] as ApplicationInfo;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>@title</title>
+  @RenderSection("styles", required: false)
+  <script type="text/javascript">
+    window.applicationInfo = {
+      urlInfo: {
+        siteUrl: "@applicationInfo?.UrlInfo?.SiteUrl",
+        appUrl: "@applicationInfo?.UrlInfo?.AppUrl"
+      },
+      version: "@applicationInfo?.Version"
+    };
+  </script>
+</head>
+<body>
+
+@RenderBody()
+
+</body>
+</html>

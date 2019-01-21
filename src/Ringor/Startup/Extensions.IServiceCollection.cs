@@ -9,6 +9,7 @@ using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
 using Dalion.Ringor.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +37,9 @@ namespace Dalion.Ringor.Startup {
         public static IServiceCollection AddApplicationInfo(this IServiceCollection services) {
             return services
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
-                .AddSingleton<IApplicationInfoProvider, ApplicationInfoProvider>();
+                .AddSingleton<IApplicationInfoProvider>(prov => new ApplicationInfoProvider(
+                    prov.GetRequiredService<IHttpContextAccessor>(),
+                    prov.GetRequiredService<BootstrapperSettings>().EntryAssembly));
         }
 
         public static IServiceCollection AddAzureAdAuthentication(this IServiceCollection services, AuthenticationSettings authSettings) {
@@ -108,6 +111,10 @@ namespace Dalion.Ringor.Startup {
             services.AddSingleton(jsonSerializer);
 
             return services;
+        }
+
+        public static IServiceCollection AddFileProviders(this IServiceCollection services) {
+            return services.AddSingleton(serviceProvider => serviceProvider.GetRequiredService<IHostingEnvironment>().WebRootFileProvider);
         }
     }
 }

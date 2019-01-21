@@ -1,4 +1,5 @@
-﻿using Dalion.Ringor.Api.Models;
+﻿using System.Reflection;
+using Dalion.Ringor.Api.Models;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -7,11 +8,13 @@ using Xunit;
 namespace Dalion.Ringor.Api.Services {
     public class ApplicationInfoProviderTests {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly Assembly _entryAssembly;
         private readonly ApplicationInfoProvider _sut;
 
         public ApplicationInfoProviderTests() {
+            _entryAssembly = typeof(Program).Assembly;
             FakeFactory.Create(out _httpContextAccessor);
-            _sut = new ApplicationInfoProvider(_httpContextAccessor);
+            _sut = new ApplicationInfoProvider(_httpContextAccessor, _entryAssembly);
         }
 
         public class Provide : ApplicationInfoProviderTests {
@@ -29,6 +32,18 @@ namespace Dalion.Ringor.Api.Services {
                 var actual = _sut.Provide();
                 var expectedVersion = typeof(Program).Assembly.GetName().Version.ToString(3);
                 actual.Version.Should().Be(expectedVersion);
+            }
+
+            [Fact]
+            public void ReportsExpectedCompany() {
+                var actual = _sut.Provide();
+                actual.Company.Should().Be("Dalion");
+            }
+
+            [Fact]
+            public void ReportsExpectedProduct() {
+                var actual = _sut.Provide();
+                actual.Product.Should().Be("Ringor");
             }
 
             [Fact]

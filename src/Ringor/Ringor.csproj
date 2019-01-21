@@ -8,6 +8,8 @@
     <UserSecretsId>a696471a-0078-4da7-a0b4-9e03d13fb1d3</UserSecretsId>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <Company>Dalion</Company>
+    <Product>Ringor</Product>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -25,6 +27,19 @@
       <InformationalVersion>$(ProductVersion)</InformationalVersion>
     </PropertyGroup>
   </Target>
+
+  <!-- Compile React app, if it has not been compiled yet -->
+  <Target Name="BuildWebPackIfNeeded" BeforeTargets="BeforeBuild" Condition="!Exists('wwwroot\App')">
+    <Exec Command="npm install" WorkingDirectory="App" />
+    <Exec Command="npm run bundle:debug" WorkingDirectory="App" />
+  </Target>
+
+  <ItemGroup>
+    <Compile Remove="App\**" />
+    <Content Remove="App\**" />
+    <EmbeddedResource Remove="App\**" />
+    <None Remove="App\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Update="appsettings.Development.json">
@@ -70,6 +85,17 @@
     <Exec Command="dotnet transform-xdt --xml &quot;$(_SourceWebConfig)&quot; --transform &quot;$(_XdtTransform)&quot; --output &quot;$(_TargetWebConfig)&quot;" Condition="Exists('$(_XdtTransform)')" />
     <Delete Files="$(PublishDir)web.Development.config" Condition="Exists('$(PublishDir)web.Development.config')" />
     <Delete Files="$(PublishDir)web.Production.config" Condition="Exists('$(PublishDir)web.Production.config')" />
+  </Target>
+
+  <!-- Compile and include React app bundle in publish output -->
+  <Target Name="IncludeWebPackOutputOnPublish" BeforeTargets="PrepareForPublish">
+    <Exec Command="npm install" WorkingDirectory="App" />
+    <Exec Command="npm run clean" WorkingDirectory="App" />
+    <Exec Command="npm run bundle:release" WorkingDirectory="App" />
+    <ItemGroup>
+      <_WebpackFiles Include="wwwroot\App\**" />
+      <ContentWithTargetPath Include="@(_WebpackFiles->'%(FullPath)')" RelativePath="%(_WebpackFiles.Identity)" TargetPath="%(_WebpackFiles.Identity)" CopyToPublishDirectory="Always" />
+    </ItemGroup>
   </Target>
 
 </Project>

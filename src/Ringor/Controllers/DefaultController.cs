@@ -8,6 +8,7 @@ using Microsoft.Extensions.FileProviders;
 namespace Dalion.Ringor.Controllers {
     [AllowAnonymous]
     [Route("")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class DefaultController : Controller {
         private readonly IFileProvider _fileProvider;
 

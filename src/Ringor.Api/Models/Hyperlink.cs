@@ -4,10 +4,12 @@ using System.Net.Http;
 namespace Dalion.Ringor.Api.Models {
     public class Hyperlink<TRel> : IEquatable<Hyperlink<TRel>>
         where TRel : struct, IConvertible {
+
         public Hyperlink(HttpMethod method, string href, TRel rel) {
+            if (method == null) throw new ArgumentNullException(nameof(method));
             if (!typeof(TRel).IsEnum) throw new ArgumentException("TRel must be an enum type.");
             if (!Enum.IsDefined(typeof(TRel), rel)) throw new ArgumentOutOfRangeException(nameof(rel));
-            Method = method;
+            Method = method.Method;
             Href = string.IsNullOrWhiteSpace(href)
                 ? null
                 : href;
@@ -16,7 +18,7 @@ namespace Dalion.Ringor.Api.Models {
                 : rel;
         }
         
-        public HttpMethod Method { get; }
+        public string Method { get; }
 
         public string Href { get; }
 

@@ -57,7 +57,7 @@ namespace Dalion.Ringor.Api.Models.Links {
             [Fact]
             public void CreatesHyperlinkWithSpecifiedMethod() {
                 var actual = _sut.Create(HttpMethod.Delete, "somelink/id", FakeRel.Rel2);
-                actual.Method.Should().Be(HttpMethod.Delete);
+                actual.Method.Should().Be(HttpMethod.Delete.Method);
             }
 
             [Fact]

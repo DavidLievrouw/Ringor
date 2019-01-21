@@ -37,9 +37,17 @@ namespace Dalion.Ringor.Api.Models {
             }
 
             [Fact]
-            public void HappyCase() {
+            public void CanHandleCreationWithHttpMethod() {
                 var actual = new Hyperlink<DummyRel>(HttpMethod.Options, "/api/document", DummyRel.DummyType2);
-                actual.Method.Should().Be(HttpMethod.Options);
+                actual.Method.Should().Be(HttpMethod.Options.Method);
+                actual.Rel.Should().Be(DummyRel.DummyType2);
+                actual.Href.Should().Be("/api/document");
+            }
+
+            [Fact]
+            public void CanHandleCreationWithUncommonHttpMethod() {
+                var actual = new Hyperlink<DummyRel>(new HttpMethod("UNCOMMONMETHOD"), "/api/document", DummyRel.DummyType2);
+                actual.Method.Should().Be("UNCOMMONMETHOD");
                 actual.Rel.Should().Be(DummyRel.DummyType2);
                 actual.Href.Should().Be("/api/document");
             }

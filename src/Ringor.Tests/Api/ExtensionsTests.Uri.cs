@@ -9,7 +9,7 @@ namespace Dalion.Ringor.Api {
             private string _relativePath;
 
             public WithStringRelativePath() {
-                _baseUri = new Uri("http://www.recomatics.com/api", UriKind.Absolute);
+                _baseUri = new Uri("http://www.dalion.eu/api", UriKind.Absolute);
                 _relativePath = "documents/getall";
             }
 
@@ -69,7 +69,7 @@ namespace Dalion.Ringor.Api {
             private Uri _relativePath;
 
             public WithUriRelativePath() {
-                _baseUri = new Uri("http://www.recomatics.com/api", UriKind.Absolute);
+                _baseUri = new Uri("http://www.dalion.eu/api", UriKind.Absolute);
                 _relativePath = new Uri("documents/getall", UriKind.Relative);
             }
 

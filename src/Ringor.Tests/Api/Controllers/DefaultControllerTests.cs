@@ -42,8 +42,8 @@ namespace Dalion.Ringor.Api.Controllers {
                 A.CallTo(() => _apiHomeResponseLinksCreatorFactory.Create())
                     .Returns(linksCreator);
                 var links = new[] {
-                    new Hyperlink<ApiHomeResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api", ApiHomeResponseHyperlinkType.Self),
-                    new Hyperlink<ApiHomeResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api/userinfo", ApiHomeResponseHyperlinkType.GetUserInfo)
+                    new Hyperlink<ApiHomeResponseHyperlinkType>(HttpMethod.Get, "https://dalion.eu/testing/api", ApiHomeResponseHyperlinkType.Self),
+                    new Hyperlink<ApiHomeResponseHyperlinkType>(HttpMethod.Get, "https://dalion.eu/testing/api/userinfo", ApiHomeResponseHyperlinkType.GetUserInfo)
                 };
                 A.CallTo(() => linksCreator.CreateLinksFor(A<ApiHomeResponse>._))
                     .Invokes(call => {

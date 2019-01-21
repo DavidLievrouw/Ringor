@@ -41,8 +41,8 @@ namespace Dalion.Ringor.Api.Controllers {
                 A.CallTo(() => _userInfoResponseLinksCreatorFactory.Create())
                     .Returns(userInfoResponseLinksCreator);
                 _userInfoResponseLinks = new[] {
-                    new Hyperlink<UserInfoResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api/userinfo", UserInfoResponseHyperlinkType.Self),
-                    new Hyperlink<UserInfoResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api", UserInfoResponseHyperlinkType.GetApiRoot)
+                    new Hyperlink<UserInfoResponseHyperlinkType>(HttpMethod.Get, "https://dalion.eu/testing/api/userinfo", UserInfoResponseHyperlinkType.Self),
+                    new Hyperlink<UserInfoResponseHyperlinkType>(HttpMethod.Get, "https://dalion.eu/testing/api", UserInfoResponseHyperlinkType.GetApiRoot)
                 };
                 A.CallTo(() => userInfoResponseLinksCreator.CreateLinksFor(A<UserInfoResponse>._))
                     .Invokes(call => {
@@ -54,7 +54,7 @@ namespace Dalion.Ringor.Api.Controllers {
                 A.CallTo(() => _claimLinksCreatorFactory.Create())
                     .Returns(claimLinksCreator);
                 _claimLinks = new[] {
-                    new Hyperlink<ClaimHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api/userinfo", ClaimHyperlinkType.GetUserInfo)
+                    new Hyperlink<ClaimHyperlinkType>(HttpMethod.Get, "https://dalion.eu/testing/api/userinfo", ClaimHyperlinkType.GetUserInfo)
                 };
                 A.CallTo(() => claimLinksCreator.CreateLinksFor(A<Claim>._))
                     .Invokes(call => {
@@ -98,7 +98,7 @@ namespace Dalion.Ringor.Api.Controllers {
                 A.CallTo(() => _claimLinksCreatorFactory.Create())
                     .Returns(linksCreator);
                 _links = new[] {
-                    new Hyperlink<ClaimHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api/userinfo", ClaimHyperlinkType.GetUserInfo)
+                    new Hyperlink<ClaimHyperlinkType>(HttpMethod.Get, "https://dalion.eu/testing/api/userinfo", ClaimHyperlinkType.GetUserInfo)
                 };
                 A.CallTo(() => linksCreator.CreateLinksFor(A<Claim>._))
                     .Invokes(call => {
@@ -149,14 +149,14 @@ namespace Dalion.Ringor.Api.Controllers {
             [Fact]
             public async Task UrlDecodesClaimType() {
                 _sut.ControllerContext.HttpContext.User.Identities.First()
-                    .AddClaim(new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", "test@recomatics.com"));
+                    .AddClaim(new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", "test@dalion.eu"));
 
                 var actual = await _sut.GetUserClaimsByType("http:%2F%2Fschemas.xmlsoap.org%2Fws%2F2005%2F05%2Fidentity%2Fclaims%2Femailaddress");
 
                 actual.Should().BeOfType<OkObjectResult>();
                 var actualPayload = actual.As<OkObjectResult>().Value;
                 var expectedPayload = new[] {
-                    new Claim {Type = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", Value = "test@recomatics.com", Links = _links}
+                    new Claim {Type = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", Value = "test@dalion.eu", Links = _links}
                 };
                 actualPayload.Should().BeEquivalentTo(expectedPayload);
             }

@@ -35,7 +35,7 @@ namespace Dalion.Ringor.Api.Models.Links {
                         var method = call.GetArgument<HttpMethod>(0);
                         var relativeUrl = call.GetArgument<string>(1);
                         var rel = call.GetArgument<ApiHomeResponseHyperlinkType>(2);
-                        return new Hyperlink<ApiHomeResponseHyperlinkType>(method, $"https://recomatics.com/testing{relativeUrl}", rel);
+                        return new Hyperlink<ApiHomeResponseHyperlinkType>(method, $"https://dalion.eu/testing{relativeUrl}", rel);
                     });
             }
 
@@ -59,8 +59,8 @@ namespace Dalion.Ringor.Api.Models.Links {
                         }
                     },
                     Links = new[] {
-                        new Hyperlink<ApiHomeResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api", ApiHomeResponseHyperlinkType.Self),
-                        new Hyperlink<ApiHomeResponseHyperlinkType>(HttpMethod.Get, "https://recomatics.com/testing/api/userinfo", ApiHomeResponseHyperlinkType.GetUserInfo)
+                        new Hyperlink<ApiHomeResponseHyperlinkType>(HttpMethod.Get, "https://dalion.eu/testing/api", ApiHomeResponseHyperlinkType.Self),
+                        new Hyperlink<ApiHomeResponseHyperlinkType>(HttpMethod.Get, "https://dalion.eu/testing/api/userinfo", ApiHomeResponseHyperlinkType.GetUserInfo)
                     }
                 };
                 var differences = _apiHomeResponse.CompareTo(expected);

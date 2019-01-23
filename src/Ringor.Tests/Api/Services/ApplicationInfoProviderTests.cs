@@ -9,12 +9,14 @@ namespace Dalion.Ringor.Api.Services {
     public class ApplicationInfoProviderTests {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly Assembly _entryAssembly;
+        private readonly string _environment;
         private readonly ApplicationInfoProvider _sut;
 
         public ApplicationInfoProviderTests() {
             _entryAssembly = typeof(Program).Assembly;
+            _environment = "UnitTests";
             FakeFactory.Create(out _httpContextAccessor);
-            _sut = new ApplicationInfoProvider(_httpContextAccessor, _entryAssembly);
+            _sut = new ApplicationInfoProvider(_httpContextAccessor, _entryAssembly, _environment);
         }
 
         public class Provide : ApplicationInfoProviderTests {
@@ -44,6 +46,12 @@ namespace Dalion.Ringor.Api.Services {
             public void ReportsExpectedProduct() {
                 var actual = _sut.Provide();
                 actual.Product.Should().Be("Ringor");
+            }
+
+            [Fact]
+            public void ReportsExpectedEnvironment() {
+                var actual = _sut.Provide();
+                actual.Environment.Should().Be(_environment);
             }
 
             [Fact]

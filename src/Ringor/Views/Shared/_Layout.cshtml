@@ -32,6 +32,11 @@
 <body>
 
 @RenderBody()
+  
+<footer>
+  <div class="ui label">@(applicationInfo?.Company) @(applicationInfo?.Product) v@(applicationInfo?.Version)</div>
+  <div class="ui label">@applicationInfo?.Environment</div>
+</footer>
 
 <environment include="Development">
   <script asp-append-version="true" src="~/js/semantic.js"></script>

@@ -4,6 +4,7 @@
         public string Product { get; set; }
         public string Version { get; set; }
         public ApplicationUrlInfo UrlInfo { get; set; }
+        public string Environment { get; set; }
 
         public class ApplicationUrlInfo {
             public string SiteUrl { get; set; }

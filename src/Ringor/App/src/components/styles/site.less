@@ -1,7 +1,32 @@
+/** BEGIN SITE WIDE **/
 body {
   background-color: #DADADA;
 }
 
+.ringorApp {
+  min-height: calc(100vh - 31px); /* View height - footer - 1px */
+  margin-bottom: -30px;
+  padding-bottom: 30px;
+}
+
 #App {
   height: 100%;
+  margin: 0px;
 }
+
+/** END SIDE WIDE **/
+
+/** BEGIN STICKY FOOTER **/
+
+footer {
+  height: 30px;
+  width: 100%;
+  margin-top: -31px;
+  position: relative;
+  background-color: #DADADA;
+  padding: 5px;
+  text-align: center;
+  color: darkgray;
+}
+
+/** END STICKY FOOTER **/

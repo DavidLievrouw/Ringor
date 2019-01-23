@@ -31,7 +31,7 @@ namespace Dalion.Ringor.Startup {
         }
 
         public static TSettings ConfigureSettings<TSettings>(this IServiceCollection services, IConfigurationSection configSection) where TSettings : class, new() {
-            return ConfigureSettings<TSettings>(services, configSection, () => new TSettings());
+            return ConfigureSettings(services, configSection, () => new TSettings());
         }
 
         public static IServiceCollection AddApplicationInfo(this IServiceCollection services) {
@@ -39,7 +39,8 @@ namespace Dalion.Ringor.Startup {
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
                 .AddSingleton<IApplicationInfoProvider>(prov => new ApplicationInfoProvider(
                     prov.GetRequiredService<IHttpContextAccessor>(),
-                    prov.GetRequiredService<BootstrapperSettings>().EntryAssembly));
+                    prov.GetRequiredService<BootstrapperSettings>().EntryAssembly,
+                    prov.GetRequiredService<BootstrapperSettings>().EnvironmentName));
         }
 
         public static IServiceCollection AddAzureAdAuthentication(this IServiceCollection services, AuthenticationSettings authSettings) {

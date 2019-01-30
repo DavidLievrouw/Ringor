@@ -6,16 +6,18 @@
     "*.css"
   ],
   "scripts": {
+    "tscompile": "tsc --project . --pretty",
+    "tswatch": "tsc --project . --pretty -w",
     "clean": "node ./npm-scripts/clean.js --target=build-output --target=tests",
     "clean:tests": "node ./npm-scripts/clean.js --target=tests",
     "clean:all": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=node-modules",
-    "bundle:release": "node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
+    "bundle:release": "npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
     "bundle:debug": "npm run bundle",
-    "bundle": "node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
-    "bundle:tests": "node ./npm-scripts/bundle.js --action=bundle --configuration=test --target=./_tests",
-    "watch": "node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App",
-    "test": "jest",
-    "watch:tests": "node ./npm-scripts/clean.js --target=tests-contents && concurrently --kill-others \"node ./npm-scripts/bundle.js --action=watch --configuration=test --target=./_tests\" \"jest --watchAll\""
+    "bundle": "npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
+    "bundle:tests": "npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=test --target=./_tests",
+    "watch": "concurrently --kill-others \"tswatch\" \"npm run tscompile && node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App\"",
+    "test": "npm run tscompile && jest",
+    "watch:tests": "node ./npm-scripts/clean.js --target=tests-contents && concurrently --kill-others \"tswatch\" \"node ./npm-scripts/bundle.js --action=watch --configuration=test --target=./_tests\" \"jest --watchAll\""
   },
   "jest": {
     "roots": [
@@ -33,6 +35,7 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
+    "@types/jest": "^23.3.13",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^1.0.0",

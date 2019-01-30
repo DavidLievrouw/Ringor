@@ -1,9 +1,20 @@
 import React from 'react';
 import "./styles/site.less";
 import composition from '../composition';
+import { IApplicationInfo } from '../facades/applicationInfo';
 
-export class App extends React.Component {
-  constructor(props) {
+export interface IAppProps {
+  className: string;
+}
+
+export interface IAppState {
+  applicationInfo: IApplicationInfo;
+}
+
+export class App extends React.Component<IAppProps, IAppState> {
+  private applicationInfo: IApplicationInfo;
+
+  constructor(props: IAppProps) {
     super(props);
     this.applicationInfo = composition.applicationInfo;
   }

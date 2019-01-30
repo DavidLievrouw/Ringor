@@ -11,30 +11,30 @@ describe('UrlService', () => {
     });
 
     test("should build the correct absolute URL for a simple resource", function () {
-      var url = urlService.getAbsoluteUrl("test");
+      const url = urlService.getAbsoluteUrl("test");
       expect(url).toBe("http://dalion.eu/RingorApi/test");
     });
 
     test("should build the correct absolute URL with a deeply nested resource", function () {
-      var url = urlService.getAbsoluteUrl("test/1/2/3/four");
+      const url = urlService.getAbsoluteUrl("test/1/2/3/four");
       expect(url).toBe("http://dalion.eu/RingorApi/test/1/2/3/four");
     });
 
     test("should build the correct absolute URL with a deeply nested resource and query parameters", function () {
-      var url = urlService.getAbsoluteUrl("test/1/2/3/four?what=goingon");
+      const url = urlService.getAbsoluteUrl("test/1/2/3/four?what=goingon");
       expect(url).toBe("http://dalion.eu/RingorApi/test/1/2/3/four?what=goingon");
     });
 
     test("should not generate URLs with double forward slashes between the site url and the base url", function () {
       urlInfo.siteUrl = "http://dalion.eu/";
       urlInfo.appUrl = "/RingorApi";
-      var url = urlService.getAbsoluteUrl("test");
+      const url = urlService.getAbsoluteUrl("test");
       expect(url).toBe("http://dalion.eu/RingorApi/test");
     });
 
     test("should not generate URLs with double forward slashes between the base url and the relative url", function () {
       urlInfo.appUrl = "/RingorApi/";
-      var url = urlService.getAbsoluteUrl("/test");
+      const url = urlService.getAbsoluteUrl("/test");
       expect(url).toBe("http://dalion.eu/RingorApi/test");
     });
 

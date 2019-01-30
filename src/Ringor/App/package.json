@@ -16,8 +16,8 @@
     "bundle": "npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
     "bundle:tests": "npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=test --target=./_tests",
     "watch": "concurrently --kill-others \"npm run tswatch\" \"npm run tscompile && node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App\"",
-    "test": "npm run tscompile && jest",
-    "watch:tests": "node ./npm-scripts/clean.js --target=tests-contents && concurrently --kill-others \"tswatch\" \"node ./npm-scripts/bundle.js --action=watch --configuration=test --target=./_tests\" \"jest --watchAll\""
+    "test": "jest",
+    "watch:tests": "node ./npm-scripts/clean.js --target=tests-contents && concurrently --kill-others \"npm run tswatch\" \"node ./npm-scripts/bundle.js --action=watch --configuration=test --target=./_tests\" \"jest --watchAll\""
   },
   "jest": {
     "roots": [

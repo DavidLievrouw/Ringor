@@ -21,6 +21,8 @@
   @RenderSection("styles", required: false)
   <script type="text/javascript">
     window.applicationInfo = {
+      company: "@applicationInfo?.Company",
+      product: "@applicationInfo?.Product",
       urlInfo: {
         siteUrl: "@applicationInfo?.UrlInfo?.SiteUrl",
         appUrl: "@applicationInfo?.UrlInfo?.AppUrl"

@@ -7,6 +7,7 @@ const urlService = new UrlService(applicationInfo.urlInfo);
 const apiClient = new ApiClient(urlService);
 
 const composition = {
+  applicationInfo: applicationInfo,
   services: {
     urlService: urlService,
     apiClient: apiClient

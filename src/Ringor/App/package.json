@@ -8,14 +8,14 @@
   "scripts": {
     "tscompile": "tsc --project . --pretty",
     "tswatch": "tsc --project . --pretty -w",
-    "clean": "node ./npm-scripts/clean.js --target=build-output --target=tests",
+    "clean": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=js",
     "clean:tests": "node ./npm-scripts/clean.js --target=tests",
-    "clean:all": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=node-modules",
-    "bundle:release": "npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
+    "clean:all": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=node-modules --target=js",
+    "bundle:release": "npm run clean && npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
     "bundle:debug": "npm run bundle",
     "bundle": "npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
     "bundle:tests": "npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=test --target=./_tests",
-    "watch": "concurrently --kill-others \"tswatch\" \"npm run tscompile && node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App\"",
+    "watch": "concurrently --kill-others \"npm run tswatch\" \"npm run tscompile && node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App\"",
     "test": "npm run tscompile && jest",
     "watch:tests": "node ./npm-scripts/clean.js --target=tests-contents && concurrently --kill-others \"tswatch\" \"node ./npm-scripts/bundle.js --action=watch --configuration=test --target=./_tests\" \"jest --watchAll\""
   },

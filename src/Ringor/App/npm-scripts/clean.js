@@ -11,7 +11,7 @@ const options = commandLineArgs([
 ]);
 
 const cleanArguments = {
-  targets: options.target || ["build-output"] // by default, clean the build output
+  targets: options.target || ["build-output", "tests", "js"]  // by default, clean everything except node_modules
 };
 
 const getAction = target => {
@@ -26,6 +26,8 @@ const getAction = target => {
       return removeFiles(buildOutputFolder + "/**/*.map");
     case "node-modules":
       return removeFolders([nodeModulesFolder]);
+    case "js":
+      return removeFiles("./App/**/*.js{x,}");
   }
 };
 

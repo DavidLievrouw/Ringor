@@ -41,9 +41,11 @@
 </footer>
 
 <environment include="Development">
+  <script asp-append-version="true" src="~/js/jquery-3.3.1.js"></script>
   <script asp-append-version="true" src="~/js/semantic.js"></script>
 </environment>
 <environment exclude="Development">
+  <script asp-append-version="true" src="~/js/jquery-3.3.1.slim.min.js"></script>
   <script asp-append-version="true" src="~/js/semantic.min.js"></script>
 </environment>
   

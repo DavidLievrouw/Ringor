@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const EncodingPlugin = require('webpack-encoding-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const bundleName = 'ringor-bundle';
@@ -97,7 +98,23 @@ module.exports = bundleArguments => {
       commonOptions.mode = 'production';
       commonOptions.devtool = 'nosources-source-map';
       commonOptions.optimization = {
-        minimize: true
+        minimize: true,
+        minimizer: [
+          new TerserPlugin({
+            terserOptions: {
+              compress: {
+                drop_console: true
+              },
+              output: {
+                comments: false
+              },
+              mangle: {
+                toplevel: true,
+                eval: true
+              }
+            },
+          }),
+        ]
       };
       commonOptions.module.rules.push({
         test: /\.(ts|tsx)?$/,

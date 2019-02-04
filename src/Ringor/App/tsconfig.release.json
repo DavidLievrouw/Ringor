@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "emitBOM": true,
+    "target": "es5",
+    "jsx": "react",
+    "module": "commonjs",
+    "sourceMap": false
+  }
+}

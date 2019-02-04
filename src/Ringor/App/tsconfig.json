@@ -1,12 +1,5 @@
 {
   "compileOnSave": true,
-  "compilerOptions": {
-    "emitBOM": true,
-    "target": "es5",
-    "jsx": "react",
-    "module": "commonjs",
-    "sourceMap": false
-  },
   "exclude": [
     "node_modules"
   ]

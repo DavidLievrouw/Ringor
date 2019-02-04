@@ -13,7 +13,7 @@ const removeSingleFile = file => new Promise((resolve, reject) => {
 });
 
 module.exports = filePattern => {
-  logger.logStart("Removing " + filePattern);
+  logger.logStart("Removing files using pattern '" + filePattern + "'");
   return new Promise((resolve, reject) => {
     glob(filePattern, (findFilesError, files) => {
       if (findFilesError) {

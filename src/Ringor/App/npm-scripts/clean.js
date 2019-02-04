@@ -3,7 +3,8 @@ const removeFolders = require("./FileSystem/removeFolders");
 const removeFiles = require("./FileSystem/removeFiles");
 const logger = require("./logger");
 const nodeModulesFolder = "./node_modules";
-const buildOutputFolder = "./App";
+const buildOutputFolder = "../wwwroot/App";
+const sourceFolder = "./src";
 const testsFolder = "./_tests";
 
 const options = commandLineArgs([
@@ -27,7 +28,7 @@ const getAction = target => {
     case "node-modules":
       return removeFolders([nodeModulesFolder]);
     case "js":
-      return removeFiles("./App/**/*.js{x,}");
+      return removeFiles(sourceFolder + "/**/*.js{x,\.map,x\.map,}");
   }
 };
 

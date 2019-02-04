@@ -6,16 +6,18 @@
     "*.css"
   ],
   "scripts": {
-    "tscompile": "tsc --project . --pretty",
+    "tscompile": "npm run tscompile:debug",
+    "tscompile:debug": "tsc --project ./tsconfig.debug.json --pretty",
+    "tscompile:release": "tsc --project ./tsconfig.release.json --pretty",
     "tswatch": "tsc --project . --pretty -w",
     "clean": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=js",
     "clean:tests": "node ./npm-scripts/clean.js --target=tests",
     "clean:all": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=node-modules --target=js",
-    "bundle:release": "npm run clean && npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
+    "bundle:release": "npm run clean && npm run tscompile:release && node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
     "bundle:debug": "npm run bundle",
-    "bundle": "npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
-    "bundle:tests": "npm run tscompile && node ./npm-scripts/bundle.js --action=bundle --configuration=test --target=./_tests",
-    "watch": "concurrently --kill-others \"npm run tswatch\" \"npm run tscompile && node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App\"",
+    "bundle": "npm run tscompile:debug && node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
+    "bundle:tests": "npm run tscompile:debug && node ./npm-scripts/bundle.js --action=bundle --configuration=test --target=./_tests",
+    "watch": "concurrently --kill-others \"npm run tswatch\" \"npm run tscompile:debug && node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App\"",
     "test": "jest",
     "watch:tests": "node ./npm-scripts/clean.js --target=tests-contents && concurrently --kill-others \"npm run tswatch\" \"node ./npm-scripts/bundle.js --action=watch --configuration=test --target=./_tests\" \"jest --watchAll\""
   },

@@ -27,31 +27,32 @@ export class App extends React.Component<IAppProps, IAppState> {
         </div>
         <div className="ui huge header status">
           <div className="ui large basic label">{this.applicationInfo.product}</div>
-          <div className="ui large basic label">v{this.applicationInfo.version}</div>
           <div className="ui large green label">
             <i className="check circle icon"></i>
             up and running
-        </div>
+          </div>
         </div>
         <div className="ui divider"></div>
-        <div className="ui three item secondary menu">
-          <div className="item">
-            <a className="ui olive huge basic image label" href="swagger">
-              <img src="/swagger.png" />
-              Swagger UI
-            </a>
-          </div>
-          <div className="item">
-            <a className="ui violet huge basic label" href="login">
-              <i className="sign-in icon"></i>
-              Browser sign in
-            </a>
-          </div>
-          <div className="item">
-            <a className="ui black huge basic image label" href="api">
-              <img src="/api.png" />
-              Navigate API
-            </a>
+        <div className="ui one column stackable center aligned grid">
+          <div className="ui three item secondary menu landing">
+            <div className="item">
+              <a className="ui olive huge basic image label" href="swagger">
+                <img src="/swagger.png" />
+                Swagger UI
+              </a>
+            </div>
+            <div className="item">
+              <a className="ui violet huge basic label" href="login">
+                <i className="sign-in icon"></i>
+                Browser sign in
+              </a>
+            </div>
+            <div className="item">
+              <a className="ui black huge basic image label" href="api">
+                <img src="/api.png" />
+                Navigate API
+              </a>
+            </div>
           </div>
         </div>
       </div>

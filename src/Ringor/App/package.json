@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "tscompile": "npm run tscompile:debug",
-    "tscompile:debug": "tsc --project ./tsconfig.debug.json --pretty",
+    "tscompile:debug": "tsc --project ./tsconfig.json --pretty",
     "tscompile:release": "tsc --project ./tsconfig.release.json --pretty",
     "tswatch": "tsc --project . --pretty -w",
     "clean": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=js",

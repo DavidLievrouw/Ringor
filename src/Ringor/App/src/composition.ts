@@ -2,12 +2,15 @@ import UrlService, { IUrlService } from "./services/UrlService";
 import ApiClient, { IApiClient } from "./services/ApiClient";
 
 import applicationInfo, { IApplicationInfo } from "./facades/applicationInfo";
+import RequestSender, { IRequestSender } from './facades/RequestSender';
 
 const urlService = new UrlService(applicationInfo.urlInfo);
-const apiClient = new ApiClient();
+const requestSender = new RequestSender();
+const apiClient = new ApiClient(requestSender);
 
 export interface IServices {
   urlService: IUrlService;
+  requestSender: IRequestSender;
   apiClient: IApiClient;
 }
 
@@ -20,6 +23,7 @@ const composition = {
   applicationInfo: applicationInfo,
   services: {
     urlService: urlService,
+    requestSender: requestSender,
     apiClient: apiClient
   }
 };

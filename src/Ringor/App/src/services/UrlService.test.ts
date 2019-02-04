@@ -1,12 +1,13 @@
-import UrlService from './UrlService';
+import UrlService, { IUrlService } from './UrlService';
+import { IUrlInfo } from '../facades/applicationInfo';
 
-let urlService;
-let urlInfo;
+let urlService: IUrlService;
+let urlInfo: IUrlInfo;
 
 describe('UrlService', () => {
   describe('getAbsoluteUrl', () => {
     beforeEach(function () {
-      urlInfo = {siteUrl: "http://dalion.eu", appUrl: "/RingorApi", path: "/RingorApi/files"};
+      urlInfo = {siteUrl: "http://dalion.eu", appUrl: "/RingorApi"};
       urlService = new UrlService(urlInfo);
     });
 
@@ -25,14 +26,14 @@ describe('UrlService', () => {
       expect(url).toBe("http://dalion.eu/RingorApi/test/1/2/3/four?what=goingon");
     });
 
-    test("should not generate URLs with double forward slashes between the site url and the base url", function () {
+    test("should not generate URLs with double forward slashes between the site url and the app url", function () {
       urlInfo.siteUrl = "http://dalion.eu/";
       urlInfo.appUrl = "/RingorApi";
       const url = urlService.getAbsoluteUrl("test");
       expect(url).toBe("http://dalion.eu/RingorApi/test");
     });
 
-    test("should not generate URLs with double forward slashes between the base url and the relative url", function () {
+    test("should not generate URLs with double forward slashes between the site url and the base url", function () {
       urlInfo.appUrl = "/RingorApi/";
       const url = urlService.getAbsoluteUrl("/test");
       expect(url).toBe("http://dalion.eu/RingorApi/test");
@@ -43,8 +44,8 @@ describe('UrlService', () => {
       expect(url).toBe("http://dalion.eu/RingorApi/test");
     });
 
-    test("should be able to deal with no base URL", function() {
-      urlInfo = {siteUrl: "http://dalion.eu"};
+    test("should be able to deal with no app URL", function() {
+      urlInfo = {siteUrl: "http://dalion.eu", appUrl: undefined};
       urlService = new UrlService(urlInfo);
       var url = urlService.getAbsoluteUrl("test");
       expect(url).toBe("http://dalion.eu/test");

@@ -4,7 +4,6 @@ const removeFiles = require("./FileSystem/removeFiles");
 const logger = require("./logger");
 const nodeModulesFolder = "./node_modules";
 const buildOutputFolder = "../wwwroot/App";
-const sourceFolder = "./src";
 const testsFolder = "./_tests";
 
 const options = commandLineArgs([
@@ -12,7 +11,7 @@ const options = commandLineArgs([
 ]);
 
 const cleanArguments = {
-  targets: options.target || ["build-output", "tests", "js"]  // by default, clean everything except node_modules
+  targets: options.target || ["build-output", "tests"]  // by default, clean everything except node_modules
 };
 
 const getAction = target => {
@@ -27,8 +26,6 @@ const getAction = target => {
       return removeFiles(buildOutputFolder + "/**/*.map");
     case "node-modules":
       return removeFolders([nodeModulesFolder]);
-    case "js":
-      return removeFiles(sourceFolder + "/**/*.js{x,\.map,x\.map,}");
   }
 };
 

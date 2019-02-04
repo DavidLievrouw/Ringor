@@ -5,7 +5,11 @@
     "target": "es2017",
     "jsx": "react",
     "module": "commonjs",
-    "sourceMap": true
+    "sourceMap": true,
+    "removeComments": false,
+    "noImplicitAny": true,
+    "importHelpers": true,
+    "noEmitHelpers": true
   },
   "exclude": [
     "node_modules"

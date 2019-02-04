@@ -6,7 +6,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const EncodingPlugin = require('webpack-encoding-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const bundleName = 'ringor-bundle';
@@ -18,7 +17,8 @@ module.exports = bundleArguments => {
       modules: [
         path.resolve(workingDirectory, 'node_modules'),
         workingDirectory
-      ]
+      ],
+      extensions: [ '.tsx', '.ts', '.js' ]
     },
     plugins: [
       //new BundleAnalyzerPlugin(),
@@ -42,16 +42,6 @@ module.exports = bundleArguments => {
             MiniCssExtractPlugin.loader,
             "css-loader"
           ]
-        },
-        {
-          test: /\.(js|jsx)$/,
-          exclude: /node_modules/,
-          use: {
-            loader: "babel-loader",
-            options: {
-              presets: ["@babel/preset-env", "@babel/preset-react"]
-            }
-          }
         }
       ]
     }
@@ -70,7 +60,13 @@ module.exports = bundleArguments => {
       commonOptions.optimization = {
         minimize: false
       };
-      commonOptions.entry = { "tests": glob.sync("./src/**/*.test.js") };
+      commonOptions.entry = { "tests": glob.sync("./src/**/*.test.ts{x,}") };
+      commonOptions.module.rules.push({
+        test: /\.(ts|tsx)?$/,
+        loader: 'ts-loader',
+        options: { configFile: 'tsconfig.json' },
+        exclude: [/node_modules/, /\.test\.(ts|tsx)?$/]
+      });
       break;
     case "debug":
       targetDirectory = path.join(workingDirectory, bundleArguments.target || '');
@@ -83,6 +79,12 @@ module.exports = bundleArguments => {
       commonOptions.optimization = {
         minimize: false
       };
+      commonOptions.module.rules.push({
+        test: /\.(ts|tsx)?$/,
+        loader: 'ts-loader',
+        options: { configFile: 'tsconfig.json' },
+        exclude: [/node_modules/, /\.test\.(ts|tsx)?$/]
+      });
       commonOptions.plugins.push(new CleanWebpackPlugin([targetDirectory], { root: path.join(targetDirectory, '..') }));
       commonOptions.plugins.push(new MiniCssExtractPlugin({ filename: bundleName + '.css' }));
       break;
@@ -95,46 +97,14 @@ module.exports = bundleArguments => {
       commonOptions.mode = 'production';
       commonOptions.devtool = 'nosources-source-map';
       commonOptions.optimization = {
-        minimize: true,
-        minimizer: [
-          // we specify a custom UglifyJsPlugin here to get source maps in production
-          new UglifyJsPlugin({
-            cache: true,
-            parallel: true,
-            uglifyOptions: {
-              compress: {
-                properties: true,
-                drop_debugger: true,
-                drop_console: true,
-                sequences: true,
-                dead_code: true,
-                conditionals: true,
-                comparisons: true,
-                evaluate: true,
-                booleans: true,
-                unused: true,
-                loops: true,
-                if_return: true,
-                negate_iife: true,
-                hoist_funs: true,
-                hoist_vars: false,
-                join_vars: true,
-                global_defs: {}
-              },
-              output: {
-                beautify: false,
-                comments: false
-              },
-              beautify: false,
-              mangle: {
-                toplevel: true,
-                eval: true
-              }
-            },
-            sourceMap: false
-          })
-        ]
+        minimize: true
       };
+      commonOptions.module.rules.push({
+        test: /\.(ts|tsx)?$/,
+        loader: 'ts-loader',
+        options: { configFile: 'tsconfig.release.json' },
+        exclude: [/node_modules/, /\.test\.(ts|tsx)?$/]
+      });
       commonOptions.plugins.push(new CleanWebpackPlugin([targetDirectory], { root: path.join(targetDirectory, '..') }));
       commonOptions.plugins.push(new MiniCssExtractPlugin({ filename: bundleName + '.css' }));
       commonOptions.plugins.push(new OptimizeCSSAssetsPlugin({}));

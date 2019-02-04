@@ -6,20 +6,16 @@
     "*.css"
   ],
   "scripts": {
-    "tscompile": "npm run tscompile:debug",
-    "tscompile:debug": "tsc --project ./tsconfig.json --pretty",
-    "tscompile:release": "tsc --project ./tsconfig.release.json --pretty",
-    "tswatch": "tsc --project . --pretty -w",
-    "clean": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=js",
+    "clean": "node ./npm-scripts/clean.js --target=build-output --target=tests",
     "clean:tests": "node ./npm-scripts/clean.js --target=tests",
-    "clean:all": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=node-modules --target=js",
-    "bundle:release": "npm run clean && npm run tscompile:release && node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
+    "clean:all": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=node-modules",
+    "bundle:release": "npm run clean && node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
     "bundle:debug": "npm run bundle",
-    "bundle": "npm run tscompile:debug && node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
-    "bundle:tests": "npm run tscompile:debug && node ./npm-scripts/bundle.js --action=bundle --configuration=test --target=./_tests",
-    "watch": "concurrently --kill-others \"npm run tswatch\" \"npm run tscompile:debug && node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App\"",
+    "bundle": "node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
+    "bundle:tests": "node ./npm-scripts/bundle.js --action=bundle --configuration=test --target=./_tests",
+    "watch": "node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App",
     "test": "jest",
-    "watch:tests": "node ./npm-scripts/clean.js --target=tests-contents && concurrently --kill-others \"npm run tswatch\" \"node ./npm-scripts/bundle.js --action=watch --configuration=test --target=./_tests\" \"jest --watchAll\""
+    "watch:tests": "node ./npm-scripts/clean.js --target=tests-contents && concurrently --kill-others \"node ./npm-scripts/bundle.js --action=watch --configuration=test --target=./_tests\" \"jest --watchAll\""
   },
   "jest": {
     "roots": [
@@ -34,12 +30,9 @@
     "react-dom": "^16.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.2.3",
-    "@babel/preset-react": "^7.0.0",
     "@types/jest": "^23.3.13",
-    "babel-jest": "^23.6.0",
-    "babel-loader": "^8.0.4",
+    "@types/react": "^16.8.1",
+    "@types/react-dom": "^16.0.11",
     "clean-webpack-plugin": "^1.0.0",
     "colors": "^1.3.3",
     "command-line-args": "^5.0.2",
@@ -55,7 +48,8 @@
     "progress-bar-webpack-plugin": "^1.11.0",
     "rimraf": "^2.6.2",
     "style-loader": "^0.23.1",
-    "uglifyjs-webpack-plugin": "^2.1.1",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.3.1",
     "webpack": "^4.8.0",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.0.0",

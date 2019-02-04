@@ -66,7 +66,7 @@ module.exports = bundleArguments => {
         test: /\.(ts|tsx)?$/,
         loader: 'ts-loader',
         options: { configFile: 'tsconfig.json' },
-        exclude: [/node_modules/, /\.test\.(ts|tsx)?$/]
+        exclude: /node_modules/
       });
       break;
     case "debug":

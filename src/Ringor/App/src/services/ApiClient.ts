@@ -4,6 +4,9 @@ import { IRequestSender } from '../facades/RequestSender';
 export interface IApiClient {
   get(url: string, queryParams?: IDictionary<string>, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
   post(url: string, queryParams?: IDictionary<string>, data?: any, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
+  put(url: string, queryParams?: IDictionary<string>, data?: any, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
+  delete(url: string, queryParams?: IDictionary<string>, data?: any, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
+  patch(url: string, queryParams?: IDictionary<string>, data?: any, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
 }
 
 class ApiClient {
@@ -14,22 +17,31 @@ class ApiClient {
   }
 
   get(url: string, queryParams: IDictionary<string> = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
-    if (queryParams) {
-      url += (url.indexOf('?') === -1 ? '?' : '&') + ApiClient.queryParams(queryParams);
-    }
-    return this.requestSender.send(url, {
-      method: 'GET',
-      mode: mode as RequestMode,
-      headers: headers
-    });
+    return this.sendRequest('GET', url, queryParams, undefined, headers, mode);
   }
 
   post(url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
+    return this.sendRequest('POST', url, queryParams, data, headers, mode);
+  }
+
+  put(url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
+    return this.sendRequest('PUT', url, queryParams, data, headers, mode);
+  }
+
+  delete(url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
+    return this.sendRequest('DELETE', url, queryParams, data, headers, mode);
+  }
+
+  patch(url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
+    return this.sendRequest('PATCH', url, queryParams, data, headers, mode);
+  }
+  
+  sendRequest(method: string, url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
     if (queryParams) {
       url += (url.indexOf('?') === -1 ? '?' : '&') + ApiClient.queryParams(queryParams);
     }
     return this.requestSender.send(url, {
-      method: 'POST',
+      method: method,
       mode: mode as RequestMode,
       headers: headers,
       body: data && JSON.stringify(data, (key, value) => {

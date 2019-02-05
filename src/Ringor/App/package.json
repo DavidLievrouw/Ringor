@@ -6,23 +6,26 @@
     "*.css"
   ],
   "scripts": {
-    "clean": "node ./npm-scripts/clean.js --target=build-output --target=tests",
-    "clean:tests": "node ./npm-scripts/clean.js --target=tests",
-    "clean:all": "node ./npm-scripts/clean.js --target=build-output --target=tests --target=node-modules",
+    "clean": "node ./npm-scripts/clean.js --target=build-output",
+    "clean:all": "node ./npm-scripts/clean.js --target sourcemaps --target=build-output --target=node-modules",
     "bundle:release": "npm run clean && node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
-    "bundle:debug": "npm run bundle",
-    "bundle": "node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
-    "bundle:tests": "node ./npm-scripts/bundle.js --action=bundle --configuration=test --target=./_tests",
+    "bundle:debug": "node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
+    "bundle": "npm run bundle:debug",
     "watch": "node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App",
-    "test": "jest",
-    "watch:tests": "node ./npm-scripts/clean.js --target=tests-contents && concurrently --kill-others \"node ./npm-scripts/bundle.js --action=watch --configuration=test --target=./_tests\" \"jest --watchAll\""
+    "tests": "jest",
+    "watch:tests": "jest --watch"
   },
   "jest": {
-    "roots": [
-      "_tests"
-    ],
-    "testMatch": [
-      "**/_tests/tests.js"
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
     ]
   },
   "dependencies": {
@@ -36,11 +39,9 @@
     "clean-webpack-plugin": "^1.0.0",
     "colors": "^1.3.3",
     "command-line-args": "^5.0.2",
-    "concurrently": "^4.1.0",
     "css-loader": "^2.1.0",
     "glob": "^7.1.3",
     "jest": "^23.6.0",
-    "jest-cli": "^23.6.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.5.0",
@@ -49,6 +50,7 @@
     "rimraf": "^2.6.2",
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.2",
+    "ts-jest": "^23.10.5",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.1",
     "webpack": "^4.8.0",

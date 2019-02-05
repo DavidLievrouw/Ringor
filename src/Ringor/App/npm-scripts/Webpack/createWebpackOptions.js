@@ -1,5 +1,4 @@
 const path = require('path');
-const glob = require("glob");
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -50,25 +49,6 @@ module.exports = bundleArguments => {
 
   let targetDirectory;
   switch (bundleArguments.configuration) {
-    case "test":
-      targetDirectory = path.join(workingDirectory, bundleArguments.target || '');
-      commonOptions.output = {
-        filename: 'tests.js',
-        path: targetDirectory
-      },
-      commonOptions.mode = 'development';
-      commonOptions.devtool = 'source-map';
-      commonOptions.optimization = {
-        minimize: false
-      };
-      commonOptions.entry = { "tests": glob.sync("./src/**/*.test.ts{x,}") };
-      commonOptions.module.rules.push({
-        test: /\.(ts|tsx)?$/,
-        loader: 'ts-loader',
-        options: { configFile: 'tsconfig.json' },
-        exclude: /node_modules/
-      });
-      break;
     case "debug":
       targetDirectory = path.join(workingDirectory, bundleArguments.target || '');
       commonOptions.output = {

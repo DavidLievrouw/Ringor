@@ -326,7 +326,3 @@ dist/
 # Node
 node_modules/
 **/wwwroot/App
-**/App/_tests
-src/Ringor/App/**/*.js
-src/Ringor/App/**/*.jsx
-src/Ringor/App/**/*.js.map

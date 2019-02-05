@@ -1,11 +1,9 @@
 import * as React from "react";
-import "./styles/site.less";
+const styles = require('./styles/site.less');
 import composition from '../composition';
 import { IApplicationInfo } from '../facades/applicationInfo';
 
-export interface IAppProps {
-  className: string;
-}
+export interface IAppProps {}
 
 export interface IAppState {
   applicationInfo: IApplicationInfo;
@@ -22,10 +20,10 @@ export class App extends React.Component<IAppProps, IAppState> {
   render() {
     return (
       <div className="column">
-        <div className="ui huge header">
-          <div className="ui massive company">{this.applicationInfo.company}</div>
+        <div className={`ui huge ${styles.header}`}>
+          <div className={`ui massive ${styles.company}`}>{this.applicationInfo.company}</div>
         </div>
-        <div className="ui huge header status">
+        <div className={`ui huge ${styles.header} ${styles.status}`}>
           <div className="ui large basic label">{this.applicationInfo.product}</div>
           <div className="ui large green label">
             <i className="check circle icon"></i>
@@ -34,7 +32,7 @@ export class App extends React.Component<IAppProps, IAppState> {
         </div>
         <div className="ui divider"></div>
         <div className="ui one column stackable center aligned grid">
-          <div className="ui three item secondary menu landing">
+          <div className={`ui three item secondary menu ${styles.menu} ${styles.landing}`}>
             <div className="item">
               <a className="ui olive huge basic image label" href="swagger">
                 <img src="/swagger.png" />

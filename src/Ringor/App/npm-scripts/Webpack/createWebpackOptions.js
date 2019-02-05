@@ -40,7 +40,7 @@ module.exports = bundleArguments => {
           test: /\.less$/,
           use: [
             MiniCssExtractPlugin.loader,
-            "css-loader",
+            'css-loader?modules&importLoaders=true&localIdentName=[path]___[name]__[local]___[hash:base64:5]``',
             "less-loader"
           ]
         },
@@ -48,7 +48,7 @@ module.exports = bundleArguments => {
           test: /.\.css$/,
           use: [
             MiniCssExtractPlugin.loader,
-            "css-loader"
+            'css-loader?modules&importLoaders=true&localIdentName=[path]___[name]__[local]___[hash:base64:5]``'
           ]
         }
       ]

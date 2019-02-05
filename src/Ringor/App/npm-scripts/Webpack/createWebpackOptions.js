@@ -12,7 +12,13 @@ const bundleName = 'ringor-bundle';
 
 module.exports = bundleArguments => {
   const workingDirectory = path.resolve(__dirname, '../../');
+  const targetDirectory = path.join(workingDirectory, bundleArguments.target || '');
+
   let commonOptions = {
+    output: {
+      filename: bundleName + '.js',
+      path: targetDirectory
+    },
     resolve: {
       modules: [
         path.resolve(workingDirectory, 'node_modules'),
@@ -24,7 +30,9 @@ module.exports = bundleArguments => {
       //new BundleAnalyzerPlugin(),
       new webpack.HashedModuleIdsPlugin(),
       new ProgressBarPlugin(),
-      new EncodingPlugin({ encoding: 'utf8' })
+      new EncodingPlugin({ encoding: 'utf8' }),
+      new CleanWebpackPlugin([targetDirectory], { root: path.join(targetDirectory, '..') }),
+      new MiniCssExtractPlugin({ filename: bundleName + '.css' })
     ],
     module: {
       rules: [
@@ -47,14 +55,8 @@ module.exports = bundleArguments => {
     }
   };
 
-  let targetDirectory;
   switch (bundleArguments.configuration) {
     case "debug":
-      targetDirectory = path.join(workingDirectory, bundleArguments.target || '');
-      commonOptions.output = {
-        filename: bundleName + '.js',
-        path: targetDirectory
-      };
       commonOptions.mode = 'development';
       commonOptions.devtool = 'source-map';
       commonOptions.optimization = {
@@ -66,15 +68,8 @@ module.exports = bundleArguments => {
         options: { configFile: 'tsconfig.json' },
         exclude: [/node_modules/, /\.test\.(ts|tsx)?$/]
       });
-      commonOptions.plugins.push(new CleanWebpackPlugin([targetDirectory], { root: path.join(targetDirectory, '..') }));
-      commonOptions.plugins.push(new MiniCssExtractPlugin({ filename: bundleName + '.css' }));
       break;
     case "release":
-      targetDirectory = path.join(workingDirectory, bundleArguments.target || '');
-      commonOptions.output = {
-        filename: bundleName + '.js',
-        path: targetDirectory
-      };
       commonOptions.mode = 'production';
       commonOptions.devtool = 'nosources-source-map';
       commonOptions.optimization = {
@@ -102,8 +97,6 @@ module.exports = bundleArguments => {
         options: { configFile: 'tsconfig.release.json' },
         exclude: [/node_modules/, /\.test\.(ts|tsx)?$/]
       });
-      commonOptions.plugins.push(new CleanWebpackPlugin([targetDirectory], { root: path.join(targetDirectory, '..') }));
-      commonOptions.plugins.push(new MiniCssExtractPlugin({ filename: bundleName + '.css' }));
       commonOptions.plugins.push(new OptimizeCSSAssetsPlugin({}));
       break;
   }

@@ -6,7 +6,7 @@ import RequestSender, { IRequestSender } from './facades/RequestSender';
 
 const urlService = new UrlService(applicationInfo.urlInfo);
 const requestSender = new RequestSender();
-const apiClient = new ApiClient(requestSender);
+const apiClient = new ApiClient(urlService, requestSender);
 
 export interface IServices {
   urlService: IUrlService;

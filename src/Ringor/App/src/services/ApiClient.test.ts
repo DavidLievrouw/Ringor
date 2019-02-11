@@ -1,48 +1,61 @@
 import ApiClient, { IApiClient } from './ApiClient';
 import { IRequestSender } from '../facades/RequestSender';
 import { IDictionary } from '../facades/IDictionary';
+import { IUrlService } from './UrlService';
 
 let apiClient: IApiClient;
+let urlService: IUrlService;
 let requestSender: IRequestSender;
 
-describe('ApiClient', () => {
+describe('ApiClient', () => {  
+  let interceptedUrl: string;
+  let interceptedRequest: Request;
+  
+  beforeEach(() => {
+    const UrlServiceMock = jest.fn<IUrlService>(() => ({
+      getAbsoluteUrl: jest.fn().mockImplementation(url => 'https://dalion.eu/ringortests/' + url)
+    }));
+    urlService = new UrlServiceMock();
+    const RequestSenderMock = jest.fn<IRequestSender>(() => ({
+      send: jest.fn().mockImplementation((url, request) => {
+        interceptedUrl = url;
+        interceptedRequest = request;
+      })
+    }));
+    requestSender = new RequestSenderMock();
+    apiClient = new ApiClient(urlService, requestSender);
+  });
+
   describe('get', () => {
     let url: string;
     let queryParams: IDictionary<string>;
     let headers: IDictionary<string>;
-    let interceptedUrl: string;
-    let interceptedRequest: Request;
 
     beforeEach(() => {
-      const RequestSenderMock = jest.fn<IRequestSender>(() => ({
-        send: jest.fn().mockImplementation((url, request) => {
-          interceptedUrl = url;
-          interceptedRequest = request;
-        })
-      }));
-      requestSender = new RequestSenderMock();
-      apiClient = new ApiClient(requestSender);
-      url = 'https://dalion.eu/ringortests/item';
+      url = 'item';
       queryParams = {};
       headers = {};
     });
 
     test("should get the correct url", async () => {
       await apiClient.get(url);
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ method: 'GET' }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ method: 'GET' }));
     });
 
     test("should send request with default headers and mode, if none is specified", async () => {
       await apiClient.get(url);
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ mode: 'same-origin', headers: undefined }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ mode: 'same-origin', headers: undefined }));
     });
 
     test("should send specified mode, if overridden", async () => {
       await apiClient.get(url, undefined, undefined, 'no-cors');
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ mode: 'no-cors' }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ mode: 'no-cors' }));
     });
 
     test("should send specified headers, if specified", async () => {
@@ -78,39 +91,32 @@ describe('ApiClient', () => {
     let url: string;    
     let queryParams: IDictionary<string>;
     let headers: IDictionary<string>;
-    let interceptedUrl: string;
-    let interceptedRequest: Request;
 
     beforeEach(() => {
-      const RequestSenderMock = jest.fn<IRequestSender>(() => ({
-        send: jest.fn().mockImplementation((url, request) => {
-          interceptedUrl = url;
-          interceptedRequest = request;
-        })
-      }));
-      requestSender = new RequestSenderMock();
-      apiClient = new ApiClient(requestSender);
-      url = 'https://dalion.eu/ringortests/item';
+      url = 'item';
       queryParams = {};
       headers = {};
     });
 
     test("should post the correct url", async () => {
       await apiClient.post(url);
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ method: 'POST' }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ method: 'POST' }));
     });
 
     test("should send request with default headers and mode, if none is specified", async () => {
       await apiClient.post(url);
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ mode: 'same-origin', headers: undefined }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ mode: 'same-origin', headers: undefined }));
     });
 
     test("should send specified mode, if overridden", async () => {
       await apiClient.post(url, undefined, undefined, undefined, 'no-cors');
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ mode: 'no-cors' }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ mode: 'no-cors' }));
     });
 
     test("should send specified headers, if specified", async () => {
@@ -161,39 +167,32 @@ describe('ApiClient', () => {
     let url: string;    
     let queryParams: IDictionary<string>;
     let headers: IDictionary<string>;
-    let interceptedUrl: string;
-    let interceptedRequest: Request;
 
     beforeEach(() => {
-      const RequestSenderMock = jest.fn<IRequestSender>(() => ({
-        send: jest.fn().mockImplementation((url, request) => {
-          interceptedUrl = url;
-          interceptedRequest = request;
-        })
-      }));
-      requestSender = new RequestSenderMock();
-      apiClient = new ApiClient(requestSender);
-      url = 'https://dalion.eu/ringortests/item';
+      url = 'item';
       queryParams = {};
       headers = {};
     });
 
     test("should put the correct url", async () => {
       await apiClient.put(url);
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ method: 'PUT' }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ method: 'PUT' }));
     });
 
     test("should send request with default headers and mode, if none is specified", async () => {
       await apiClient.put(url);
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ mode: 'same-origin', headers: undefined }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ mode: 'same-origin', headers: undefined }));
     });
 
     test("should send specified mode, if overridden", async () => {
       await apiClient.put(url, undefined, undefined, undefined, 'no-cors');
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ mode: 'no-cors' }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ mode: 'no-cors' }));
     });
 
     test("should send specified headers, if specified", async () => {
@@ -244,39 +243,32 @@ describe('ApiClient', () => {
     let url: string;    
     let queryParams: IDictionary<string>;
     let headers: IDictionary<string>;
-    let interceptedUrl: string;
-    let interceptedRequest: Request;
 
     beforeEach(() => {
-      const RequestSenderMock = jest.fn<IRequestSender>(() => ({
-        send: jest.fn().mockImplementation((url, request) => {
-          interceptedUrl = url;
-          interceptedRequest = request;
-        })
-      }));
-      requestSender = new RequestSenderMock();
-      apiClient = new ApiClient(requestSender);
-      url = 'https://dalion.eu/ringortests/item';
+      url = 'item';
       queryParams = {};
       headers = {};
     });
 
     test("should delete the correct url", async () => {
       await apiClient.delete(url);
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ method: 'DELETE' }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ method: 'DELETE' }));
     });
 
     test("should send request with default headers and mode, if none is specified", async () => {
       await apiClient.delete(url);
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ mode: 'same-origin', headers: undefined }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ mode: 'same-origin', headers: undefined }));
     });
 
     test("should send specified mode, if overridden", async () => {
       await apiClient.delete(url, undefined, undefined, undefined, 'no-cors');
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ mode: 'no-cors' }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ mode: 'no-cors' }));
     });
 
     test("should send specified headers, if specified", async () => {
@@ -327,39 +319,32 @@ describe('ApiClient', () => {
     let url: string;    
     let queryParams: IDictionary<string>;
     let headers: IDictionary<string>;
-    let interceptedUrl: string;
-    let interceptedRequest: Request;
 
     beforeEach(() => {
-      const RequestSenderMock = jest.fn<IRequestSender>(() => ({
-        send: jest.fn().mockImplementation((url, request) => {
-          interceptedUrl = url;
-          interceptedRequest = request;
-        })
-      }));
-      requestSender = new RequestSenderMock();
-      apiClient = new ApiClient(requestSender);
-      url = 'https://dalion.eu/ringortests/item';
+      url = 'item';
       queryParams = {};
       headers = {};
     });
 
     test("should patch the correct url", async () => {
       await apiClient.patch(url);
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ method: 'PATCH' }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ method: 'PATCH' }));
     });
 
     test("should send request with default headers and mode, if none is specified", async () => {
       await apiClient.patch(url);
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ mode: 'same-origin', headers: undefined }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ mode: 'same-origin', headers: undefined }));
     });
 
     test("should send specified mode, if overridden", async () => {
       await apiClient.patch(url, undefined, undefined, undefined, 'no-cors');
+      const expectedUrl = 'https://dalion.eu/ringortests/item';
       expect(requestSender.send)
-        .toHaveBeenCalledWith(url, expect.objectContaining({ mode: 'no-cors' }));
+        .toHaveBeenCalledWith(expectedUrl, expect.objectContaining({ mode: 'no-cors' }));
     });
 
     test("should send specified headers, if specified", async () => {

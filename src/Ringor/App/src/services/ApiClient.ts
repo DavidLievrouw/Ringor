@@ -1,5 +1,6 @@
 import { IDictionary } from "../facades/IDictionary";
 import { IRequestSender } from '../facades/RequestSender';
+import { IUrlService } from './UrlService';
 
 export interface IApiClient {
   get(url: string, queryParams?: IDictionary<string>, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
@@ -11,29 +12,36 @@ export interface IApiClient {
 
 class ApiClient {
   private requestSender: IRequestSender;
+  private urlService: IUrlService;
 
-  constructor(requestSender: IRequestSender) {
+  constructor(urlService: IUrlService, requestSender: IRequestSender) {
     this.requestSender = requestSender;
+    this.urlService = urlService;
   }
 
   get(url: string, queryParams: IDictionary<string> = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
-    return this.sendRequest('GET', url, queryParams, undefined, headers, mode);
+    const absoluteUrl = this.urlService.getAbsoluteUrl(url);
+    return this.sendRequest('GET', absoluteUrl, queryParams, undefined, headers, mode);
   }
 
   post(url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
-    return this.sendRequest('POST', url, queryParams, data, headers, mode);
+    const absoluteUrl = this.urlService.getAbsoluteUrl(url);
+    return this.sendRequest('POST', absoluteUrl, queryParams, data, headers, mode);
   }
 
   put(url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
-    return this.sendRequest('PUT', url, queryParams, data, headers, mode);
+    const absoluteUrl = this.urlService.getAbsoluteUrl(url);
+    return this.sendRequest('PUT', absoluteUrl, queryParams, data, headers, mode);
   }
 
   delete(url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
-    return this.sendRequest('DELETE', url, queryParams, data, headers, mode);
+    const absoluteUrl = this.urlService.getAbsoluteUrl(url);
+    return this.sendRequest('DELETE', absoluteUrl, queryParams, data, headers, mode);
   }
 
   patch(url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
-    return this.sendRequest('PATCH', url, queryParams, data, headers, mode);
+    const absoluteUrl = this.urlService.getAbsoluteUrl(url);
+    return this.sendRequest('PATCH', absoluteUrl, queryParams, data, headers, mode);
   }
   
   sendRequest(method: string, url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {

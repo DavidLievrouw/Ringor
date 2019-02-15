@@ -13,9 +13,7 @@ namespace Dalion.Ringor.Build.Tasks.Test {
                 settings.WorkingDirectory = context.Ringor.FileSystem.ProjectsAndSolutions.Ringor.ReactAppDirectory;
             }
 
-            context.NpmRunScript("clean:tests", Configurator);
-            context.NpmRunScript("bundle:tests", Configurator);
-            context.NpmRunScript("test", Configurator);
+            context.NpmRunScript("tests", Configurator);
         }
     }
 }

@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "clean": "node ./npm-scripts/clean.js --target=build-output",
-    "clean:all": "node ./npm-scripts/clean.js --target sourcemaps --target=build-output --target=node-modules",
+    "clean:all": "node ./npm-scripts/clean.js --target=build-output --target=node-modules",
     "bundle:release": "npm run clean && node ./npm-scripts/bundle.js --action=bundle --configuration=release --target=../wwwroot/App",
     "bundle:debug": "node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
     "bundle": "npm run bundle:debug",

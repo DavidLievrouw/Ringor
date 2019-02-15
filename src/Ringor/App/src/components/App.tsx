@@ -6,7 +6,6 @@ export interface IAppProps {}
 export interface IAppState {}
 
 export class App extends React.Component<IAppProps, IAppState> {
-
   constructor(props: IAppProps) {
     super(props);
   }

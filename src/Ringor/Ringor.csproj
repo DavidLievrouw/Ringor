@@ -28,19 +28,35 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="BuildWebPackIfNeeded" BeforeTargets="BeforeBuild" Condition="!Exists('wwwroot\App') Or '$(IsPublishing)' == 'true'">
-    <Exec Command="npm install" WorkingDirectory="App" />
-    <Exec Command="npm run clean" WorkingDirectory="App" />
-    <Exec Command="npm run bundle:debug" WorkingDirectory="App" Condition="'$(Configuration)' != 'Release'" />
-    <Exec Command="npm run bundle:release" WorkingDirectory="App" Condition="'$(Configuration)' == 'Release'" />
-  </Target>
-
   <ItemGroup>
     <Compile Remove="App\**" />
     <Content Remove="App\**" />
     <EmbeddedResource Remove="App\**" />
     <None Remove="App\**" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(IsPublishing)' == 'true'">
+    <!-- Workaround to refresh the default content items, built by npm, later -->
+    <!-- https://github.com/aspnet/websdk/issues/162 -->
+    <Content Update="wwwroot\App\**" CopyToPublishDirectory="Never" />
+    <Content Remove="wwwroot\App\**" />
+  </ItemGroup>
+  <Target Name="BuildWebPackIfNeeded" BeforeTargets="BeforeBuild" Condition="!Exists('wwwroot\App') Or '$(IsPublishing)' == 'true'">
+    <Exec Command="npm install" WorkingDirectory="App" />
+    <Exec Command="npm run clean" WorkingDirectory="App" />
+    <Exec Command="npm run bundle:debug" WorkingDirectory="App" Condition="'$(Configuration)' != 'Release'" />
+    <Exec Command="npm run bundle:release" WorkingDirectory="App" Condition="'$(Configuration)' == 'Release'" />
+    <!-- Workaround to refresh the default content items, built by npm, later -->
+    <!-- https://github.com/aspnet/websdk/issues/162 -->
+    <ItemGroup>
+      <AppFiles Include="wwwroot\App\**\*" />
+      <Content Include="@(AppFiles)" CopytoPublishDirectory="Always" />
+      <ResolvedFileToPublish Include="@(AppFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(AppFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <Content Update="appsettings.Development.json">

@@ -9,7 +9,8 @@
     "removeComments": true,
     "noImplicitAny": true,
     "importHelpers": true,
-    "noEmitHelpers": true
+    "noEmitHelpers": true,
+    "lib": ["es2018", "dom"]
   },
   "exclude": [
     "node_modules"

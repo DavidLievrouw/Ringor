@@ -2,14 +2,15 @@
   "compileOnSave": true,
   "compilerOptions": {
     "emitBOM": true,
-    "target": "es2017",
+    "target": "es2018",
     "jsx": "react",
     "module": "commonjs",
     "sourceMap": true,
     "removeComments": false,
     "noImplicitAny": true,
     "importHelpers": true,
-    "noEmitHelpers": true
+    "noEmitHelpers": true,
+    "lib": ["es2018", "dom"]
   },
   "exclude": [
     "node_modules"

@@ -24,8 +24,7 @@
       "ts",
       "tsx",
       "js",
-      "jsx",
-      "json"
+      "jsx"
     ]
   },
   "dependencies": {

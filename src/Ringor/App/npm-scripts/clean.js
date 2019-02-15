@@ -1,6 +1,5 @@
 const commandLineArgs = require('command-line-args');
 const removeFolders = require("./FileSystem/removeFolders");
-const removeFiles = require("./FileSystem/removeFiles");
 const logger = require("./logger");
 const nodeModulesFolder = "./node_modules";
 const buildOutputFolder = "../wwwroot/App";
@@ -17,8 +16,6 @@ const getAction = target => {
   switch (target) {
     case "build-output":
       return removeFolders([buildOutputFolder]);
-    case "sourcemaps":
-      return removeFiles(buildOutputFolder + "/**/*.map");
     case "node-modules":
       return removeFolders([nodeModulesFolder]);
   }

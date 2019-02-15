@@ -71,7 +71,6 @@ module.exports = bundleArguments => {
       break;
     case "release":
       commonOptions.mode = 'production';
-      commonOptions.devtool = 'nosources-source-map';
       commonOptions.optimization = {
         minimize: true,
         minimizer: [
@@ -87,7 +86,7 @@ module.exports = bundleArguments => {
                 toplevel: true,
                 eval: true
               }
-            },
+            }
           }),
         ]
       };

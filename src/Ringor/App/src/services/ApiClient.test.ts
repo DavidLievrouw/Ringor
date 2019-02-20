@@ -12,11 +12,11 @@ describe('ApiClient', () => {
   let interceptedRequest: Request;
   
   beforeEach(() => {
-    const UrlServiceMock = jest.fn<IUrlService>(() => ({
+    const UrlServiceMock = jest.fn<IUrlService, any[]>(() => ({
       getAbsoluteUrl: jest.fn().mockImplementation(url => 'https://dalion.eu/ringortests/' + url)
     }));
     urlService = new UrlServiceMock();
-    const RequestSenderMock = jest.fn<IRequestSender>(() => ({
+    const RequestSenderMock = jest.fn<IRequestSender, any[]>(() => ({
       send: jest.fn().mockImplementation((url, request) => {
         interceptedUrl = url;
         interceptedRequest = request;

@@ -1,9 +1,10 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 const styles = require('./styles/site.less');
 import composition from '../composition';
 import { IApplicationInfo } from '../facades/applicationInfo';
 
-export interface ILandingProps {}
+export interface ILandingProps { }
 
 export interface ILandingState {
   applicationInfo: IApplicationInfo;
@@ -40,10 +41,10 @@ export class Landing extends React.Component<ILandingProps, ILandingState> {
               </a>
             </div>
             <div className="item">
-              <a className="ui violet huge basic label" href="login">
+              <Link to="/login" className="ui violet huge basic label">
                 <i className="sign-in icon"></i>
                 Browser sign in
-              </a>
+              </Link>
             </div>
             <div className="item">
               <a className="ui black huge basic image label" href="api">

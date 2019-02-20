@@ -25,8 +25,8 @@ export class Landing extends React.Component<ILandingProps, ILandingState> {
           <div className={`ui massive ${styles.company}`}>{this.applicationInfo.company}</div>
         </div>
         <div className={`ui huge ${styles.header} ${styles.status}`}>
-          <div className="ui large basic label">{this.applicationInfo.product}</div>
-          <div className="ui large green label">
+          <div className="ui small basic label">{this.applicationInfo.product}</div>
+          <div className="ui small green label">
             <i className="check circle icon"></i>
             up and running
           </div>

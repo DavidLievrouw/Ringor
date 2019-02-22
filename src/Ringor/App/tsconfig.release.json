@@ -10,7 +10,7 @@
     "noImplicitAny": true,
     "importHelpers": true,
     "noEmitHelpers": true,
-    "lib": ["es2018", "dom"]
+    "lib": ["es2018", "dom", "es2015.promise", "es5"]
   },
   "exclude": [
     "node_modules"

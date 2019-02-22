@@ -1,3 +1,5 @@
+import "isomorphic-fetch"; // For IE11 compatibility
+
 export interface IRequestSender {
   send(input: RequestInfo, init?: RequestInit): Promise<Response>;
 }

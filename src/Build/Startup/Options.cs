@@ -41,7 +41,7 @@ namespace Dalion.Ringor.Build.Startup {
         Quiet,
         Minimal,
         Normal,
-        Verbose,
+        Detailed,
         Diagnostic
     }
 

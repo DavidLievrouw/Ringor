@@ -24,7 +24,7 @@ namespace Dalion.Ringor.Build.Configuration.Arguments {
                         return DotNetCoreVerbosity.Minimal;
                     case "normal":
                         return DotNetCoreVerbosity.Normal;
-                    case "verbose":
+                    case "detailed":
                         return DotNetCoreVerbosity.Detailed;
                     case "diagnostic":
                         return DotNetCoreVerbosity.Diagnostic;

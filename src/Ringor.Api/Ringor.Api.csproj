@@ -21,7 +21,6 @@
       <Version>$(ProductVersion)</Version>
       <InformationalVersion>$(ProductVersion)</InformationalVersion>
     </PropertyGroup>
-    <Message Text="The Ringor application version is '$(ApplicationVersion)'." Importance="High" />
   </Target>
   
   <ItemGroup>

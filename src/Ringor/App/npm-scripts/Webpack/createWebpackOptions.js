@@ -13,8 +13,10 @@ const bundleName = 'ringor-bundle';
 module.exports = bundleArguments => {
   const workingDirectory = path.resolve(__dirname, '../../');
   const targetDirectory = path.join(workingDirectory, bundleArguments.target || '');
+  const sourceDirectory = path.join(workingDirectory, 'src');
 
   let commonOptions = {
+    entry: path.join(sourceDirectory, 'index.tsx'),
     output: {
       filename: bundleName + '.js',
       path: targetDirectory
@@ -31,7 +33,7 @@ module.exports = bundleArguments => {
       new webpack.HashedModuleIdsPlugin(),
       new ProgressBarPlugin(),
       new EncodingPlugin({ encoding: 'utf8' }),
-      new CleanWebpackPlugin([targetDirectory], { root: path.join(targetDirectory, '..') }),
+      new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({ filename: bundleName + '.css' })
     ],
     module: {

@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-const EncodingPlugin = require('webpack-encoding-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -32,7 +31,6 @@ module.exports = bundleArguments => {
       //new BundleAnalyzerPlugin(),
       new webpack.HashedModuleIdsPlugin(),
       new ProgressBarPlugin(),
-      new EncodingPlugin({ encoding: 'utf8' }),
       new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({ filename: bundleName + '.css' })
     ],

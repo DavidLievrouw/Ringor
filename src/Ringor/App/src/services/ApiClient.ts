@@ -10,7 +10,7 @@ export interface IApiClient {
   patch(url: string, queryParams?: IDictionary<string>, data?: any, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
 }
 
-class ApiClient {
+class ApiClient implements IApiClient {
   private requestSender: IRequestSender;
   private urlService: IUrlService;
 

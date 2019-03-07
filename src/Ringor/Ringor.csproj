@@ -80,6 +80,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ringor.Api\Ringor.Api.csproj" />
+    <ProjectReference Include="..\Ringor.Utils\Ringor.Utils.csproj" />
   </ItemGroup>
 
   <!-- Delete appsettings.{Environment}.json that are not applicable to the specified environment -->

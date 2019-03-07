@@ -2,14 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Dalion.Ringor.Api</RootNamespace>
+    <RootNamespace>Dalion.Ringor.Utils</RootNamespace>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <DocumentationFile>.\bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
-    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <Target Name="InitVersion" BeforeTargets="BeforeBuild">
@@ -22,13 +17,5 @@
       <InformationalVersion>$(ProductVersion)</InformationalVersion>
     </PropertyGroup>
   </Target>
-  
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\Ringor.Utils\Ringor.Utils.csproj" />
-  </ItemGroup>
-  
+
 </Project>

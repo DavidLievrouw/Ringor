@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ringor.Api\Ringor.Api.csproj" />
+    <ProjectReference Include="..\Ringor.Utils\Ringor.Utils.csproj" />
     <ProjectReference Include="..\Ringor\Ringor.csproj" />
   </ItemGroup>
 

@@ -23,11 +23,11 @@ export class App extends React.Component<IAppProps, IAppState> {
               Home
             </Link>
             <a className="item" href="swagger">
-              <img src="/swagger.png" className={`ui ${styles.menu} ${styles.image}`} />
+              <img src="/swagger.png" />
               Swagger UI
             </a>
             <a className="item" href="api">
-              <img src="/api.png" className={`ui ${styles.menu} ${styles.image}`} />
+              <img src="/api.png" />
               Navigate API
             </a>
             <Link to="/login" className="item">

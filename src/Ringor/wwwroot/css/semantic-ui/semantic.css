@@ -23609,8 +23609,7 @@ ol.ui.horizontal.list li:before,
          Site Overrides
 *******************************/
 
-.ui.grid > .column.input,
-.ui.grid > .row > .column.input {
+.ui.grid .column.input {
   min-width: 275px;
 }
 
@@ -25919,6 +25918,14 @@ Floated Menu / Item
 /*******************************
          Site Overrides
 *******************************/
+
+.ui.vertical.labeled.icon.menu img {
+  display: block;
+  height: 2em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.25rem;
+}
 /*!
  * # Semantic UI 2.4.2 - Message
  * http://github.com/semantic-org/semantic-ui/

@@ -2,8 +2,7 @@
          Site Overrides
 *******************************/
 
-.ui.grid > .column.input,
-.ui.grid > .row > .column.input {
+.ui.grid .column.input {
   min-width: 275px;
 }
 

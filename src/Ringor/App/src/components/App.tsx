@@ -16,7 +16,7 @@ export class App extends React.Component<IAppProps, IAppState> {
   render() {
     return (
       <Router>
-        <div className={`${styles['middle-aligned']}`}>
+        <div className={`${styles.app}`}>
           <div className={`ui left fixed vertical labeled icon menu ${styles['vertical']} ${styles['icon']} ${styles['menu']} ${styles['fixed-width-menu']}`}>
             <Link to="/" className="item">
               <i className="home icon"></i>

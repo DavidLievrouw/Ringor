@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Landing } from './Landing';
 import { Login } from './Login';
 const styles = require('./styles/site.less');
@@ -16,9 +16,29 @@ export class App extends React.Component<IAppProps, IAppState> {
   render() {
     return (
       <Router>
-        <div className={`ui middle aligned center aligned grid ${styles.ringorApp}`} style={{ margin: "0px" }}>
-          <Route exact path="/" component={Landing} />
-          <Route path="/login" component={Login} />
+        <div className={`${styles['middle-aligned']}`}>
+          <div className={`ui left fixed vertical labeled icon menu`}>
+            <Link to="/" className="item">
+              <i className="home icon"></i>
+              Home
+            </Link>
+            <a className="item" href="swagger">
+              <img src="/swagger.png" className={`ui ${styles.menu} ${styles.image}`} />
+              Swagger UI
+            </a>
+            <a className="item" href="api">
+              <img src="/api.png" className={`ui ${styles.menu} ${styles.image}`} />
+              Navigate API
+            </a>
+            <Link to="/login" className="item">
+              <i className="sign-in icon"></i>
+              Browser login
+            </Link>
+          </div>
+          <div className={`${styles['app-content']}`}>
+            <Route exact path="/" component={Landing} />
+            <Route path="/login" component={Login} />
+          </div>
         </div>
       </Router>
     );

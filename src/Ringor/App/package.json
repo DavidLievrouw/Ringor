@@ -12,8 +12,8 @@
     "bundle:debug": "node ./npm-scripts/bundle.js --action=bundle --configuration=debug --target=../wwwroot/App",
     "bundle": "npm run bundle:debug",
     "watch": "node ./npm-scripts/bundle.js --action=watch --configuration=debug --target=../wwwroot/App",
-    "tests": "jest",
-    "watch:tests": "jest --watch"
+    "tests": "jest --verbose false",
+    "watch:tests": "jest --watch --verbose false"
   },
   "jest": {
     "transform": {

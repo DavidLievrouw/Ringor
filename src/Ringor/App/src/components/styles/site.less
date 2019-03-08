@@ -15,11 +15,18 @@ body {
 }
 
 .app-content {
-  padding-left: @sidebar-width + @content-padding;
   height: 100%;
+  padding-left: @sidebar-width;
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: @footer-height;
+}
+
+.app-content .padded {
+  padding-left: @content-padding;
   padding-top: @content-padding;
   padding-right: @content-padding;
-  padding-bottom: calc(@content-padding + @footer-height);
+  padding-bottom: @content-padding;
 }
 
 /** END APP WIDE **/

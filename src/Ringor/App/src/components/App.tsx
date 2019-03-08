@@ -2,6 +2,7 @@ import * as React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Landing } from './Landing';
 import { Login } from './Login';
+import { Swagger } from './Swagger';
 const styles = require('./styles/site.less');
 
 export interface IAppProps { }
@@ -22,10 +23,10 @@ export class App extends React.Component<IAppProps, IAppState> {
               <i className="home icon"></i>
               Home
             </Link>
-            <a className="item" href="swagger">
+            <Link to="/swagger" className="item">
               <img src="/swagger.png" />
               Swagger UI
-            </a>
+            </Link>
             <a className="item" href="api">
               <img src="/api.png" />
               Navigate API
@@ -38,6 +39,7 @@ export class App extends React.Component<IAppProps, IAppState> {
           <div className={`${styles['app-content']}`}>
             <Route exact path="/" component={Landing} />
             <Route path="/login" component={Login} />
+            <Route path="/swagger" component={Swagger} />
           </div>
         </div>
       </Router>

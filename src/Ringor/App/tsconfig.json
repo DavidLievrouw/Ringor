@@ -10,7 +10,8 @@
     "noImplicitAny": true,
     "importHelpers": true,
     "noEmitHelpers": true,
-    "lib": ["es2018", "dom"]
+    "lib": ["es2018", "dom"],
+    "typeRoots" : ["./typings", "./node_modules/@types/"]
   },
   "exclude": [
     "node_modules"

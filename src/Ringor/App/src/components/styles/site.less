@@ -64,17 +64,29 @@ footer {
 
 /** BEGIN CONTENTS **/
 
-.fill {
-  height: 100%;
-  width: 100%;
+.fillbox {
   display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  min-height: 0px;
+  flex-flow: column;
+  height: 100%;
 }
 
-.fill-remaining {
-  flex-grow: 1
+.fillbox .row.header {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+}
+
+.fillbox .row.content {
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.fillbox .row.footer {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 40px;
 }
 
 /** END CONTENTS **/

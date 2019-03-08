@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Landing } from './Landing';
 import { Login } from './Login';
 import { Swagger } from './Swagger';
+import { Api } from './Api';
 const styles = require('./styles/site.less');
 
 export interface IAppProps { }
@@ -26,11 +27,11 @@ export class App extends React.Component<IAppProps, IAppState> {
             <Link to="/swagger" className="item">
               <img src="/swagger.png" />
               Swagger UI
-            </Link>
-            <a className="item" href="api">
+            </Link>            
+            <Link to="/api" className="item">
               <img src="/api.png" />
-              Navigate API
-            </a>
+              Navigate the API
+            </Link>
             <Link to="/login" className="item">
               <i className="sign-in icon"></i>
               Browser login
@@ -39,6 +40,7 @@ export class App extends React.Component<IAppProps, IAppState> {
           <div className={`${styles['app-content']}`}>
             <Route exact path="/" component={Landing} />
             <Route path="/login" component={Login} />
+            <Route path="/api" component={Api} />
             <Route path="/swagger" component={Swagger} />
           </div>
         </div>

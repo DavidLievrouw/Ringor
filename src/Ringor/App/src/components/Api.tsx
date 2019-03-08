@@ -1,11 +1,11 @@
-import * as React from "react";
-import IFrame from 'react-iframe';
 const styles = require('./styles/site.less');
 
-export interface IApiProps { }
+import * as React from "react";
+import IFrame from 'react-iframe';
 
-export interface IApiState {
-}
+export interface IApiProps {}
+
+export interface IApiState {}
 
 export class Api extends React.Component<IApiProps, IApiState> {
   constructor(props: IApiProps) {

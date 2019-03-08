@@ -1,19 +1,17 @@
-import * as React from "react";
 const styles = require('./styles/site.less');
-import composition from '../composition';
+
+import * as React from "react";
 import { IApplicationInfo } from '../facades/applicationInfo';
 
-export interface ILoginProps { }
-
-export interface ILoginState {
+export interface ILoginProps { 
+  applicationInfo: IApplicationInfo;
 }
 
-export class Login extends React.Component<ILoginProps, ILoginState> {
-  private applicationInfo: IApplicationInfo;
+export interface ILoginState {}
 
+export class Login extends React.Component<ILoginProps, ILoginState> {
   constructor(props: ILoginProps) {
     super(props);
-    this.applicationInfo = composition.applicationInfo;
   }
 
   render() {
@@ -22,7 +20,7 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
         <div className="five wide input column">
           <h2 className="ui image header">
             <div className={`ui huge ${styles.header}`}>
-              <div className={`ui massive ${styles.company}`}>{this.applicationInfo.company}</div>
+              <div className={`ui massive ${styles.company}`}>{this.props.applicationInfo.company}</div>
             </div>
             <div className="content">
               Log-in to your account

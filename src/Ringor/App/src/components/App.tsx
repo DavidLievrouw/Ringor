@@ -1,14 +1,18 @@
+const styles = require('./styles/site.less');
+
 import * as React from "react";
+import { IComposition } from '../composition';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Landing } from './Landing';
 import { Login } from './Login';
 import { Swagger } from './Swagger';
 import { Api } from './Api';
-const styles = require('./styles/site.less');
 
-export interface IAppProps { }
+export interface IAppProps {
+  composition: IComposition
+}
 
-export interface IAppState { }
+export interface IAppState {}
 
 export class App extends React.Component<IAppProps, IAppState> {
   constructor(props: IAppProps) {
@@ -38,10 +42,10 @@ export class App extends React.Component<IAppProps, IAppState> {
             </Link>
           </div>
           <div className={`${styles['app-content']}`}>
-            <Route exact path="/" component={Landing} />
-            <Route path="/login" component={Login} />
-            <Route path="/api" component={Api} />
-            <Route path="/swagger" component={Swagger} />
+            <Route exact path="/" render={(routeProps) => <Landing applicationInfo={this.props.composition.applicationInfo} />} />
+            <Route path="/login" render={(routeProps) => <Login applicationInfo={this.props.composition.applicationInfo} />} />
+            <Route path="/api" render={(routeProps) => <Api />}  />
+            <Route path="/swagger" render={(routeProps) => <Swagger />}  />
           </div>
         </div>
       </Router>

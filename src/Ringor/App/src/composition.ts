@@ -19,7 +19,7 @@ export interface IComposition {
   services: IServices;
 }
 
-const composition = {
+const composition : IComposition = {
   applicationInfo: applicationInfo,
   services: {
     urlService: urlService,

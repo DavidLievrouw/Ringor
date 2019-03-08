@@ -1,11 +1,11 @@
-import * as React from "react";
-import IFrame from 'react-iframe';
 const styles = require('./styles/site.less');
 
-export interface ISwaggerProps { }
+import * as React from "react";
+import IFrame from 'react-iframe';
 
-export interface ISwaggerState {
-}
+export interface ISwaggerProps {}
+
+export interface ISwaggerState {}
 
 export class Swagger extends React.Component<ISwaggerProps, ISwaggerState> {
   constructor(props: ISwaggerProps) {

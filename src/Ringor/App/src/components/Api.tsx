@@ -1,8 +1,8 @@
 const styles = require('./styles/site.less');
 
 import * as React from "react";
-import IFrame from 'react-iframe';
 import { IApiUrlGetter } from '../services/ApiUrlGetter';
+import ReactJson from 'react-json-view';
 
 export interface IApiProps {
   apiUrlGetter: IApiUrlGetter;
@@ -12,7 +12,7 @@ export interface IApiState {
   error: string;
   isLoading: boolean;
   url: string;
-  response: string;
+  response: Object;
 }
 
 export class Api extends React.Component<IApiProps, IApiState> {
@@ -45,7 +45,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
       .get(this.state.url)
       .then(response => {
         this.setState({
-          response: JSON.stringify(response),
+          response: response,
           isLoading: false,
           error: null
         });
@@ -73,10 +73,19 @@ export class Api extends React.Component<IApiProps, IApiState> {
     let output = null;
     if (!this.state.isLoading && !this.state.error && this.state.response) {
       output =
-        <IFrame
-          className={`${styles['row']} ${styles['content']}`}
-          position="relative"
-          url="api" />;
+        <div className={`${styles['row']} ${styles['content']}`}>
+          <div className="ui basic segment">
+            <ReactJson
+              src={this.state.response}
+              theme="monokai"
+              collapsed={false}
+              displayDataTypes={false}
+              onAdd={false}
+              onEdit={false}
+              onDelete={false}
+              collapseStringsAfterLength={100} />
+          </div>
+        </div>;
     }
 
     let errorMessage = null;
@@ -94,7 +103,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
             <tbody>
               <tr>
                 <td className={`${styles['stretched-horizontally']}`}>
-                  <div className={`ui left icon ${this.state.isLoading ? 'disabled' : ''} input ${styles['stretched-horizontally']}`} style={{width:'100%'}}>
+                  <div className={`ui left icon ${this.state.isLoading ? 'disabled' : ''} input ${styles['stretched-horizontally']}`} style={{ width: '100%' }}>
                     <input type="text" placeholder="Api URL..." value={this.state.url} onChange={this.handleUrlChange} />
                     <i className="globe icon"></i>
                   </div>

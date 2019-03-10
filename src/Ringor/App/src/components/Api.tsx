@@ -90,7 +90,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
 
   render() {
     let postmanMessage = null;
-    if (!this.state.clickedAwayPostmanMessage && this.state.requestCount < 3) {
+    if (!this.state.clickedAwayPostmanMessage && this.state.requestCount < 3  && !this.state.error) {
       postmanMessage =
         <tr>
           <td colSpan={2}>

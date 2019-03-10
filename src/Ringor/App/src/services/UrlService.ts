@@ -14,7 +14,7 @@ class UrlService implements IUrlService {
   }
 
   getAbsoluteUrl(relativeUrl: string): string {
-    if(relativeUrl.indexOf("http") === 0) return relativeUrl;
+    if (relativeUrl.indexOf("http") === 0) return relativeUrl;
     return [this.siteUrl, this.appUrl, UrlService.trimSlashes(relativeUrl)]
       .filter(_ => _)
       .join('/');

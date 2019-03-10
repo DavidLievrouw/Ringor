@@ -12,14 +12,20 @@ class ApiUrlGetter implements IApiUrlGetter {
   }
 
   get(url: string): Promise<Object> {
-    const paramsValidation = new Promise(function (resolve, reject) {
-      const sanitizedUrl = url && url.trim();
-      if (!sanitizedUrl) throw new Error('No URL is specified when performing a call to get an API endpoint.');
-      resolve();
+    const paramsValidation = new Promise<string>(function (resolve, reject) {
+      let sanitizedUrl = url && url.trim();
+      if (!sanitizedUrl) reject(new Error('No Api URL is specified.'));
+
+      if (sanitizedUrl.toLowerCase().indexOf("http") === 0) reject(new Error('Absolute URLs are not allowed. URLs should start with \'/api\'.'));
+      if (sanitizedUrl.toLowerCase().indexOf("/api") !== 0) reject(new Error('Only relative URLs that start with \'/api\' are allowed.'));
+
+      sanitizedUrl = '/api' + sanitizedUrl.substring(4);
+
+      resolve(sanitizedUrl);
     });
 
     return paramsValidation
-      .then(() => this.apiClient.get(url))
+      .then(sanitized => this.apiClient.get(sanitized))
       .then(response => {
         if (!response.ok) throw new Error(`Call to get url '${url}' failed: ${response.status} - ${response.statusText}.`);
         return response.json();

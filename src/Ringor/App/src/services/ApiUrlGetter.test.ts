@@ -41,22 +41,63 @@ describe('ApiUrlGetter', () => {
 
     test("should not allow a null URL", () => {
       return expect(apiUrlGetter.get(null)).rejects
-        .toThrow("No URL is specified");
+        .toThrow("No Api URL is specified");
+    });
+
+    test("should not allow an absolute HTTP URL", () => {
+      return expect(apiUrlGetter.get('http://www.dalion.eu/api')).rejects
+        .toThrow("Absolute URL");
+    });
+
+    test("should not allow an absolute HTTPS URL", () => {
+      return expect(apiUrlGetter.get('https://www.dalion.eu/api')).rejects
+        .toThrow("Absolute URL");
+    });
+
+    test("should not allow an absolute incorrectly cased HTTP URL", () => {
+      return expect(apiUrlGetter.get('Http://www.dalion.eu/api')).rejects
+        .toThrow("Absolute URL");
+    });
+
+    test("should not allow an absolute incorrectly cased HTTPS URL", () => {
+      return expect(apiUrlGetter.get('Https://www.dalion.eu/api')).rejects
+        .toThrow("Absolute URL");
+    });
+
+    test("should not allow URLs that don't start with /api", () => {
+      return expect(apiUrlGetter.get('/swagger')).rejects
+        .toThrow("/api");
+    });
+
+    test("should allow URLs that start with an incorrectly cased /api", async () => {
+      const incorrectlyCasedUrl = '/ApI/userInfo';
+      await apiUrlGetter.get(incorrectlyCasedUrl);
+      const expectedUrl = '/api/userInfo';
+      expect(apiClient.get)
+        .toHaveBeenCalledWith(expectedUrl);
     });
 
     test("should not allow an empty URL", () => {
       return expect(apiUrlGetter.get("")).rejects
-        .toThrow("No URL is specified");
+        .toThrow("No Api URL is specified");
     });
 
     test("should not allow an whitespace URL", () => {
       return expect(apiUrlGetter.get(" ")).rejects
-        .toThrow("No URL is specified");
+        .toThrow("No Api URL is specified");
     });
 
     test("should query the correct URL", async () => {
       await apiUrlGetter.get(url);
       const expectedUrl = url;
+      expect(apiClient.get)
+        .toHaveBeenCalledWith(expectedUrl);
+    });
+
+    test("should sanitize the URL", async () => {
+      const unsanitizedUrl = ' /Api/test?debug=true  ';
+      await apiUrlGetter.get(unsanitizedUrl);
+      const expectedUrl = '/api/test?debug=true';
       expect(apiClient.get)
         .toHaveBeenCalledWith(expectedUrl);
     });

@@ -28,11 +28,11 @@ export class App extends React.Component<IAppProps, IAppState> {
               <i className="home icon"></i>
               Home
             </Link>
-            <Link to="/swagger" className="item">
+            <Link to="/swaggerui" className="item">
               <img src="/swagger.png" />
               Swagger UI
             </Link>            
-            <Link to="/api" className="item">
+            <Link to="/apinav" className="item">
               <img src="/api.png" />
               Navigate the API
             </Link>
@@ -44,8 +44,8 @@ export class App extends React.Component<IAppProps, IAppState> {
           <div className={`${styles['app-content']}`}>
             <Route exact path="/" render={(routeProps) => <Landing applicationInfo={this.props.composition.applicationInfo} />} />
             <Route path="/login" render={(routeProps) => <Login applicationInfo={this.props.composition.applicationInfo} />} />
-            <Route path="/api" render={(routeProps) => <Api />}  />
-            <Route path="/swagger" render={(routeProps) => <Swagger />}  />
+            <Route path="/apinav" render={(routeProps) => <Api />}  />
+            <Route path="/swaggerui" render={(routeProps) => <Swagger />}  />
           </div>
         </div>
       </Router>

@@ -48,7 +48,7 @@ namespace Dalion.Ringor.Startup {
 
             services
                 .AddAuthorization(options => {
-                    options.AddPolicy(AuthorizationPolicies.RequireApiAccess, policy => policy.RequireClaim(Constants.ClaimTypes.Scope, "Api.FullAccess"));
+                    options.AddPolicy(AuthorizationPolicies.RequireApiAccess, policy => policy.RequireClaim(ClaimTypes.Scope, "Api.FullAccess"));
                     options.DefaultPolicy = options.GetPolicy(AuthorizationPolicies.RequireApiAccess);
                 })
                 .AddAuthentication(o => { o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
@@ -78,9 +78,9 @@ namespace Dalion.Ringor.Startup {
                         Title = "Ringor API",
                         Version = appVersion.ToString(2)
                     });
-                var pathToAddOn = bootstrapperSettings.EntryAssembly.Location;
-                var pathToContentRoot = Path.GetDirectoryName(pathToAddOn);
-                var assemblyName = Path.GetFileNameWithoutExtension(pathToAddOn);
+                var pathToEntryAssembly = bootstrapperSettings.EntryAssembly.Location;
+                var pathToContentRoot = Path.GetDirectoryName(pathToEntryAssembly);
+                var assemblyName = Path.GetFileNameWithoutExtension(pathToEntryAssembly);
                 c.IncludeXmlComments(Path.Combine(pathToContentRoot, assemblyName + ".xml"));
                 var apiAssemblyName = Path.GetFileNameWithoutExtension(typeof(DefaultController).Assembly.Location);
                 c.IncludeXmlComments(Path.Combine(pathToContentRoot, apiAssemblyName + ".xml"));

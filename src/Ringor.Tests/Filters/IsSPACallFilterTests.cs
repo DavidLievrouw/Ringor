@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dalion.Ringor.Api.Models;
 using Dalion.Ringor.Api.Services;
 using FakeItEasy;
@@ -15,16 +16,16 @@ using Microsoft.AspNetCore.Routing;
 using Xunit;
 
 namespace Dalion.Ringor.Filters {
-    public class SetViewDataApplicationInfoFilterTests {
+    public class IsSPACallFilterTests {
         private readonly IApplicationInfoProvider _applicationInfoProvider;
-        private readonly SetViewDataApplicationInfoFilter _sut;
+        private readonly IsSPACallFilterAttribute.IsSPACallFilter _sut;
 
-        public SetViewDataApplicationInfoFilterTests() {
+        public IsSPACallFilterTests() {
             FakeFactory.Create(out _applicationInfoProvider);
-            _sut = new SetViewDataApplicationInfoFilter(_applicationInfoProvider);
+            _sut = new IsSPACallFilterAttribute.IsSPACallFilter(_applicationInfoProvider);
         }
 
-        public class OnActionExecuted : SetViewDataApplicationInfoFilterTests {
+        public class OnActionExecuted : IsSPACallFilterTests {
             private readonly ApplicationInfo _applicationInfo;
             private readonly ActionExecutedContext _context;
 
@@ -110,6 +111,27 @@ namespace Dalion.Ringor.Filters {
                 public override IReadOnlyList<object> ValidatorMetadata { get; }
                 public override Func<object, object> PropertyGetter { get; }
                 public override Action<object, object> PropertySetter { get; }
+            }
+        }
+
+        public class OnResultExecuting : IsSPACallFilterTests {
+            private readonly ResultExecutingContext _context;
+
+            public OnResultExecuting() {
+                _context = new ResultExecutingContext(
+                    new ActionContext(new DefaultHttpContext(), new RouteData(), new ActionDescriptor()),
+                    Enumerable.Empty<IFilterMetadata>().ToList(),
+                    A.Dummy<IActionResult>(),
+                    null);
+            }
+
+            [Fact]
+            public void AddsHeaderToResponse() {
+                _sut.OnResultExecuting(_context);
+
+                _context.HttpContext.Response.Headers.Should().Contain(
+                    "Dalion-ResponseType",
+                    new[] {"spa-view"});
             }
         }
     }

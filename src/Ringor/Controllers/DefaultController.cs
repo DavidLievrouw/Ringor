@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using Dalion.Ringor.Constraints;
+using Dalion.Ringor.Filters;
 using Dalion.Ringor.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,8 +18,10 @@ namespace Dalion.Ringor.Controllers {
             _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         }
 
-        [HttpGet("")]
-        public IActionResult Index() {
+        [HttpGet("{*url}")]
+        [GetSpaActionConstraint]
+        [IsSPACallFilter]
+        public IActionResult Index(string url) {
             var indexViewModel = new IndexViewModel {
                 Scripts = new[] {"App/ringor-bundle.js"}
                     .Where(relativePath => _fileProvider.GetFileInfo(relativePath).Exists),

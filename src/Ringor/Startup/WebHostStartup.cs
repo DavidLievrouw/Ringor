@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Dalion.Ringor.Startup {
-    internal class WebHostStartup : IStartup {
+    public class WebHostStartup : IStartup {
         private readonly IHostingEnvironment _environment;
 
         public WebHostStartup(IHostingEnvironment environment) {
@@ -24,9 +24,7 @@ namespace Dalion.Ringor.Startup {
             // Mvc
             services
                 .AddRouting(options => options.LowercaseUrls = true)
-                .AddMvc(options => {
-                    options.Filters.Add<SetViewDataApplicationInfoFilter>();
-                })
+                .AddMvc()
                 .AddJsonOptions(config => PreConfiguredJsonSerializerSettings.Apply(config.SerializerSettings))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddApplicationPart(typeof(DefaultController).Assembly)

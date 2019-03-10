@@ -59,7 +59,7 @@ namespace Dalion.Ringor.Startup {
             }
         }
 
-        private static IWebHost BuildWebHost(IConfigurationRoot configuration, BootstrapperSettings settings) {
+        internal static IWebHostBuilder CreateWebHostBuilder(IConfigurationRoot configuration, BootstrapperSettings settings) {
             return new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel()
@@ -73,8 +73,11 @@ namespace Dalion.Ringor.Startup {
                     s.AddSingleton(settings);
                 })
                 .UseStartup<WebHostStartup>()
-                .ConfigureServices((ctx, s) => Composition.ConfigureServices(s, ctx.HostingEnvironment, configuration, settings))
-                .Build();
+                .ConfigureServices((ctx, s) => Composition.ConfigureServices(s, ctx.HostingEnvironment, configuration, settings));
+        }
+
+        internal static IWebHost BuildWebHost(IConfigurationRoot configuration, BootstrapperSettings settings) {
+            return CreateWebHostBuilder(configuration, settings).Build();
         }
     }
 }

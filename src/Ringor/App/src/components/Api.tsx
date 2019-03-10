@@ -27,14 +27,15 @@ export class Api extends React.Component<IApiProps, IApiState> {
     };
 
     this.handleUrlChange = this.handleUrlChange.bind(this);
-    this.loadTrace = this.loadTrace.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.getUrl = this.getUrl.bind(this);
   }
 
   componentDidMount() {
-    this.loadTrace();
+    this.getUrl();
   }
 
-  loadTrace() {
+  getUrl() {
     this.setState({
       response: null,
       isLoading: true,
@@ -67,6 +68,12 @@ export class Api extends React.Component<IApiProps, IApiState> {
       url: newValue,
       error: null
     });
+  }
+
+  handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') {
+      this.getUrl();
+    }
   }
 
   render() {
@@ -103,13 +110,13 @@ export class Api extends React.Component<IApiProps, IApiState> {
             <tbody>
               <tr>
                 <td className={`${styles['stretched-horizontally']}`}>
-                  <div className={`ui left icon ${this.state.isLoading ? 'disabled' : ''} input ${styles['stretched-horizontally']}`} style={{ width: '100%' }}>
-                    <input type="text" placeholder="Api URL..." value={this.state.url} onChange={this.handleUrlChange} />
+                  <div className={`ui left icon ${this.state.isLoading ? 'disabled' : ''} input ${styles['stretched-horizontally']}`}>
+                    <input type="text" placeholder="Api URL..." value={this.state.url} onChange={this.handleUrlChange} onKeyPress={this.handleKeyPress} />
                     <i className="globe icon"></i>
                   </div>
                 </td>
                 <td>
-                  <div className={`ui right labeled icon ${this.state.isLoading ? 'loading' : ''} primary button`} onClick={this.loadTrace}>
+                  <div className={`ui right labeled icon ${this.state.isLoading ? 'loading' : ''} primary button`} onClick={this.getUrl}>
                     <i className="down arrow icon"></i>
                     Show
                   </div>

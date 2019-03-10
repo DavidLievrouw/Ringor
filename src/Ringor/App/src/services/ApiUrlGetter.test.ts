@@ -7,7 +7,7 @@ let apiUrlGetter: IApiUrlGetter;
 let apiClient: IApiClient;
 
 describe('ApiUrlGetter', () => {
-  describe('load', () => {
+  describe('get', () => {
     let url: string;
 
     beforeEach(() => {
@@ -40,35 +40,35 @@ describe('ApiUrlGetter', () => {
     }
 
     test("should not allow a null URL", () => {
-      return expect(apiUrlGetter.load(null)).rejects
+      return expect(apiUrlGetter.get(null)).rejects
         .toThrow("No URL is specified");
     });
 
     test("should not allow an empty URL", () => {
-      return expect(apiUrlGetter.load("")).rejects
+      return expect(apiUrlGetter.get("")).rejects
         .toThrow("No URL is specified");
     });
 
     test("should not allow an whitespace URL", () => {
-      return expect(apiUrlGetter.load(" ")).rejects
+      return expect(apiUrlGetter.get(" ")).rejects
         .toThrow("No URL is specified");
     });
 
     test("should query the correct URL", async () => {
-      await apiUrlGetter.load(url);
+      await apiUrlGetter.get(url);
       const expectedUrl = url;
       expect(apiClient.get)
         .toHaveBeenCalledWith(expectedUrl);
     });
 
     test("should return the JSON data from the response", async () => {
-      const actual = await apiUrlGetter.load(url);
+      const actual = await apiUrlGetter.get(url);
       expect(actual).toMatchObject({ trace: { id: 42 } });
     });
 
     test("should throw when the request failed", async () => {
       createSut(true);
-      return expect(apiUrlGetter.load(url)).rejects
+      return expect(apiUrlGetter.get(url)).rejects
         .toThrow("404");
     });
   });

@@ -42,7 +42,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
     });
 
     this.props.apiUrlGetter
-      .load(this.state.url)
+      .get(this.state.url)
       .then(response => {
         this.setState({
           response: JSON.stringify(response),
@@ -90,18 +90,24 @@ export class Api extends React.Component<IApiProps, IApiState> {
     return (
       <div className={`${styles['padded-content']} ${styles['fillbox']}`}>
         <div className={`${styles['row']} ${styles['header']}`}>
-          <div className="ui form">
-            <div className={`field ${this.state.error ? 'error' : ''}`}>
-              <div className={`ui left icon ${this.state.isLoading ? 'disabled' : ''} input`}>
-                <input type="text" placeholder="Api URL..." value={this.state.url} onChange={this.handleUrlChange} />
-                <i className="globe icon"></i>
-                <div className={`ui right attached labeled icon ${this.state.isLoading ? 'loading' : ''} button`} onClick={this.loadTrace}>
-                  <i className="down arrow icon"></i>
-                  Show
-                </div>
-              </div>
-            </div>
-          </div>
+          <table className="ui basic table">
+            <tbody>
+              <tr>
+                <td className={`${styles['stretched-horizontally']}`}>
+                  <div className={`ui left icon ${this.state.isLoading ? 'disabled' : ''} input ${styles['stretched-horizontally']}`} style={{width:'100%'}}>
+                    <input type="text" placeholder="Api URL..." value={this.state.url} onChange={this.handleUrlChange} />
+                    <i className="globe icon"></i>
+                  </div>
+                </td>
+                <td>
+                  <div className={`ui right labeled icon ${this.state.isLoading ? 'loading' : ''} primary button`} onClick={this.loadTrace}>
+                    <i className="down arrow icon"></i>
+                    Show
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         {errorMessage}
         {output}

@@ -88,7 +88,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
     }
 
     return (
-      <div className={`${styles['padded']} ${styles['fillbox']}`}>
+      <div className={`${styles['padded-content']} ${styles['fillbox']}`}>
         <div className={`${styles['row']} ${styles['header']}`}>
           <div className="ui form">
             <div className={`field ${this.state.error ? 'error' : ''}`}>

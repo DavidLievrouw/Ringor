@@ -16,7 +16,7 @@ export class Landing extends React.Component<ILandingProps, ILandingState> {
 
   render() {
     return (
-      <div className={`ui middle aligned center aligned full-height bounds-adhering ${styles['padded']} grid`}>
+      <div className={`ui middle aligned center aligned full-height padded ${styles['padded-content']} grid`}>
         <div className="column">
           <div className={`ui huge ${styles.header}`}>
             <div className={`ui massive ${styles.company}`}>{this.props.applicationInfo.company}</div>

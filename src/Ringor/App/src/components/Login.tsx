@@ -16,7 +16,7 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 
   render() {
     return (
-      <div className={`ui middle aligned center aligned full-height bounds-adhering ${styles['padded']} grid`}>
+      <div className={`ui middle aligned center aligned full-height padded ${styles['padded-content']} grid`}>
         <div className="five wide input column">
           <h2 className="ui image header">
             <div className={`ui huge ${styles.header}`}>

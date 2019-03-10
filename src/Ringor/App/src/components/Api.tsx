@@ -9,6 +9,8 @@ export interface IApiProps {
 }
 
 export interface IApiState {
+  requestCount: number;
+  clickedAwayPostmanMessage: boolean;
   error: string;
   isLoading: boolean;
   url: string;
@@ -20,6 +22,8 @@ export class Api extends React.Component<IApiProps, IApiState> {
     super(props);
 
     this.state = {
+      requestCount: 0,
+      clickedAwayPostmanMessage: false,
       url: '/api',
       error: null,
       isLoading: false,
@@ -28,6 +32,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
 
     this.handleUrlChange = this.handleUrlChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.clickAwayPostmanMessage = this.clickAwayPostmanMessage.bind(this);
     this.getUrl = this.getUrl.bind(this);
   }
 
@@ -35,11 +40,18 @@ export class Api extends React.Component<IApiProps, IApiState> {
     this.getUrl();
   }
 
+  clickAwayPostmanMessage() {
+    this.setState({
+      clickedAwayPostmanMessage: true
+    });
+  }
+
   getUrl() {
     this.setState({
       response: null,
       isLoading: true,
-      error: null
+      error: null,
+      requestCount: this.state.requestCount + 1
     });
 
     this.props.apiUrlGetter
@@ -77,6 +89,22 @@ export class Api extends React.Component<IApiProps, IApiState> {
   }
 
   render() {
+    let postmanMessage = null;
+    if (!this.state.clickedAwayPostmanMessage && this.state.requestCount < 3) {
+      postmanMessage =
+        <tr>
+          <td colSpan={2}>
+            <div className="ui info message">
+              <i className="close icon" onClick={this.clickAwayPostmanMessage}></i>
+              <div className="header">
+                Want a better experience?
+              </div>
+              <a href="https://www.getpostman.com" target="_blank" onClick={this.clickAwayPostmanMessage}>Get Postman</a>
+            </div>
+          </td>
+        </tr>;
+    }
+
     let output = null;
     if (!this.state.isLoading && !this.state.error && this.state.response) {
       output =
@@ -122,6 +150,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
                   </div>
                 </td>
               </tr>
+              {postmanMessage}
             </tbody>
           </table>
         </div>

@@ -1,6 +1,7 @@
 import { IUrlInfo } from "../facades/applicationInfo";
 
 export interface IUrlService {
+  getApplicationUrl(): string;
   getAbsoluteUrl(relativeUrl: string): string;
 }
 
@@ -18,6 +19,12 @@ class UrlService implements IUrlService {
     return [this.siteUrl, this.appUrl, UrlService.trimSlashes(relativeUrl)]
       .filter(_ => _)
       .join('/');
+  }
+
+  getApplicationUrl(): string {
+    return [this.siteUrl, this.appUrl]
+    .filter(_ => _)
+    .join('/');
   }
 
   static trimSlashes(string: string): string {

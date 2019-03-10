@@ -51,4 +51,23 @@ describe('UrlService', () => {
       expect(url).toBe("http://dalion.eu/test");
     });
   });
+
+  describe('getApplicationUrl', () => {
+    beforeEach(() => {
+      urlInfo = {siteUrl: "http://dalion.eu", appUrl: "/RingorApi"};
+      urlService = new UrlService(urlInfo);
+    });
+
+    test("should build the correct absolute URL", () => {
+      const url = urlService.getApplicationUrl();
+      expect(url).toBe("http://dalion.eu/RingorApi");
+    });
+
+    test("should build the correct absolute URL when there is no application path", () => {
+      urlInfo.appUrl = '';
+      urlService = new UrlService(urlInfo);
+      const url = urlService.getApplicationUrl();
+      expect(url).toBe("http://dalion.eu");
+    });
+  });
 });

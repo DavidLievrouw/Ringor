@@ -44,7 +44,7 @@ export class App extends React.Component<IAppProps, IAppState> {
           <div className={`${styles['app-content']}`}>
             <Route exact path="/" render={(routeProps) => <Landing applicationInfo={this.props.composition.applicationInfo} />} />
             <Route path="/login" render={(routeProps) => <Login applicationInfo={this.props.composition.applicationInfo} />} />
-            <Route path="/apinav" render={(routeProps) => <Api apiUrlGetter={this.props.composition.services.apiUrlGetter} />}  />
+            <Route path="/apinav" render={(routeProps) => <Api apiUrlGetter={this.props.composition.services.apiUrlGetter} urlService={this.props.composition.services.urlService} />}  />
             <Route path="/swaggerui" render={(routeProps) => <Swagger />}  />
           </div>
         </div>

@@ -3,12 +3,15 @@ const styles = require('./styles/site.less');
 import * as React from "react";
 import { IApiUrlGetter } from '../services/ApiUrlGetter';
 import ReactJson from 'react-json-view';
+import { IUrlService } from '../services/UrlService';
 
 export interface IApiProps {
   apiUrlGetter: IApiUrlGetter;
+  urlService: IUrlService;
 }
 
 export interface IApiState {
+  applicationUrl: string;
   requestCount: number;
   clickedAwayPostmanMessage: boolean;
   error: string;
@@ -22,6 +25,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
     super(props);
 
     this.state = {
+      applicationUrl: props.urlService.getApplicationUrl(),
       requestCount: 0,
       clickedAwayPostmanMessage: false,
       url: '/api',
@@ -32,6 +36,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
 
     this.handleUrlChange = this.handleUrlChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handlePaste = this.handlePaste.bind(this);
     this.clickAwayPostmanMessage = this.clickAwayPostmanMessage.bind(this);
     this.getUrl = this.getUrl.bind(this);
   }
@@ -74,6 +79,21 @@ export class Api extends React.Component<IApiProps, IApiState> {
       });
   }
 
+  handlePaste(event: React.ClipboardEvent<HTMLInputElement>) {
+    const pastedContent = event.clipboardData.getData('text/plain');
+    if (pastedContent) {
+      const sanitized = pastedContent.replace(/['"]+/g, '');
+      const pattern = this.state.applicationUrl;
+      const regex = new RegExp(pattern, "gi");
+      const newUrl = sanitized.replace(regex, '');
+      this.setState({
+        url: newUrl,
+        error: null
+      });
+      event.preventDefault();
+    }
+  }
+
   handleUrlChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newValue = event.target.value;
     this.setState({
@@ -90,7 +110,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
 
   render() {
     let postmanMessage = null;
-    if (!this.state.clickedAwayPostmanMessage && this.state.requestCount < 3  && !this.state.error) {
+    if (!this.state.clickedAwayPostmanMessage && this.state.requestCount < 3 && !this.state.error) {
       postmanMessage =
         <tr>
           <td colSpan={2}>
@@ -139,7 +159,13 @@ export class Api extends React.Component<IApiProps, IApiState> {
               <tr>
                 <td className={`${styles['stretched-horizontally']}`}>
                   <div className={`ui left icon ${this.state.isLoading ? 'disabled' : ''} input ${styles['stretched-horizontally']}`}>
-                    <input type="text" placeholder="Api URL..." value={this.state.url} onChange={this.handleUrlChange} onKeyPress={this.handleKeyPress} />
+                    <input
+                      type="text"
+                      placeholder="Api URL..."
+                      value={this.state.url}
+                      onChange={this.handleUrlChange}
+                      onKeyPress={this.handleKeyPress}
+                      onPaste={this.handlePaste} />
                     <i className="globe icon"></i>
                   </div>
                 </td>

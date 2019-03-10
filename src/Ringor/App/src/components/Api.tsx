@@ -81,7 +81,15 @@ export class Api extends React.Component<IApiProps, IApiState> {
   }
 
   handlePaste(event: React.ClipboardEvent<HTMLInputElement>) {
-    const pastedContent = event.clipboardData.getData('text/plain');
+    let pastedContent;
+    if (event.clipboardData && event.clipboardData.types) {
+      pastedContent = event.clipboardData.getData('text/plain');
+    } else {
+      // IE 11
+      const theWindow = window as any;
+      pastedContent = theWindow.clipboardData && theWindow.clipboardData.getData && theWindow.clipboardData.getData('Text');
+    }
+    
     if (pastedContent) {
       const sanitized = pastedContent.replace(/['"]+/g, '');
       const pattern = this.state.applicationUrl;

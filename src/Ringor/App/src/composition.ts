@@ -3,15 +3,18 @@ import ApiClient, { IApiClient } from "./services/ApiClient";
 
 import applicationInfo, { IApplicationInfo } from "./facades/applicationInfo";
 import RequestSender, { IRequestSender } from './facades/RequestSender';
+import ApiUrlGetter, { IApiUrlGetter } from './services/ApiUrlGetter';
 
 const urlService = new UrlService(applicationInfo.urlInfo);
 const requestSender = new RequestSender();
 const apiClient = new ApiClient(urlService, requestSender);
+const apiUrlGetter = new ApiUrlGetter(apiClient);
 
 export interface IServices {
   urlService: IUrlService;
   requestSender: IRequestSender;
   apiClient: IApiClient;
+  apiUrlGetter: IApiUrlGetter;
 }
 
 export interface IComposition {
@@ -24,7 +27,8 @@ const composition : IComposition = {
   services: {
     urlService: urlService,
     requestSender: requestSender,
-    apiClient: apiClient
+    apiClient: apiClient,
+    apiUrlGetter: apiUrlGetter
   }
 };
     

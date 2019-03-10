@@ -37,6 +37,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
     this.handleUrlChange = this.handleUrlChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handlePaste = this.handlePaste.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
     this.clickAwayPostmanMessage = this.clickAwayPostmanMessage.bind(this);
     this.getUrl = this.getUrl.bind(this);
   }
@@ -108,6 +109,10 @@ export class Api extends React.Component<IApiProps, IApiState> {
     }
   }
 
+  handleFocus(event: React.FocusEvent<HTMLInputElement>) {
+    event.target.select();
+  }
+
   render() {
     let postmanMessage = null;
     if (!this.state.clickedAwayPostmanMessage && this.state.requestCount < 3 && !this.state.error) {
@@ -165,7 +170,8 @@ export class Api extends React.Component<IApiProps, IApiState> {
                       value={this.state.url}
                       onChange={this.handleUrlChange}
                       onKeyPress={this.handleKeyPress}
-                      onPaste={this.handlePaste} />
+                      onPaste={this.handlePaste}
+                      onFocus={this.handleFocus} />
                     <i className="globe icon"></i>
                   </div>
                 </td>

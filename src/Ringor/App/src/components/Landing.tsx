@@ -1,5 +1,6 @@
 import * as React from "react";
 import { IApplicationInfo } from '../facades/applicationInfo';
+import { CompanyLogo } from './CompanyLogo';
 
 export interface ILandingProps {
   applicationInfo: IApplicationInfo;
@@ -16,9 +17,7 @@ export class Landing extends React.Component<ILandingProps, ILandingState> {
     return (
       <div className="ui middle aligned center aligned full-height padded padded-content grid">
         <div className="column">
-          <div className="ui huge header">
-            <div className="ui massive company">{this.props.applicationInfo.company}</div>
-          </div>
+          <CompanyLogo applicationInfo={this.props.applicationInfo} />
           <div className="ui centered card">
             <div className="content">
               <div className="header">{this.props.applicationInfo.product}</div>

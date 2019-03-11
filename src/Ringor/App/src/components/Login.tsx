@@ -1,11 +1,12 @@
 import * as React from "react";
 import { IApplicationInfo } from '../facades/applicationInfo';
+import { CompanyLogo } from './CompanyLogo';
 
-export interface ILoginProps { 
+export interface ILoginProps {
   applicationInfo: IApplicationInfo;
 }
 
-export interface ILoginState {}
+export interface ILoginState { }
 
 export class Login extends React.Component<ILoginProps, ILoginState> {
   constructor(props: ILoginProps) {
@@ -16,13 +17,9 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
     return (
       <div className="ui middle aligned center aligned full-height padded padded-content grid">
         <div className="five wide input column">
-          <h2 className="ui image header">
-            <div className="ui huge header">
-              <div className="ui massive company">{this.props.applicationInfo.company}</div>
-            </div>
-            <div className="content">
-              Log-in to your account
-            </div>
+          <CompanyLogo applicationInfo={this.props.applicationInfo} />
+          <h2 className="content">
+            Log-in to your account
           </h2>
           <form className="ui large form">
             <div className="ui stacked segment">

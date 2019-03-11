@@ -1,3 +1,8 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+.ui.card.big {
+  font-size: @18px;
+  width: 400px;
+}

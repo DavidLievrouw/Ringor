@@ -18,10 +18,25 @@
   <environment exclude="Development">
     <link asp-append-version="true" href="~/css/semantic-ui/semantic.min.css" rel="stylesheet"/>
   </environment>
+  <link rel="stylesheet" type="text/css" href="~/App/ringor-bundle.css" asp-append-version="true"/>
 </head>
 <body>
 
-@RenderBody()
+<div class="app">
+  <div class="ui left fixed vertical labeled icon menu fixed-width-menu">
+    <a href="~/" class="item">
+      <i class="home icon"></i>
+      Home
+    </a>
+  </div>
+  <div class="app-content">
+    @RenderBody()
+  </div>
+  <footer>
+    <div class="ui label">@(applicationInfo.Company) @(applicationInfo.Product) v@(applicationInfo.Version)</div>
+    <div class="ui label">@(applicationInfo.Environment)</div>
+  </footer>
+</div>
 
 <environment include="Development">
   <script asp-append-version="true" src="~/js/jquery-3.3.1.js"></script>

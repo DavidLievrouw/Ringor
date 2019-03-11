@@ -29180,6 +29180,11 @@ a.ui.card:hover,
 /*******************************
     User Variable Overrides
 *******************************/
+
+.ui.card.big {
+  font-size: 1.28571429rem;
+  width: 400px;
+}
 /*!
  * # Semantic UI 2.4.2 - Comment
  * http://github.com/semantic-org/semantic-ui/

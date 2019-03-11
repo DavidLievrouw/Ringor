@@ -1,37 +1,56 @@
-﻿@{
+﻿@using Dalion.Ringor
+@using Dalion.Ringor.Api.Models
+@using Microsoft.AspNetCore.WebUtilities
+
+@{
   ViewData["Title"] = "Not found";
-  var statusCode = $"{Context.Response.StatusCode}";
+  var statusCode = Context.Response.StatusCode;
+  var reasonPhrase = ReasonPhrases.GetReasonPhrase(Context.Response.StatusCode);
+  var applicationInfo = ViewData[Constants.ViewData.ApplicationInfo] as ApplicationInfo;
 }
 
-<div>
-  <div class="ui padded grid center aligned">
-    <div class="row">
-      <h1 class="ui icon center aligned header">
-        <i class="question icon"></i>
-        <div class="content">@statusCode - That's an error</div>
-        <div class="sub header">The requested URL was not found on this server.</div>
-      </h1>
+<div class="ui middle aligned center aligned full-height padded padded-content grid">
+  <div class="column">
+    <div class="ui huge header">
+      <div class="ui massive company">@(applicationInfo?.Company)</div>
     </div>
-    <div class="ui basic vertical segment padded">
-      <table class="ui collapsing definition table">
-        <tbody>
-        <tr>
-          <td colspan="2">Additional information for your system administrator</td>
-        </tr>
-        <tr>
-          <td>Time</td>
-          <td>@DateTimeOffset.UtcNow.ToString("R")</td>
-        </tr>
-        <tr>
-          <td>Request Id</td>
-          <td>@Context.TraceIdentifier</td>
-        </tr>
-        <tr>
-          <td>...</td>
-          <td>Details of the error are not shown on this page. Check the server logs for more information.</td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="ui padded grid center aligned">
+      <div class="row">
+        <div class="ui big centered card">
+          <div class="content">
+            <div class="header">
+              <i class="yellow exclamation triangle icon"></i> @(statusCode) - @(reasonPhrase)
+            </div>
+            <div class="description">
+              That's an error
+            </div>
+          </div>
+          <div class="extra content">
+            The requested URL was not found on this server.
+          </div>
+        </div>
+      </div>
+      <div class="ui basic vertical segment padded">
+        <table class="ui collapsing definition basic table">
+          <tbody>
+          <tr>
+            <td colspan="2">Additional information for your system administrator</td>
+          </tr>
+          <tr>
+            <td>Time</td>
+            <td>@DateTimeOffset.UtcNow.ToString("R")</td>
+          </tr>
+          <tr>
+            <td>Request Id</td>
+            <td>@Context.TraceIdentifier</td>
+          </tr>
+          <tr>
+            <td>...</td>
+            <td>Details of the error are not shown on this page. Check the server logs for more information.</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

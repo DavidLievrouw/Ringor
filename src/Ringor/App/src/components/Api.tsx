@@ -4,10 +4,12 @@ import * as React from "react";
 import { IApiUrlGetter } from '../services/ApiUrlGetter';
 import ReactJson from 'react-json-view';
 import { IUrlService } from '../services/UrlService';
+import { IApiUrlPasteHandler } from '../services/ApiUrlPasteHandler';
 
 export interface IApiProps {
   apiUrlGetter: IApiUrlGetter;
   urlService: IUrlService;
+  apiUrlPasteHandler: IApiUrlPasteHandler;
 }
 
 export interface IApiState {
@@ -90,13 +92,10 @@ export class Api extends React.Component<IApiProps, IApiState> {
       pastedContent = theWindow.clipboardData && theWindow.clipboardData.getData && theWindow.clipboardData.getData('Text');
     }
     
-    if (pastedContent) {
-      const sanitized = pastedContent.replace(/['"]+/g, '');
-      const pattern = this.state.applicationUrl;
-      const regex = new RegExp(pattern, "gi");
-      const newUrl = sanitized.replace(regex, '');
+    const sanitizedPastedContent = this.props.apiUrlPasteHandler.sanitizePastedUrl(pastedContent);
+    if (sanitizedPastedContent) {
       this.setState({
-        url: newUrl,
+        url: sanitizedPastedContent,
         error: null
       });
       event.preventDefault();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Dalion.Ringor.Api.Models;
 using Dalion.Ringor.Api.Services;
@@ -13,19 +14,21 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.FileProviders;
 using Xunit;
 
 namespace Dalion.Ringor.Filters {
-    public class IsSPACallFilterTests {
+    public class IsViewFilterTests {
         private readonly IApplicationInfoProvider _applicationInfoProvider;
-        private readonly IsSPACallFilterAttribute.IsSPACallFilter _sut;
+        private readonly IFileProvider _fileProvider;
+        private readonly IsViewFilterAttribute.IsViewFilter _sut;
 
-        public IsSPACallFilterTests() {
-            FakeFactory.Create(out _applicationInfoProvider);
-            _sut = new IsSPACallFilterAttribute.IsSPACallFilter(_applicationInfoProvider);
+        public IsViewFilterTests() {
+            FakeFactory.Create(out _applicationInfoProvider, out _fileProvider);
+            _sut = new IsViewFilterAttribute.IsViewFilter(_applicationInfoProvider, _fileProvider);
         }
 
-        public class OnActionExecuted : IsSPACallFilterTests {
+        public class OnActionExecuted : IsViewFilterTests {
             private readonly ApplicationInfo _applicationInfo;
             private readonly ActionExecutedContext _context;
 
@@ -61,6 +64,75 @@ namespace Dalion.Ringor.Filters {
                 var actualViewDataDic = _context.Result.As<ViewResult>().ViewData;
                 actualViewDataDic.Should().ContainKey("Dalion-ApplicationInfo");
                 actualViewDataDic["Dalion-ApplicationInfo"].Should().Be(_applicationInfo);
+            }
+
+            [Fact]
+            public void WhenResultIsAView_AddsScriptsToViewData() {
+                _context.Result = new ViewResult {
+                    ViewData = new ViewDataDictionary(new FakeModelMetadataProvider(), new ModelStateDictionary())
+                };
+                A.CallTo(() => _fileProvider.GetFileInfo(A<string>._))
+                    .ReturnsLazily(call => new FakeFileInfo(call.GetArgument<string>(0), true));
+
+                _sut.OnActionExecuted(_context);
+
+                var actualViewDataDic = _context.Result.As<ViewResult>().ViewData;
+                actualViewDataDic.Should().ContainKey("Dalion-Scripts");
+                actualViewDataDic["Dalion-Scripts"].Should().BeEquivalentTo(new[] {
+                    "App/ringor-bundle.js"
+                });
+            }
+
+            [Fact]
+            public void WhenResultIsAView_AddsOnlyExistingScriptsToViewData() {
+                _context.Result = new ViewResult {
+                    ViewData = new ViewDataDictionary(new FakeModelMetadataProvider(), new ModelStateDictionary())
+                };
+                A.CallTo(() => _fileProvider.GetFileInfo(A<string>._))
+                    .ReturnsLazily(call => new FakeFileInfo(
+                        call.GetArgument<string>(0),
+                        call.GetArgument<string>(0).StartsWith("ringor-bundle")));
+
+                _sut.OnActionExecuted(_context);
+
+                var actualViewDataDic = _context.Result.As<ViewResult>().ViewData;
+                actualViewDataDic.Should().ContainKey("Dalion-Scripts");
+                actualViewDataDic["Dalion-Scripts"].Should().BeEquivalentTo(Array.Empty<string>());
+            }
+
+            [Fact]
+            public void WhenResultIsAView_AddsStylesToViewData() {
+                _context.Result = new ViewResult {
+                    ViewData = new ViewDataDictionary(new FakeModelMetadataProvider(), new ModelStateDictionary())
+                };
+                A.CallTo(() => _fileProvider.GetFileInfo(A<string>._))
+                    .ReturnsLazily(call => new FakeFileInfo(call.GetArgument<string>(0), true));
+
+                _sut.OnActionExecuted(_context);
+
+                var actualViewDataDic = _context.Result.As<ViewResult>().ViewData;
+                actualViewDataDic.Should().ContainKey("Dalion-Styles");
+                actualViewDataDic["Dalion-Styles"].Should().BeEquivalentTo(new[] {
+                    "App/ringor-bundle.css"
+                });
+            }
+
+            [Fact]
+            public void WhenResultIsAView_AddsOnlyExistingStylesToViewData() {
+                _context.Result = new ViewResult {
+                    ViewData = new ViewDataDictionary(new FakeModelMetadataProvider(), new ModelStateDictionary())
+                };
+                A.CallTo(() => _fileProvider.GetFileInfo(A<string>._))
+                    .ReturnsLazily(call => new FakeFileInfo(
+                        call.GetArgument<string>(0),
+                        call.GetArgument<string>(0).StartsWith("ringor-bundle")));
+
+                _sut.OnActionExecuted(_context);
+
+                var actualViewDataDic = _context.Result.As<ViewResult>().ViewData;
+                actualViewDataDic.Should().ContainKey("Dalion-Styles");
+                actualViewDataDic["Dalion-Styles"].Should().BeEquivalentTo(Array.Empty<string>());
+                ;
             }
 
             private class FakeModelMetadataProvider : IModelMetadataProvider {
@@ -112,26 +184,55 @@ namespace Dalion.Ringor.Filters {
                 public override Func<object, object> PropertyGetter { get; }
                 public override Action<object, object> PropertySetter { get; }
             }
+
+            private class FakeFileInfo : IFileInfo {
+                public FakeFileInfo(string path, bool exists) {
+                    PhysicalPath = path;
+                    Exists = exists;
+                }
+
+                public Stream CreateReadStream() {
+                    throw new NotImplementedException();
+                }
+
+                public bool Exists { get; }
+                public long Length { get; }
+                public string PhysicalPath { get; }
+                public string Name { get; }
+                public DateTimeOffset LastModified { get; }
+                public bool IsDirectory { get; }
+            }
         }
 
-        public class OnResultExecuting : IsSPACallFilterTests {
+        public class OnResultExecuting : IsViewFilterTests {
             private readonly ResultExecutingContext _context;
 
             public OnResultExecuting() {
                 _context = new ResultExecutingContext(
                     new ActionContext(new DefaultHttpContext(), new RouteData(), new ActionDescriptor()),
                     Enumerable.Empty<IFilterMetadata>().ToList(),
-                    A.Dummy<IActionResult>(),
+                    new ViewResult(), 
                     null);
             }
 
             [Fact]
-            public void AddsHeaderToResponse() {
+            public void IfResultIsViewResult_AddsHeaderToResponse() {
+                _context.Result = new ViewResult();
+                
                 _sut.OnResultExecuting(_context);
 
                 _context.HttpContext.Response.Headers.Should().Contain(
                     "Dalion-ResponseType",
-                    new[] {"spa-view"});
+                    new[] {"View"});
+            }
+
+            [Fact]
+            public void IfResultIsNotViewResult_DoesNotAddHeaderToResponse() {
+                _context.Result = new NotFoundResult();
+
+                _sut.OnResultExecuting(_context);
+
+                _context.HttpContext.Response.Headers.Should().NotContainKey("Dalion-ResponseType");
             }
         }
     }

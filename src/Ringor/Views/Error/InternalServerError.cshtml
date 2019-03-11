@@ -1,0 +1,37 @@
+﻿@{
+  ViewData["Title"] = "Error";
+  var statusCode = $"{Context.Response.StatusCode}";
+}
+
+<div>
+  <div class="ui padded grid center aligned">
+    <div class="row">
+      <h1 class="ui icon center aligned header">
+        <i class="bug icon"></i>
+        <div class="content">@statusCode - Oops, something went wrong</div>
+        <div class="sub header">The server encountered an internal error or misconfiguration and was unable to complete your request.</div>
+      </h1>
+    </div>
+    <div class="ui basic vertical segment padded">
+      <table class="ui collapsing definition table">
+        <tbody>
+        <tr>
+          <td colspan="2">Additional information for your system administrator</td>
+        </tr>
+        <tr>
+          <td>Time</td>
+          <td>@DateTimeOffset.UtcNow.ToString("R")</td>
+        </tr>
+        <tr>
+          <td>Request Id</td>
+          <td>@Context.TraceIdentifier</td>
+        </tr>
+        <tr>
+          <td>...</td>
+          <td>Details of the error are not shown on this page. Check the server logs for more information.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

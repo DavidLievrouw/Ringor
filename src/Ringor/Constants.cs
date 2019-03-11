@@ -6,6 +6,12 @@
 
         public static class ViewData {
             public const string ApplicationInfo = "Dalion-ApplicationInfo";
+            public const string Styles = "Dalion-Styles";
+            public const string Scripts = "Dalion-Scripts";
+        }
+
+        public static class ResponseTypes {
+            public const string View = "View";
         }
     }
 }

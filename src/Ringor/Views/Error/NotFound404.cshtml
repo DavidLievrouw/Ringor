@@ -1,0 +1,37 @@
+﻿@{
+  ViewData["Title"] = "Not found";
+  var statusCode = $"{Context.Response.StatusCode}";
+}
+
+<div>
+  <div class="ui padded grid center aligned">
+    <div class="row">
+      <h1 class="ui icon center aligned header">
+        <i class="question icon"></i>
+        <div class="content">@statusCode - That's an error</div>
+        <div class="sub header">The requested URL was not found on this server.</div>
+      </h1>
+    </div>
+    <div class="ui basic vertical segment padded">
+      <table class="ui collapsing definition table">
+        <tbody>
+        <tr>
+          <td colspan="2">Additional information for your system administrator</td>
+        </tr>
+        <tr>
+          <td>Time</td>
+          <td>@DateTimeOffset.UtcNow.ToString("R")</td>
+        </tr>
+        <tr>
+          <td>Request Id</td>
+          <td>@Context.TraceIdentifier</td>
+        </tr>
+        <tr>
+          <td>...</td>
+          <td>Details of the error are not shown on this page. Check the server logs for more information.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

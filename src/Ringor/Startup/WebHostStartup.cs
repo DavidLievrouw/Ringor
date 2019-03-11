@@ -35,10 +35,13 @@ namespace Dalion.Ringor.Startup {
         }
 
         public void Configure(IApplicationBuilder app) {
-            if (_environment.IsDevelopmentOrDebug()) app.UseDeveloperExceptionPage();
+            app = _environment.IsDevelopmentOrDebug()
+                ? app.UseDeveloperExceptionPage()
+                : app.UseExceptionHandler("/error");
 
             app
                 .UseHttpsRedirection()
+                .UseStatusCodePagesWithReExecute("/error/{0}")
                 .UseAuthentication() // Very important that this is called before anything that will require authentication
                 .UseMvc()
                 .UseStaticFiles()

@@ -9,7 +9,6 @@ namespace Dalion.Ringor.Controllers {
     [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorController : Controller {
         [Route("")]
-        [IsViewFilter]
         public IActionResult InternalServerError() {
             var exceptionHandlerPathFeature = HttpContext?.Features?.Get<IExceptionHandlerPathFeature>();
             var path = exceptionHandlerPathFeature?.Path;
@@ -18,7 +17,6 @@ namespace Dalion.Ringor.Controllers {
         }
 
         [Route("404")]
-        [IsViewFilter]
         public IActionResult NotFound404() {
             return View();
         }

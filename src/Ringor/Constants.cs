@@ -11,7 +11,7 @@
         }
 
         public static class ResponseTypes {
-            public const string View = "View";
+            public const string SpaView = "SPA-View";
         }
     }
 }

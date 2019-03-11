@@ -1,27 +1,22 @@
 ﻿using System;
 using System.Linq;
-using Dalion.Ringor.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 
 namespace Dalion.Ringor.Filters {
-    public class IsViewFilterAttribute : Attribute, IFilterFactory {
+    public class IsSpaViewAttribute : Attribute, IFilterFactory {
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider) {
-            return new IsViewFilter(
-                serviceProvider.GetRequiredService<IApplicationInfoProvider>(),
-                serviceProvider.GetRequiredService<IFileProvider>());
+            return new IsSpaViewFilter(serviceProvider.GetRequiredService<IFileProvider>());
         }
 
         public bool IsReusable => false;
 
-        internal class IsViewFilter : ActionFilterAttribute {
-            private readonly IApplicationInfoProvider _applicationInfoProvider;
+        internal class IsSpaViewFilter : ActionFilterAttribute {
             private readonly IFileProvider _fileProvider;
 
-            public IsViewFilter(IApplicationInfoProvider applicationInfoProvider, IFileProvider fileProvider) {
-                _applicationInfoProvider = applicationInfoProvider ?? throw new ArgumentNullException(nameof(applicationInfoProvider));
+            public IsSpaViewFilter(IFileProvider fileProvider) {
                 _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
             }
 
@@ -29,7 +24,6 @@ namespace Dalion.Ringor.Filters {
                 base.OnActionExecuted(context);
 
                 if (context.Result is ViewResult viewResult) {
-                    viewResult.ViewData[Constants.ViewData.ApplicationInfo] = _applicationInfoProvider.Provide();
                     viewResult.ViewData[Constants.ViewData.Scripts] = new[] {"App/ringor-bundle.js"}
                         .Where(relativePath => _fileProvider.GetFileInfo(relativePath).Exists)
                         .ToList();
@@ -45,7 +39,7 @@ namespace Dalion.Ringor.Filters {
                 if (context.Result is ViewResult) {
                     context.HttpContext.Response.Headers.Add(
                         Constants.Headers.ResponseType,
-                        new[] {Constants.ResponseTypes.View});
+                        new[] {Constants.ResponseTypes.SpaView});
                 }
             }
         }

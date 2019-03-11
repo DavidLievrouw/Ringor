@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Dalion.Ringor.Api.Models;
-using Dalion.Ringor.Api.Services;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -18,26 +16,19 @@ using Microsoft.Extensions.FileProviders;
 using Xunit;
 
 namespace Dalion.Ringor.Filters {
-    public class IsViewFilterTests {
-        private readonly IApplicationInfoProvider _applicationInfoProvider;
+    public class IsSpaViewFilterTests {
         private readonly IFileProvider _fileProvider;
-        private readonly IsViewFilterAttribute.IsViewFilter _sut;
+        private readonly IsSpaViewAttribute.IsSpaViewFilter _sut;
 
-        public IsViewFilterTests() {
-            FakeFactory.Create(out _applicationInfoProvider, out _fileProvider);
-            _sut = new IsViewFilterAttribute.IsViewFilter(_applicationInfoProvider, _fileProvider);
+        public IsSpaViewFilterTests() {
+            FakeFactory.Create(out _fileProvider);
+            _sut = new IsSpaViewAttribute.IsSpaViewFilter(_fileProvider);
         }
 
-        public class OnActionExecuted : IsViewFilterTests {
-            private readonly ApplicationInfo _applicationInfo;
+        public class OnActionExecuted : IsSpaViewFilterTests {
             private readonly ActionExecutedContext _context;
 
             public OnActionExecuted() {
-                _applicationInfo = new ApplicationInfo {
-                    Version = "1.2.3"
-                };
-                A.CallTo(() => _applicationInfoProvider.Provide())
-                    .Returns(_applicationInfo);
                 _context = new ActionExecutedContext(
                     new ActionContext(new DefaultHttpContext(), new RouteData(), new ActionDescriptor()),
                     new List<IFilterMetadata>(),
@@ -50,20 +41,8 @@ namespace Dalion.Ringor.Filters {
 
                 _sut.OnActionExecuted(_context);
 
-                A.CallTo(() => _applicationInfoProvider.Provide()).MustNotHaveHappened();
-            }
-
-            [Fact]
-            public void WhenResultIsAView_AddsApplicationInfoToViewData() {
-                _context.Result = new ViewResult {
-                    ViewData = new ViewDataDictionary(new FakeModelMetadataProvider(), new ModelStateDictionary())
-                };
-
-                _sut.OnActionExecuted(_context);
-
-                var actualViewDataDic = _context.Result.As<ViewResult>().ViewData;
-                actualViewDataDic.Should().ContainKey("Dalion-ApplicationInfo");
-                actualViewDataDic["Dalion-ApplicationInfo"].Should().Be(_applicationInfo);
+                var actualViewDataDic = _context.Result.As<ViewResult>()?.ViewData;
+                actualViewDataDic.Should().Match<ViewDataDictionary>(dic => dic == null || dic.Count < 1);
             }
 
             [Fact]
@@ -204,26 +183,26 @@ namespace Dalion.Ringor.Filters {
             }
         }
 
-        public class OnResultExecuting : IsViewFilterTests {
+        public class OnResultExecuting : IsSpaViewFilterTests {
             private readonly ResultExecutingContext _context;
 
             public OnResultExecuting() {
                 _context = new ResultExecutingContext(
                     new ActionContext(new DefaultHttpContext(), new RouteData(), new ActionDescriptor()),
                     Enumerable.Empty<IFilterMetadata>().ToList(),
-                    new ViewResult(), 
+                    new ViewResult(),
                     null);
             }
 
             [Fact]
             public void IfResultIsViewResult_AddsHeaderToResponse() {
                 _context.Result = new ViewResult();
-                
+
                 _sut.OnResultExecuting(_context);
 
                 _context.HttpContext.Response.Headers.Should().Contain(
                     "Dalion-ResponseType",
-                    new[] {"View"});
+                    new[] {"SPA-View"});
             }
 
             [Fact]

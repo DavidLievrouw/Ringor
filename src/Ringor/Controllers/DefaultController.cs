@@ -10,7 +10,8 @@ namespace Dalion.Ringor.Controllers {
     public class DefaultController : Controller {
         [HttpGet("{*url}")]
         [GetSpaActionConstraint]
-        [IsViewFilter]
+        [IsSpaView]
+        [ReportsApplicationInfo]
         public IActionResult Index(string url) {
             return View();
         }

@@ -12,7 +12,7 @@ export interface IAppProps {
   composition: IComposition
 }
 
-export interface IAppState {}
+export interface IAppState { }
 
 export class App extends React.Component<IAppProps, IAppState> {
   constructor(props: IAppProps) {
@@ -20,6 +20,8 @@ export class App extends React.Component<IAppProps, IAppState> {
   }
 
   render() {
+    const applicationInfo = this.props.composition.applicationInfo;
+
     return (
       <Router>
         <div className={`${styles.app}`}>
@@ -31,7 +33,7 @@ export class App extends React.Component<IAppProps, IAppState> {
             <Link to="/swaggerui" className="item">
               <img src="/swagger.png" />
               Swagger UI
-            </Link>            
+            </Link>
             <Link to="/apinav" className="item">
               <img src="/api.png" />
               Navigate the API
@@ -44,13 +46,17 @@ export class App extends React.Component<IAppProps, IAppState> {
           <div className={`${styles['app-content']}`}>
             <Route exact path="/" render={(routeProps) => <Landing applicationInfo={this.props.composition.applicationInfo} />} />
             <Route path="/login" render={(routeProps) => <Login applicationInfo={this.props.composition.applicationInfo} />} />
-            <Route path="/apinav" render={(routeProps) => <Api 
-                                                            apiUrlGetter={this.props.composition.services.apiUrlGetter} 
-                                                            urlService={this.props.composition.services.urlService}
-                                                            apiUrlPasteHandler={this.props.composition.services.apiUrlPasteHandler} />} 
+            <Route path="/apinav" render={(routeProps) => <Api
+              apiUrlGetter={this.props.composition.services.apiUrlGetter}
+              urlService={this.props.composition.services.urlService}
+              apiUrlPasteHandler={this.props.composition.services.apiUrlPasteHandler} />}
             />
-            <Route path="/swaggerui" render={(routeProps) => <Swagger />}  />
+            <Route path="/swaggerui" render={(routeProps) => <Swagger />} />
           </div>
+          <footer>
+            <div className="ui label">{applicationInfo.company} {applicationInfo.product} v{applicationInfo.version}</div>
+            <div className="ui label">{applicationInfo.environment}</div>
+          </footer>
         </div>
       </Router>
     );

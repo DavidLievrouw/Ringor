@@ -13,6 +13,7 @@ export interface IApplicationInfo {
   product: string;
   version: string;
   urlInfo: IUrlInfo;
+  environment: string;
 }
 
 const applicationInfo = (typeof window !== "undefined" && window.applicationInfo || {}) as IApplicationInfo;

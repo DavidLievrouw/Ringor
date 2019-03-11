@@ -1,5 +1,3 @@
-const styles = require('./styles/site.less');
-
 import * as React from "react";
 import IFrame from 'react-iframe';
 
@@ -14,9 +12,9 @@ export class Swagger extends React.Component<ISwaggerProps, ISwaggerState> {
 
   render() {
     return (
-      <div className={`${styles['fillbox']}`}>
+      <div className="fillbox">
         <IFrame
-          className={`${styles['row']} ${styles['content']}`}
+          className="row content"
           position="relative"
           url="swagger" />
       </div>

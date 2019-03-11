@@ -1,5 +1,3 @@
-const styles = require('./styles/site.less');
-
 import * as React from "react";
 import { IComposition } from '../composition';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -21,11 +19,11 @@ export class App extends React.Component<IAppProps, IAppState> {
 
   render() {
     const applicationInfo = this.props.composition.applicationInfo;
-
+ 
     return (
       <Router>
-        <div className={`${styles.app}`}>
-          <div className={`ui left fixed vertical labeled icon menu ${styles['fixed-width-menu']}`}>
+        <div className="app">
+          <div className="ui left fixed vertical labeled icon menu fixed-width-menu">
             <Link to="/" className="item">
               <i className="home icon"></i>
               Home
@@ -43,7 +41,7 @@ export class App extends React.Component<IAppProps, IAppState> {
               Browser login
             </Link>
           </div>
-          <div className={`${styles['app-content']}`}>
+          <div className="app-content">
             <Route exact path="/" render={(routeProps) => <Landing applicationInfo={this.props.composition.applicationInfo} />} />
             <Route path="/login" render={(routeProps) => <Login applicationInfo={this.props.composition.applicationInfo} />} />
             <Route path="/apinav" render={(routeProps) => <Api

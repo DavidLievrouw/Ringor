@@ -1,5 +1,3 @@
-const styles = require('./styles/site.less');
-
 import * as React from "react";
 import { IApplicationInfo } from '../facades/applicationInfo';
 
@@ -16,11 +14,11 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 
   render() {
     return (
-      <div className={`ui middle aligned center aligned full-height padded ${styles['padded-content']} grid`}>
+      <div className="ui middle aligned center aligned full-height padded padded-content grid">
         <div className="five wide input column">
           <h2 className="ui image header">
-            <div className={`ui huge ${styles.header}`}>
-              <div className={`ui massive ${styles.company}`}>{this.props.applicationInfo.company}</div>
+            <div className="ui huge header">
+              <div className="ui massive company">{this.props.applicationInfo.company}</div>
             </div>
             <div className="content">
               Log-in to your account

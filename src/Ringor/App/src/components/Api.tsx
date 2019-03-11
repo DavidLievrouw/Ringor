@@ -1,5 +1,3 @@
-const styles = require('./styles/site.less');
-
 import * as React from "react";
 import { IApiUrlGetter } from '../services/ApiUrlGetter';
 import ReactJson from 'react-json-view';
@@ -140,7 +138,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
     let output = null;
     if (!this.state.isLoading && !this.state.error && this.state.response) {
       output =
-        <div className={`${styles['row']} ${styles['content']}`}>
+        <div className="row content">
           <div className="ui basic segment">
             <ReactJson
               src={this.state.response}
@@ -164,13 +162,13 @@ export class Api extends React.Component<IApiProps, IApiState> {
     }
 
     return (
-      <div className={`${styles['padded-content']} ${styles['fillbox']}`}>
-        <div className={`${styles['row']} ${styles['header']}`}>
+      <div className="padded-content fillbox">
+        <div className="row header">
           <table className="ui basic table">
             <tbody>
               <tr>
-                <td className={`${styles['stretched-horizontally']}`}>
-                  <div className={`ui left icon ${this.state.isLoading ? 'disabled' : ''} input ${styles['stretched-horizontally']}`}>
+                <td className="stretched-horizontally">
+                  <div className={`ui left icon ${this.state.isLoading ? 'disabled' : ''} input stretched-horizontally`}>
                     <input
                       type="text"
                       placeholder="Api URL..."

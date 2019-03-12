@@ -11,13 +11,13 @@
             public const string ErrorPath = "Dalion-ErrorPath";
             public const string ErrorPathBase = "Dalion-ErrorPathBase";
             public const string ErrorQueryString = "Dalion-ErrorQueryString";
+            public const string ErrorStatusCode = "Dalion-ErrorStatusCode";
             public const string Error = "Dalion-Error";
         }
 
         public static class ResponseTypes {
             public const string SpaView = "SPAView";
             public const string ServerError = "ServerError";
-            public const string NotFoundError = "NotFoundError";
             public const string CatchAllError = "CatchAllError";
         }
     }

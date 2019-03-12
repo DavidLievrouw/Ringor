@@ -19,7 +19,7 @@ namespace Dalion.Ringor.Controllers {
             _sut = new ErrorController {
                 ControllerContext = new ControllerContext {
                     HttpContext = new DefaultHttpContext {
-                        Response = { StatusCode = 204 }
+                        Response = {StatusCode = 204}
                     }
                 }
             };
@@ -174,7 +174,7 @@ namespace Dalion.Ringor.Controllers {
 
                 actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorQueryString");
             }
-            
+
             [Theory]
             [InlineData("200", 200)]
             [InlineData("401", 401)]
@@ -186,7 +186,7 @@ namespace Dalion.Ringor.Controllers {
 
                 actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorStatusCode", expectedStatusCode);
             }
-            
+
             [Fact]
             public void AddsStatusCodeIsNotANumber_AddsReponseStatusCodeToView() {
                 var actual = _sut.CatchAllStatusCodes("NaN");
@@ -218,7 +218,7 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("/Api/", "401.2", 401)]
             [InlineData("/api/userinfo", "401.2", 401)]
             [InlineData("/Api/userinfo", "401.2", 401)]
-            public void ReturnJsonWithoutBodyWhenOriginalCallWasToApi(string originalPath, string status, int expectedStatusCode) { 
+            public void ReturnJsonWithoutBodyWhenOriginalCallWasToApi(string originalPath, string status, int expectedStatusCode) {
                 A.CallTo(() => _feature.OriginalPath)
                     .Returns(originalPath);
 
@@ -232,9 +232,18 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("404")]
             [InlineData("404.14")]
             [InlineData("404.xx")]
-            public async Task ReturnsNotFoundViewFor404(string status) {
+            public void ReturnsNotFoundViewFor404(string status) {
                 var actual = _sut.CatchAllStatusCodes(status);
                 actual.As<ViewResult>().ViewName.Should().Be("NotFound");
+            }
+
+            [Theory]
+            [InlineData("404")]
+            [InlineData("404.14")]
+            [InlineData("404.xx")]
+            public void ReturnsNotFoundCodeFor404(string status) {
+                var actual = _sut.CatchAllStatusCodes(status);
+                actual.As<ViewResult>().StatusCode.Should().Be(404);
             }
 
             [Theory]
@@ -245,9 +254,22 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("500")]
             [InlineData("503.2")]
             [InlineData("somethingelse")]
-            public async Task ReturnsOtherErrorViewForNon404Codes(string status) {
+            public void ReturnsOtherErrorViewForNon404Codes(string status) {
                 var actual = _sut.CatchAllStatusCodes(status);
                 actual.As<ViewResult>().ViewName.Should().Be("OtherError");
+            }
+
+            [Theory]
+            [InlineData("100", 100)]
+            [InlineData("200", 200)]
+            [InlineData("400", 400)]
+            [InlineData("400.14", 400)]
+            [InlineData("500", 500)]
+            [InlineData("503.2", 503)]
+            [InlineData("somethingelse", 204)]
+            public void ReturnsStatusCodeNon404Codes(string status, int expectedStatusCode) {
+                var actual = _sut.CatchAllStatusCodes(status);
+                actual.As<ViewResult>().StatusCode.Should().Be(expectedStatusCode);
             }
 
             [Theory]
@@ -264,15 +286,14 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("/error/somethingelse")]
             [InlineData("/error/400?debug=true")]
             [InlineData("/error/somethingelse?debug=true")]
-            public async Task CatchesRoutesForNotFoundStatusCodes(string url) {
+            public async Task CatchesRoutesForAllStatusCodes(string url) {
                 var response = await _client.GetAsync(url);
-                response.Should().Match<HttpResponseMessage>(_ => IsCallToNotFoundErrorEndpoint(_));
+                response.Should().Match<HttpResponseMessage>(_ => IsCallToCatchAllStatusCodesEndpoint(_));
             }
 
-            private static bool IsCallToNotFoundErrorEndpoint(HttpResponseMessage response) {
+            private static bool IsCallToCatchAllStatusCodesEndpoint(HttpResponseMessage response) {
                 return response.Headers.TryGetValues("Dalion-ResponseType", out var values) &&
-                       values.Contains("CatchAllError") &&
-                       response.IsSuccessStatusCode;
+                       values.Contains("CatchAllError");
             }
         }
     }

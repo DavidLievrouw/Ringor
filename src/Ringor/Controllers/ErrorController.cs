@@ -46,9 +46,13 @@ namespace Dalion.Ringor.Controllers {
                 return StatusCode(statusCode);
             }
 
-            return statusCode == StatusCodes.Status404NotFound
+            var view = statusCode == StatusCodes.Status404NotFound
                 ? View("NotFound")
                 : View("OtherError");
+
+            view.StatusCode = statusCode;
+
+            return view;
         }
     }
 }

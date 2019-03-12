@@ -11,15 +11,23 @@ namespace Dalion.Ringor.Controllers {
         [Route("")]
         [ReportsApplicationInfo]
         public IActionResult InternalServerError() {
-            var exceptionHandlerPathFeature = HttpContext?.Features?.Get<IExceptionHandlerPathFeature>();
-            var path = exceptionHandlerPathFeature?.Path;
-            var exception = exceptionHandlerPathFeature?.Error;
+            var feature = HttpContext?.Features?.Get<IExceptionHandlerPathFeature>();
+            ViewData[Constants.ViewData.ErrorPath] = feature?.Path;
+            ViewData[Constants.ViewData.Error] = feature?.Error;
             return View();
         }
 
         [Route("404")]
         [ReportsApplicationInfo]
         public IActionResult NotFound404() {
+            var feature = HttpContext?.Features?.Get<IStatusCodeReExecuteFeature>();
+            ViewData[Constants.ViewData.ErrorPath] = feature?.OriginalPath;
+            return View();
+        }
+
+        [Route("{*url:regex(^((?!/404).)*$)}")]
+        [ReportsApplicationInfo]
+        public IActionResult OtherError() {
             return View();
         }
     }

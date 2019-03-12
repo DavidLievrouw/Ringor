@@ -8,6 +8,8 @@
             public const string ApplicationInfo = "Dalion-ApplicationInfo";
             public const string Styles = "Dalion-Styles";
             public const string Scripts = "Dalion-Scripts";
+            public const string ErrorPath = "Dalion-ErrorPath";
+            public const string Error = "Dalion-Error";
         }
 
         public static class ResponseTypes {

@@ -12,8 +12,8 @@ namespace Dalion.Ringor.Controllers {
         [ReportsApplicationInfo]
         public IActionResult InternalServerError() {
             var feature = HttpContext?.Features?.Get<IExceptionHandlerPathFeature>();
-            ViewData[Constants.ViewData.ErrorPath] = feature?.Path;
-            ViewData[Constants.ViewData.Error] = feature?.Error;
+            if (!string.IsNullOrEmpty(feature?.Path)) ViewData[Constants.ViewData.ErrorPath] = feature.Path;
+            if (feature?.Error != null) ViewData[Constants.ViewData.Error] = feature.Error;
             return View();
         }
 
@@ -21,7 +21,9 @@ namespace Dalion.Ringor.Controllers {
         [ReportsApplicationInfo]
         public IActionResult NotFound404() {
             var feature = HttpContext?.Features?.Get<IStatusCodeReExecuteFeature>();
-            ViewData[Constants.ViewData.ErrorPath] = feature?.OriginalPath;
+            if (!string.IsNullOrEmpty(feature?.OriginalPathBase)) ViewData[Constants.ViewData.ErrorPathBase] = feature?.OriginalPathBase;
+            if (!string.IsNullOrEmpty(feature?.OriginalPath)) ViewData[Constants.ViewData.ErrorPath] = feature?.OriginalPath;
+            if (!string.IsNullOrEmpty(feature?.OriginalQueryString)) ViewData[Constants.ViewData.ErrorQueryString] = feature?.OriginalQueryString;
             return View();
         }
 

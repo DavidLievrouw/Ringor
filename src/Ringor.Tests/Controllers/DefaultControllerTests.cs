@@ -116,7 +116,7 @@ namespace Dalion.Ringor.Controllers {
                 response.Should().Match<HttpResponseMessage>(_ => !IsCallToSPA(_));
             }
 
-            private bool IsCallToSPA(HttpResponseMessage response) {
+            private static bool IsCallToSPA(HttpResponseMessage response) {
                 return
                     response.Headers.TryGetValues("Dalion-ResponseType", out var values) &&
                     values.Contains("SPA-View") &&

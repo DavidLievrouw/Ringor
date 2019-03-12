@@ -9,6 +9,8 @@
             public const string Styles = "Dalion-Styles";
             public const string Scripts = "Dalion-Scripts";
             public const string ErrorPath = "Dalion-ErrorPath";
+            public const string ErrorPathBase = "Dalion-ErrorPathBase";
+            public const string ErrorQueryString = "Dalion-ErrorQueryString";
             public const string Error = "Dalion-Error";
         }
 

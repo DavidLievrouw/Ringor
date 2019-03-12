@@ -7,7 +7,7 @@
   var statusCode = Context.Response.StatusCode;
   var reasonPhrase = ReasonPhrases.GetReasonPhrase(Context.Response.StatusCode);
   var applicationInfo = ViewData[Constants.ViewData.ApplicationInfo] as ApplicationInfo;
-  var errorUrl = ViewData[Constants.ViewData.ErrorPath] as string;
+  var errorPath = ViewData[Constants.ViewData.ErrorPath] as string;
 }
 
 <div class="ui middle aligned center aligned full-height padded padded-content grid">
@@ -45,10 +45,10 @@
             <td>Request Id</td>
             <td>@Context.TraceIdentifier</td>
           </tr>
-          @if (!string.IsNullOrEmpty(errorUrl)) {
+          @if (!string.IsNullOrEmpty(errorPath)) {
             <tr>
               <td>Request Path</td>
-              <td>@errorUrl</td>
+              <td>@errorPath</td>
             </tr>
           }
           <tr>

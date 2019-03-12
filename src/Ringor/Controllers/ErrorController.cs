@@ -10,16 +10,18 @@ namespace Dalion.Ringor.Controllers {
     public class ErrorController : Controller {
         [Route("")]
         [ReportsApplicationInfo]
+        [ReportsResponseType(Constants.ResponseTypes.ServerError)]
         public IActionResult InternalServerError() {
             var feature = HttpContext?.Features?.Get<IExceptionHandlerPathFeature>();
             if (!string.IsNullOrEmpty(feature?.Path)) ViewData[Constants.ViewData.ErrorPath] = feature.Path;
             if (feature?.Error != null) ViewData[Constants.ViewData.Error] = feature.Error;
             return View();
         }
-
+        
         [Route("404")]
         [ReportsApplicationInfo]
-        public IActionResult NotFound404() {
+        [ReportsResponseType(Constants.ResponseTypes.NotFoundError)]
+        public IActionResult NotFound404(string url) {
             var feature = HttpContext?.Features?.Get<IStatusCodeReExecuteFeature>();
             if (!string.IsNullOrEmpty(feature?.OriginalPathBase)) ViewData[Constants.ViewData.ErrorPathBase] = feature?.OriginalPathBase;
             if (!string.IsNullOrEmpty(feature?.OriginalPath)) ViewData[Constants.ViewData.ErrorPath] = feature?.OriginalPath;
@@ -29,7 +31,8 @@ namespace Dalion.Ringor.Controllers {
 
         [Route("{*url:regex(^((?!/404).)*$)}")]
         [ReportsApplicationInfo]
-        public IActionResult OtherError() {
+        [ReportsResponseType(Constants.ResponseTypes.CatchAllError)]
+        public IActionResult OtherError(string url) {
             return View();
         }
     }

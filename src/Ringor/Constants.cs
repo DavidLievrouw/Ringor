@@ -15,7 +15,10 @@
         }
 
         public static class ResponseTypes {
-            public const string SpaView = "SPA-View";
+            public const string SpaView = "SPAView";
+            public const string ServerError = "ServerError";
+            public const string NotFoundError = "NotFoundError";
+            public const string CatchAllError = "CatchAllError";
         }
     }
 }

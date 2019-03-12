@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Dalion.Ringor.Startup;
@@ -69,22 +70,40 @@ namespace Dalion.Ringor.Controllers {
                 actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorPath");
                 actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-Error");
             }
+
+            [Theory]
+            [InlineData("/error")]
+            [InlineData("/error/")]
+            [InlineData("/error?debug=true")]
+            [InlineData("/error/?debug=true")]
+            public async Task ReturnsServerErrorView(string url) {
+                var response = await _client.GetAsync(url);
+                response.Should().Match<HttpResponseMessage>(_ => IsCallToServerErrorEndpoint(_));
+            }
+
+            private static bool IsCallToServerErrorEndpoint(HttpResponseMessage response) {
+                return response.Headers.TryGetValues("Dalion-ResponseType", out var values) &&
+                       values.Contains("ServerError") &&
+                       response.IsSuccessStatusCode;
+            }
         }
 
         public class NotFound404 : ErrorControllerTests, IClassFixture<WebApplicationFactory<WebHostStartup>> {
             private readonly HttpClient _client;
             private readonly IStatusCodeReExecuteFeature _feature;
+            private readonly string _suffix;
 
             public NotFound404() {
                 var factory = new CustomWebApplicationFactory();
                 _client = factory.CreateClient();
                 FakeFactory.Create(out _feature);
                 _sut.HttpContext.Features.Set(_feature);
+                _suffix = "";
             }
 
             [Fact]
             public void ReturnsView() {
-                var actual = _sut.NotFound404();
+                var actual = _sut.NotFound404(_suffix);
                 actual.Should().NotBeNull().And.BeAssignableTo<ViewResult>();
             }
 
@@ -93,7 +112,7 @@ namespace Dalion.Ringor.Controllers {
                 A.CallTo(() => _feature.OriginalPath)
                     .Returns("/foo/bar");
 
-                var actual = _sut.NotFound404();
+                var actual = _sut.NotFound404(_suffix);
 
                 actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorPath", "/foo/bar");
             }
@@ -103,7 +122,7 @@ namespace Dalion.Ringor.Controllers {
                 A.CallTo(() => _feature.OriginalPathBase)
                     .Returns("/RingorApp");
 
-                var actual = _sut.NotFound404();
+                var actual = _sut.NotFound404(_suffix);
 
                 actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorPathBase", "/RingorApp");
             }
@@ -113,7 +132,7 @@ namespace Dalion.Ringor.Controllers {
                 A.CallTo(() => _feature.OriginalQueryString)
                     .Returns("?debug=true");
 
-                var actual = _sut.NotFound404();
+                var actual = _sut.NotFound404(_suffix);
 
                 actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorQueryString", "?debug=true");
             }
@@ -122,23 +141,41 @@ namespace Dalion.Ringor.Controllers {
             public void WhenFeatureIsNotAvailable_DoesNotThrow_DoesNotAddOriginalPathToViewData() {
                 _sut.ControllerContext.HttpContext = new DefaultHttpContext();
 
-                var actual = _sut.NotFound404();
+                var actual = _sut.NotFound404(_suffix);
 
                 actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorPath");
+            }
+
+            [Theory]
+            [InlineData("/error/404")]
+            [InlineData("/error/404.14")]
+            [InlineData("/error/404.xx")]
+            [InlineData("/error/404?debug=true")]
+            public async Task CatchesRoutesForNotFoundStatusCodes(string url) {
+                var response = await _client.GetAsync(url);
+                response.Should().Match<HttpResponseMessage>(_ => IsCallToNotFoundErrorEndpoint(_));
+            }
+
+            private static bool IsCallToNotFoundErrorEndpoint(HttpResponseMessage response) {
+                return response.Headers.TryGetValues("Dalion-ResponseType", out var values) &&
+                       values.Contains("NotFoundError") &&
+                       response.IsSuccessStatusCode;
             }
         }
 
         public class OtherError : ErrorControllerTests, IClassFixture<WebApplicationFactory<WebHostStartup>> {
             private readonly HttpClient _client;
+            private readonly string _url;
 
             public OtherError() {
                 var factory = new CustomWebApplicationFactory();
                 _client = factory.CreateClient();
+                _url = "400";
             }
 
             [Fact]
             public void ReturnsView() {
-                var actual = _sut.OtherError();
+                var actual = _sut.OtherError(_url);
                 actual.Should().NotBeNull().And.BeAssignableTo<ViewResult>();
             }
 
@@ -152,11 +189,13 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("/error/somethingelse?debug=true")]
             public async Task CatchesAllNon404Errors(string url) {
                 var response = await _client.GetAsync(url);
-                response.Should().Match<HttpResponseMessage>(_ => IsCallToCatchAllEndpoint(_));
+                response.Should().Match<HttpResponseMessage>(_ => IsCallToCatchAllErrorEndpoint(_));
             }
 
-            private static bool IsCallToCatchAllEndpoint(HttpResponseMessage response) {
-                return response.IsSuccessStatusCode &&;
+            private static bool IsCallToCatchAllErrorEndpoint(HttpResponseMessage response) {
+                return response.Headers.TryGetValues("Dalion-ResponseType", out var values) &&
+                       values.Contains("CatchAllError") &&
+                       response.IsSuccessStatusCode;
             }
         }
     }

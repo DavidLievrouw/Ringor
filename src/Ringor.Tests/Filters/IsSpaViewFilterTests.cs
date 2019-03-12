@@ -202,7 +202,7 @@ namespace Dalion.Ringor.Filters {
 
                 _context.HttpContext.Response.Headers.Should().Contain(
                     "Dalion-ResponseType",
-                    new[] {"SPA-View"});
+                    new[] {"SPAView"});
             }
 
             [Fact]

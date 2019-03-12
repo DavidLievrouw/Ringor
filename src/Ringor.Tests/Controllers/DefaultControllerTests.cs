@@ -119,7 +119,7 @@ namespace Dalion.Ringor.Controllers {
             private static bool IsCallToSPA(HttpResponseMessage response) {
                 return
                     response.Headers.TryGetValues("Dalion-ResponseType", out var values) &&
-                    values.Contains("SPA-View") &&
+                    values.Contains("SPAView") &&
                     response.IsSuccessStatusCode;
             }
         }

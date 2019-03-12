@@ -94,6 +94,7 @@ namespace Dalion.Ringor.Controllers {
             private readonly HttpClient _client;
             private readonly IStatusCodeReExecuteFeature _feature;
             private readonly string _status;
+            private readonly string _path;
 
             public CatchAllStatusCodes() {
                 var factory = new CustomWebApplicationFactory();
@@ -101,11 +102,12 @@ namespace Dalion.Ringor.Controllers {
                 FakeFactory.Create(out _feature);
                 _sut.HttpContext.Features.Set(_feature);
                 _status = "401";
+                _path = null;
             }
 
             [Fact]
             public void ReturnsView() {
-                var actual = _sut.CatchAllStatusCodes(_status);
+                var actual = _sut.CatchAllStatusCodes(_status, _path);
                 actual.Should().NotBeNull().And.BeAssignableTo<ViewResult>();
             }
 
@@ -114,7 +116,7 @@ namespace Dalion.Ringor.Controllers {
                 A.CallTo(() => _feature.OriginalPath)
                     .Returns("/foo/bar");
 
-                var actual = _sut.CatchAllStatusCodes(_status);
+                var actual = _sut.CatchAllStatusCodes(_status, _path);
 
                 actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorPath", "/foo/bar");
             }
@@ -126,9 +128,29 @@ namespace Dalion.Ringor.Controllers {
                 A.CallTo(() => _feature.OriginalPath)
                     .Returns(noValue);
 
-                var actual = _sut.CatchAllStatusCodes(_status);
+                var actual = _sut.CatchAllStatusCodes(_status, _path);
 
                 actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorPath");
+            }
+            
+            [Fact]
+            public void WhenThereIsNoOriginalPathInFeature_ButItIsSpecifiedInQueryString_AddsToViewData() {
+                A.CallTo(() => _feature.OriginalPath)
+                    .Returns(null);
+
+                var actual = _sut.CatchAllStatusCodes(_status, "/path/from/qs");
+
+                actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorPath", "/path/from/qs");
+            }
+
+            [Fact]
+            public void WhenThereAreBothQueryStringPathAndFeaturePath_PrefersFeaturePath() {
+                A.CallTo(() => _feature.OriginalPath)
+                    .Returns("/foo/bar");
+
+                var actual = _sut.CatchAllStatusCodes(_status, "/path/from/qs");
+
+                actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorPath", "/foo/bar");
             }
 
             [Fact]
@@ -136,7 +158,7 @@ namespace Dalion.Ringor.Controllers {
                 A.CallTo(() => _feature.OriginalPathBase)
                     .Returns("/RingorApp");
 
-                var actual = _sut.CatchAllStatusCodes(_status);
+                var actual = _sut.CatchAllStatusCodes(_status, _path);
 
                 actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorPathBase", "/RingorApp");
             }
@@ -148,7 +170,7 @@ namespace Dalion.Ringor.Controllers {
                 A.CallTo(() => _feature.OriginalPathBase)
                     .Returns(noValue);
 
-                var actual = _sut.CatchAllStatusCodes(_status);
+                var actual = _sut.CatchAllStatusCodes(_status, _path);
 
                 actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorPathBase");
             }
@@ -158,7 +180,7 @@ namespace Dalion.Ringor.Controllers {
                 A.CallTo(() => _feature.OriginalQueryString)
                     .Returns("?debug=true");
 
-                var actual = _sut.CatchAllStatusCodes(_status);
+                var actual = _sut.CatchAllStatusCodes(_status, _path);
 
                 actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorQueryString", "?debug=true");
             }
@@ -170,7 +192,7 @@ namespace Dalion.Ringor.Controllers {
                 A.CallTo(() => _feature.OriginalQueryString)
                     .Returns(noValue);
 
-                var actual = _sut.CatchAllStatusCodes(_status);
+                var actual = _sut.CatchAllStatusCodes(_status, _path);
 
                 actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorQueryString");
             }
@@ -182,14 +204,14 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("401-xx", 401)]
             [InlineData("4-a01-xx", 4)]
             public void AddsStatusCodeToViewData(string status, int expectedStatusCode) {
-                var actual = _sut.CatchAllStatusCodes(status);
+                var actual = _sut.CatchAllStatusCodes(status, _path);
 
                 actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorStatusCode", expectedStatusCode);
             }
 
             [Fact]
             public void AddsStatusCodeIsNotANumber_AddsReponseStatusCodeToView() {
-                var actual = _sut.CatchAllStatusCodes("NaN");
+                var actual = _sut.CatchAllStatusCodes("NaN", _path);
 
                 actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorStatusCode", _sut.ControllerContext.HttpContext.Response.StatusCode);
             }
@@ -198,9 +220,20 @@ namespace Dalion.Ringor.Controllers {
             public void WhenFeatureIsNotAvailable_DoesNotThrow_DoesNotAddOriginalRequestValuesToViewData() {
                 _sut.ControllerContext.HttpContext = new DefaultHttpContext();
 
-                var actual = _sut.CatchAllStatusCodes(_status);
+                var actual = _sut.CatchAllStatusCodes(_status, _path);
 
                 actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorPath");
+                actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorPathBase");
+                actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorPathQueryString");
+            }
+
+            [Fact]
+            public void WhenFeatureIsNotAvailable_ButQueryStringPathIs_OnlyAddsQueryStringPathToViewData() {
+                _sut.ControllerContext.HttpContext = new DefaultHttpContext();
+
+                var actual = _sut.CatchAllStatusCodes(_status, "/path/from/qs");
+
+                actual.As<ViewResult>().ViewData.Should().Contain("Dalion-ErrorPath", "/path/from/qs");
                 actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorPathBase");
                 actual.As<ViewResult>().ViewData.Should().NotContainKey("Dalion-ErrorPathQueryString");
             }
@@ -222,7 +255,7 @@ namespace Dalion.Ringor.Controllers {
                 A.CallTo(() => _feature.OriginalPath)
                     .Returns(originalPath);
 
-                var actual = _sut.CatchAllStatusCodes(status);
+                var actual = _sut.CatchAllStatusCodes(status, _path);
 
                 actual.Should().BeAssignableTo<StatusCodeResult>();
                 actual.As<StatusCodeResult>().StatusCode.Should().Be(expectedStatusCode);
@@ -233,7 +266,7 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("404.14")]
             [InlineData("404.xx")]
             public void ReturnsNotFoundViewFor404(string status) {
-                var actual = _sut.CatchAllStatusCodes(status);
+                var actual = _sut.CatchAllStatusCodes(status, _path);
                 actual.As<ViewResult>().ViewName.Should().Be("NotFound");
             }
 
@@ -242,7 +275,7 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("404.14")]
             [InlineData("404.xx")]
             public void ReturnsNotFoundCodeFor404(string status) {
-                var actual = _sut.CatchAllStatusCodes(status);
+                var actual = _sut.CatchAllStatusCodes(status, _path);
                 actual.As<ViewResult>().StatusCode.Should().Be(404);
             }
 
@@ -255,7 +288,7 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("503.2")]
             [InlineData("somethingelse")]
             public void ReturnsOtherErrorViewForNon404Codes(string status) {
-                var actual = _sut.CatchAllStatusCodes(status);
+                var actual = _sut.CatchAllStatusCodes(status, _path);
                 actual.As<ViewResult>().ViewName.Should().Be("OtherError");
             }
 
@@ -268,7 +301,7 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("503.2", 503)]
             [InlineData("somethingelse", 204)]
             public void ReturnsStatusCodeNon404Codes(string status, int expectedStatusCode) {
-                var actual = _sut.CatchAllStatusCodes(status);
+                var actual = _sut.CatchAllStatusCodes(status, _path);
                 actual.As<ViewResult>().StatusCode.Should().Be(expectedStatusCode);
             }
 

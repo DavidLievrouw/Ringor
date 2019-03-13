@@ -40,7 +40,7 @@ namespace Dalion.Ringor.Startup {
 
             app
                 .UseHttpsRedirection()
-                .UseStatusCodePagesWithReExecute("/error/{0}")
+                .UseStatusCodePagesWithReExecute("/error/{0}") // When response is between 400 and 599, and there is no response content, the catch-all error endpoint will be invoked
                 .UseAuthentication() // Very important that this is called before anything that will require authentication
                 .UseMvc()
                 .UseStaticFiles()

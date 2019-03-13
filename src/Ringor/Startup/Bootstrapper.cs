@@ -4,6 +4,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace Dalion.Ringor.Startup {
     internal static class Bootstrapper {
@@ -73,7 +74,8 @@ namespace Dalion.Ringor.Startup {
                     s.AddSingleton(settings);
                 })
                 .UseStartup<WebHostStartup>()
-                .ConfigureServices((ctx, s) => Composition.ConfigureServices(s, ctx.HostingEnvironment, configuration, settings));
+                .ConfigureServices((ctx, s) => Composition.ConfigureServices(s, ctx.HostingEnvironment, configuration, settings))
+                .UseSerilog();
         }
 
         internal static IWebHost BuildWebHost(IConfigurationRoot configuration, BootstrapperSettings settings) {

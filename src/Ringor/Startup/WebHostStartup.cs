@@ -23,6 +23,7 @@ namespace Dalion.Ringor.Startup {
 
             // Mvc
             services
+                .AddApiVersioning()
                 .AddRouting(options => options.LowercaseUrls = true)
                 .AddMvc()
                 .AddJsonOptions(config => PreConfiguredJsonSerializerSettings.Apply(config.SerializerSettings))
@@ -46,7 +47,8 @@ namespace Dalion.Ringor.Startup {
                 .UseAuthentication() // Very important that this is called before anything that will require authentication
                 .UseMvc()
                 .UseStaticFiles()
-                .UseSwagger(app.ApplicationServices.GetService<AuthenticationSettings>());
+                .UseSwagger(app.ApplicationServices.GetService<AuthenticationSettings>())
+                .UseApiVersioning();
         }
     }
 }

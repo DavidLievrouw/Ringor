@@ -11,6 +11,7 @@ using Dalion.Ringor.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -116,6 +117,16 @@ namespace Dalion.Ringor.Startup {
 
         public static IServiceCollection AddFileProviders(this IServiceCollection services) {
             return services.AddSingleton(serviceProvider => serviceProvider.GetRequiredService<IHostingEnvironment>().WebRootFileProvider);
+        }
+
+        public static IServiceCollection AddApiVersioning(this IServiceCollection services) {
+            return services.AddApiVersioning(options => {
+                options.UseApiBehavior = true; // Apply only on controllers with ApiControllerAttribute
+                options.AssumeDefaultVersionWhenUnspecified = true; // Don't require clients to specify which version they want
+                options.ApiVersionSelector = new CurrentImplementationApiVersionSelector(options); // When not specifying a version, use the latest version
+                options.ReportApiVersions = true; // Report supported API versions for requests to controllers having an ApiControllerAttribute
+                options.ApiVersionReader = new MediaTypeApiVersionReader(); // Versions are specified using the Accept-header
+            });
         }
     }
 }

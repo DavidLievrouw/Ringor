@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -9,7 +10,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dalion.Ringor.Api.Controllers {
+    [ApiController]
+    [ApiVersion("1.0")]
     [Route("api/userinfo")]
+    [DisplayName("UserInfo")]
     [Authorize]
     public class UserInfoController : Controller {
         private readonly IClaimLinksCreatorFactory _claimLinksCreatorFactory;

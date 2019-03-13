@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Dalion.Ringor.Api.Models;
 using Dalion.Ringor.Api.Models.Links;
@@ -7,7 +8,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dalion.Ringor.Api.Controllers {
+    [ApiController]
+    [ApiVersion("1.0")]
     [Route("api")]
+    [DisplayName("ApiHome")]
     [AllowAnonymous]
     public class DefaultController : Controller {
         private readonly IApplicationInfoProvider _applicationInfoProvider;

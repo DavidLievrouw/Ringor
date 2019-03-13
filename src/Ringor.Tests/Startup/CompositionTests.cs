@@ -6,6 +6,7 @@ using Dalion.Ringor.Api.Models.Links;
 using Dalion.Ringor.Api.Serialization;
 using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
+using Dalion.Ringor.Utils;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

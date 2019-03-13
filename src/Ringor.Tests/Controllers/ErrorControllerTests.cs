@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Dalion.Ringor.Startup;
-using Dalion.Ringor.Utils.Logging;
+using Dalion.Ringor.Utils;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Diagnostics;

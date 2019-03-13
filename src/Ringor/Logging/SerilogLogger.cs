@@ -1,5 +1,5 @@
 using System;
-using Dalion.Ringor.Utils.Logging;
+using Dalion.Ringor.Utils;
 
 namespace Dalion.Ringor.Logging {
     public class SerilogLogger<TContext> : ILogger<TContext>, IDisposable {

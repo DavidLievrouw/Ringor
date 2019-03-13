@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using Dalion.Ringor.Utils;
 using Newtonsoft.Json;
 
 namespace Dalion.Ringor.Api.Serialization {

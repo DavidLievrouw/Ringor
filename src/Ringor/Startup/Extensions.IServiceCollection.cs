@@ -9,7 +9,7 @@ using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
 using Dalion.Ringor.Logging;
 using Dalion.Ringor.Swagger;
-using Dalion.Ringor.Utils.Logging;
+using Dalion.Ringor.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

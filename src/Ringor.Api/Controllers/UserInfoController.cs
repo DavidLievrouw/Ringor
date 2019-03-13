@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Dalion.Ringor.Api.Models;
 using Dalion.Ringor.Api.Models.Links;
+using Dalion.Ringor.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

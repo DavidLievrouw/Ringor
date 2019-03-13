@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Dalion.Ringor.Logging;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 using Xunit;
 
-namespace Dalion.Ringor.Api.Logging {
+namespace Dalion.Ringor.Logging {
     public class UnhandledExceptionLoggingMiddlewareTests {
         private readonly ILogger _logger;
 

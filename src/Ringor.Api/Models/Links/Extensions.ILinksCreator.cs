@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Dalion.Ringor.Utils;
 
 namespace Dalion.Ringor.Api.Models.Links {
     public static partial class Extensions {

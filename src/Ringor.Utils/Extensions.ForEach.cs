@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 namespace Dalion.Ringor.Utils {
     public static partial class Extensions {
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-        public static async Task<IEnumerable<T>> ForEach<T>(this IEnumerable<T> source, Func<T, Task> action) {
+        public static Task<IEnumerable<T>> ForEach<T>(this IEnumerable<T> source, Func<T, Task> action) {
+            return ForEachAsync(source, action);
+        }        
+        
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
+        public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> source, Func<T, Task> action) {
             if (source == null) return source;
             if (action == null) return source;
             foreach (var element in source) {
@@ -16,7 +21,12 @@ namespace Dalion.Ringor.Utils {
         }
 
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-        public static async Task<IEnumerable<T>> ForEach<T>(this IEnumerable<T> source, Func<T, int, Task> action) {
+        public static Task<IEnumerable<T>> ForEach<T>(this IEnumerable<T> source, Func<T, int, Task> action) {
+            return ForEachAsync(source, action);
+        }
+
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
+        public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> source, Func<T, int, Task> action) {
             if (source == null) return source;
             if (action == null) return source;
             var index = 0;

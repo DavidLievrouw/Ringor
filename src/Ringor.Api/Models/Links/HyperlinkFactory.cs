@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using Dalion.Ringor.Utils;
 
 namespace Dalion.Ringor.Api.Models.Links {
     public class HyperlinkFactory : IHyperlinkFactory {

@@ -1,5 +1,6 @@
 ﻿using System;
 using Dalion.Ringor.Api.Controllers;
+using Dalion.Ringor.Api.Logging;
 using Dalion.Ringor.Api.Serialization;
 using Dalion.Ringor.Configuration;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +40,7 @@ namespace Dalion.Ringor.Startup {
                 : app.UseExceptionHandler("/error");
 
             app
+                .UseUnhandledExceptionLogging()
                 .UseHttpsRedirection()
                 .UseStatusCodePagesWithReExecute("/error/{0}") // When response is between 400 and 599, and there is no response content, the catch-all error endpoint will be invoked
                 .UseAuthentication() // Very important that this is called before anything that will require authentication

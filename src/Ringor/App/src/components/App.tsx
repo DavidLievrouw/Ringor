@@ -52,7 +52,7 @@ export class App extends React.Component<IAppProps, IAppState> {
                 apiUrlPasteHandler={this.props.composition.services.apiUrlPasteHandler} />}
               />
               <Route path="/swaggerui" render={(routeProps) => <Swagger />} />
-              <Route render={(routeProps) => <NotFound urlService={this.props.composition.services.urlService} path={routeProps.location.pathname} />} />
+              <Route render={(routeProps) => <NotFound urlService={this.props.composition.services.urlService} path={routeProps.location.pathname} query={routeProps.location.search} />} />
             </Switch>
           </div>
           <footer>

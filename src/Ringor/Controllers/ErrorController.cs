@@ -27,13 +27,14 @@ namespace Dalion.Ringor.Controllers {
         [Route("{*status}")]
         [ReportsApplicationInfo]
         [ReportsResponseType(Constants.ResponseTypes.CatchAllError)]
-        public IActionResult CatchAllStatusCodes(string status, [FromQuery] string path) {
+        public IActionResult CatchAllStatusCodes(string status, [FromQuery] string path, [FromQuery] string query) {
             var feature = HttpContext.Features?.Get<IStatusCodeReExecuteFeature>();
 
             if (!string.IsNullOrEmpty(feature?.OriginalPathBase)) ViewData[Constants.ViewData.ErrorPathBase] = feature.OriginalPathBase;
             if (!string.IsNullOrEmpty(feature?.OriginalPath)) ViewData[Constants.ViewData.ErrorPath] = feature.OriginalPath;
             if (!string.IsNullOrEmpty(feature?.OriginalQueryString)) ViewData[Constants.ViewData.ErrorQueryString] = feature.OriginalQueryString;
             if (!ViewData.ContainsKey(Constants.ViewData.ErrorPath) && !string.IsNullOrEmpty(path)) ViewData[Constants.ViewData.ErrorPath] = path;
+            if (!ViewData.ContainsKey(Constants.ViewData.ErrorQueryString) && !string.IsNullOrEmpty(query)) ViewData[Constants.ViewData.ErrorQueryString] = query;
 
             var statusCodeString = StatusCodeRegex.Matches(status).FirstOrDefault()?.Value;
             if (!int.TryParse(statusCodeString, out var statusCode)) {

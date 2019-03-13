@@ -1,6 +1,5 @@
 ﻿using System;
 using Dalion.Ringor.Api.Controllers;
-using Dalion.Ringor.Api.Logging;
 using Dalion.Ringor.Api.Serialization;
 using Dalion.Ringor.Configuration;
 using Microsoft.AspNetCore.Builder;

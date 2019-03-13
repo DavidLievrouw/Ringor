@@ -1,11 +1,11 @@
 using System;
 using Dalion.Ringor.Utils.Logging;
 
-namespace Dalion.Ringor.Api.Logging {
-    public class Logger<TContext> : ILogger<TContext>, IDisposable {
+namespace Dalion.Ringor.Logging {
+    public class SerilogLogger<TContext> : ILogger<TContext>, IDisposable {
         private readonly Serilog.ILogger _logger;
 
-        public Logger(Serilog.ILogger logger) {
+        public SerilogLogger(Serilog.ILogger logger) {
             _logger = logger?.ForContext<TContext>() ?? throw new ArgumentNullException(nameof(logger));
         }
 

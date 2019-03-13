@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Dalion.Ringor.Logging;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;

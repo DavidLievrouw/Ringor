@@ -7,13 +7,16 @@ using Dalion.Ringor.Api.Security;
 using Dalion.Ringor.Api.Serialization;
 using Dalion.Ringor.Api.Services;
 using Dalion.Ringor.Configuration;
+using Dalion.Ringor.Logging;
 using Dalion.Ringor.Swagger;
+using Dalion.Ringor.Utils.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Dalion.Ringor.Startup {
@@ -127,6 +130,26 @@ namespace Dalion.Ringor.Startup {
                 options.ReportApiVersions = true; // Report supported API versions for requests to controllers having an ApiControllerAttribute
                 options.ApiVersionReader = new MediaTypeApiVersionReader(); // Versions are specified using the Accept-header
             });
+        }
+
+        public static IServiceCollection AddSerilog(this IServiceCollection services, IConfiguration configuration) {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+
+            return AddSerilog(services, new LoggerConfiguration().ReadFrom.Configuration(configuration));
+        }
+
+        public static IServiceCollection AddSerilog(this IServiceCollection services, LoggerConfiguration configuration) {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+
+            var logger = configuration.CreateLogger();
+
+            services.AddSingleton<ILogger>(logger);
+            services.AddSingleton(typeof(ILogger<>), typeof(SerilogLogger<>));
+            Log.Logger = logger;
+
+            return services;
         }
     }
 }

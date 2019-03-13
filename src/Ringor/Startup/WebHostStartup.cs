@@ -1,7 +1,7 @@
 ﻿using System;
 using Dalion.Ringor.Api.Controllers;
-using Dalion.Ringor.Api.Serialization;
 using Dalion.Ringor.Configuration;
+using Dalion.Ringor.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

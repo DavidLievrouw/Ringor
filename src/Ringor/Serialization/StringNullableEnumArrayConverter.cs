@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Dalion.Ringor.Api.Serialization {
+namespace Dalion.Ringor.Serialization {
     /// <summary>
     ///     Converts an <see cref="Enum" /> to and from its name string value in a safe manner: if it fails anywhere in the
     ///     process, it will read or write null.

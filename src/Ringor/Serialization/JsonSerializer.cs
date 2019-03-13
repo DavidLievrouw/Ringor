@@ -4,7 +4,7 @@ using System.Text;
 using Dalion.Ringor.Utils;
 using Newtonsoft.Json;
 
-namespace Dalion.Ringor.Api.Serialization {
+namespace Dalion.Ringor.Serialization {
     internal class JsonSerializer : IJsonSerializer {
         private readonly Newtonsoft.Json.JsonSerializer _inner;
 

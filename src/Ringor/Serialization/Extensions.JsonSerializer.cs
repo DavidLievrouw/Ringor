@@ -1,7 +1,7 @@
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Dalion.Ringor.Api.Serialization {
+namespace Dalion.Ringor.Serialization {
     internal static partial class Extensions {
         public static string Serialize(this Newtonsoft.Json.JsonSerializer jsonSerializer, object model) {
             return jsonSerializer.Serialize(model, false);

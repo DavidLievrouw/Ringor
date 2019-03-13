@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace Dalion.Ringor.Api.Serialization {
+namespace Dalion.Ringor.Serialization {
     public static class PreConfiguredJsonSerializerSettings {
         public static JsonSerializerSettings Create() {
             var settings = new JsonSerializerSettings();

@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
+using Dalion.Ringor.Api.Logging;
 using Dalion.Ringor.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
@@ -13,6 +15,11 @@ namespace Dalion.Ringor.Controllers {
     public class ErrorController : Controller {
         private static readonly Regex ApiCallRegex = new Regex(@"^/?api.*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex StatusCodeRegex = new Regex(@"\d+", RegexOptions.Compiled);
+        private readonly ILogger<ErrorController> _logger;
+
+        public ErrorController(ILogger<ErrorController> logger) {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
         [Route("")]
         [ReportsApplicationInfo]
@@ -21,6 +28,9 @@ namespace Dalion.Ringor.Controllers {
             var feature = HttpContext.Features?.Get<IExceptionHandlerPathFeature>();
             if (!string.IsNullOrEmpty(feature?.Path)) ViewData[Constants.ViewData.ErrorPath] = feature.Path;
             if (feature?.Error != null) ViewData[Constants.ViewData.Error] = feature.Error;
+
+            _logger.Warning(feature?.Error, "Displaying internal server error view to user.");
+
             return View();
         }
 
@@ -28,6 +38,8 @@ namespace Dalion.Ringor.Controllers {
         [ReportsApplicationInfo]
         [ReportsResponseType(Constants.ResponseTypes.CatchAllError)]
         public IActionResult CatchAllStatusCodes(string status, [FromQuery] string path, [FromQuery] string query) {
+            _logger.Warning("Displaying catch-all or not found error view to user.");
+
             var feature = HttpContext.Features?.Get<IStatusCodeReExecuteFeature>();
 
             if (!string.IsNullOrEmpty(feature?.OriginalPathBase)) ViewData[Constants.ViewData.ErrorPathBase] = feature.OriginalPathBase;

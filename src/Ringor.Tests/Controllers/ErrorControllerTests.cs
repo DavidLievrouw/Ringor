@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Dalion.Ringor.Api.Logging;
 using Dalion.Ringor.Startup;
 using FakeItEasy;
 using FluentAssertions;
@@ -13,10 +14,12 @@ using Xunit;
 
 namespace Dalion.Ringor.Controllers {
     public class ErrorControllerTests {
+        private readonly ILogger<ErrorController> _logger;
         private readonly ErrorController _sut;
 
         public ErrorControllerTests() {
-            _sut = new ErrorController {
+            FakeFactory.Create(out _logger);
+            _sut = new ErrorController(_logger) {
                 ControllerContext = new ControllerContext {
                     HttpContext = new DefaultHttpContext {
                         Response = {StatusCode = 204}

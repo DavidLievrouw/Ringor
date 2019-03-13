@@ -1,4 +1,5 @@
 using System;
+using Dalion.Ringor.Utils.Logging;
 
 namespace Dalion.Ringor.Api.Logging {
     public class Logger<TContext> : ILogger<TContext>, IDisposable {

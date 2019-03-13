@@ -1,6 +1,6 @@
 using System;
 
-namespace Dalion.Ringor.Api.Logging {
+namespace Dalion.Ringor.Utils.Logging {
     public class DisabledLogger<TContext> : ILogger<TContext>, IDisposable {
         public void Dispose() { }
         public void Verbose(string messageTemplate) { }

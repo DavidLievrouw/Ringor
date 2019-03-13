@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Dalion.Ringor.Api.Logging;
 using Dalion.Ringor.Startup;
+using Dalion.Ringor.Utils.Logging;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Diagnostics;

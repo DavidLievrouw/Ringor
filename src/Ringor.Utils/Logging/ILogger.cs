@@ -1,6 +1,6 @@
 using System;
 
-namespace Dalion.Ringor.Api.Logging {
+namespace Dalion.Ringor.Utils.Logging {
     /// <summary>
     ///     The methods on <see cref="ILogger{TContext}" /> are guaranteed never to throw exceptions.
     /// </summary>

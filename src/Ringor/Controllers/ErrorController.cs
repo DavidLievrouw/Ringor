@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Dalion.Ringor.Api.Logging;
 using Dalion.Ringor.Filters;
+using Dalion.Ringor.Utils.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;

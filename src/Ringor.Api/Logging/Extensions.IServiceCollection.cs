@@ -1,4 +1,5 @@
 using System;
+using Dalion.Ringor.Utils.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;

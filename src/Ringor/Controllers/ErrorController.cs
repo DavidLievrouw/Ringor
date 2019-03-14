@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dalion.Ringor.Controllers {
     [AllowAnonymous]
     [Route("error")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorController : Controller {
         private static readonly Regex ApiCallRegex = new Regex(@"^/?api.*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex StatusCodeRegex = new Regex(@"\d+", RegexOptions.Compiled);

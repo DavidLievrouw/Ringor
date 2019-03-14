@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dalion.Ringor.Controllers {
     [AllowAnonymous]
     [Route("")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public class DefaultController : Controller {
         [HttpGet("{*url}")]
         [GetSpaActionConstraint]

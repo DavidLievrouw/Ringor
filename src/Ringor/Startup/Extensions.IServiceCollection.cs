@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Dalion.Ringor.Api.Controllers;
 using Dalion.Ringor.Api.Models.Links;
 using Dalion.Ringor.Api.Security;
@@ -78,22 +79,23 @@ namespace Dalion.Ringor.Startup {
         public static IServiceCollection AddSwagger(this IServiceCollection services, BootstrapperSettings bootstrapperSettings, AuthenticationSettings authSettings) {
             return services
                 .AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>()
-                .AddSwaggerGen(c => {
+                .AddSwaggerGen(options => {
                     var pathToEntryAssembly = bootstrapperSettings.EntryAssembly.Location;
                     var pathToContentRoot = Path.GetDirectoryName(pathToEntryAssembly);
                     var assemblyName = Path.GetFileNameWithoutExtension(pathToEntryAssembly);
-                    c.IncludeXmlComments(Path.Combine(pathToContentRoot, assemblyName + ".xml"));
+                    options.IncludeXmlComments(Path.Combine(pathToContentRoot, assemblyName + ".xml"));
                     var apiAssemblyName = Path.GetFileNameWithoutExtension(typeof(DefaultController).Assembly.Location);
-                    c.IncludeXmlComments(Path.Combine(pathToContentRoot, apiAssemblyName + ".xml"));
-                    c.DescribeAllEnumsAsStrings();
-                    c.DescribeStringEnumsInCamelCase();
+                    options.IncludeXmlComments(Path.Combine(pathToContentRoot, apiAssemblyName + ".xml"));
+                    options.DescribeAllEnumsAsStrings();
+                    options.DescribeStringEnumsInCamelCase();
 
                     var authority = (authSettings.Swagger.SignInEndpoint?.AbsoluteUri?.TrimEnd('/') ?? string.Empty) + '/' + (authSettings.Swagger.Tenant ?? string.Empty);
-                    c.AddSecurityDefinition("oauth2", new OAuth2Scheme {
+                    options.AddSecurityDefinition("oauth2", new OAuth2Scheme {
                         Flow = "implicit",
                         AuthorizationUrl = $"{authority}/oauth2/authorize"
                     });
-                    c.OperationFilter<AuthorizeCheckOperationFilter>();
+                    options.OperationFilter<AuthorizeCheckOperationFilter>();
+                    options.OperationFilter<SwaggerDefaultValues>();
                 });
         }
 

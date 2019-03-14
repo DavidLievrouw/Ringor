@@ -5,10 +5,10 @@ using Dalion.Ringor.Api.Controllers;
 using Dalion.Ringor.Api.Models.Links;
 using Dalion.Ringor.Api.Security;
 using Dalion.Ringor.Api.Services;
+using Dalion.Ringor.Api.Swagger;
 using Dalion.Ringor.Configuration;
 using Dalion.Ringor.Logging;
 using Dalion.Ringor.Serialization;
-using Dalion.Ringor.Swagger;
 using Dalion.Ringor.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
@@ -16,8 +16,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Dalion.Ringor.Startup {
     internal static partial class Extensions {
@@ -74,30 +76,25 @@ namespace Dalion.Ringor.Startup {
         }
 
         public static IServiceCollection AddSwagger(this IServiceCollection services, BootstrapperSettings bootstrapperSettings, AuthenticationSettings authSettings) {
-            var appVersion = bootstrapperSettings.EntryAssembly.GetName().Version;
-            return services.AddSwaggerGen(c => {
-                c.SwaggerDoc(
-                    "v" + appVersion.ToString(2),
-                    new Info {
-                        Title = "Ringor API",
-                        Version = appVersion.ToString(2)
-                    });
-                var pathToEntryAssembly = bootstrapperSettings.EntryAssembly.Location;
-                var pathToContentRoot = Path.GetDirectoryName(pathToEntryAssembly);
-                var assemblyName = Path.GetFileNameWithoutExtension(pathToEntryAssembly);
-                c.IncludeXmlComments(Path.Combine(pathToContentRoot, assemblyName + ".xml"));
-                var apiAssemblyName = Path.GetFileNameWithoutExtension(typeof(DefaultController).Assembly.Location);
-                c.IncludeXmlComments(Path.Combine(pathToContentRoot, apiAssemblyName + ".xml"));
-                c.DescribeAllEnumsAsStrings();
-                c.DescribeStringEnumsInCamelCase();
+            return services
+                .AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>()
+                .AddSwaggerGen(c => {
+                    var pathToEntryAssembly = bootstrapperSettings.EntryAssembly.Location;
+                    var pathToContentRoot = Path.GetDirectoryName(pathToEntryAssembly);
+                    var assemblyName = Path.GetFileNameWithoutExtension(pathToEntryAssembly);
+                    c.IncludeXmlComments(Path.Combine(pathToContentRoot, assemblyName + ".xml"));
+                    var apiAssemblyName = Path.GetFileNameWithoutExtension(typeof(DefaultController).Assembly.Location);
+                    c.IncludeXmlComments(Path.Combine(pathToContentRoot, apiAssemblyName + ".xml"));
+                    c.DescribeAllEnumsAsStrings();
+                    c.DescribeStringEnumsInCamelCase();
 
-                var authority = (authSettings.Swagger.SignInEndpoint?.AbsoluteUri?.TrimEnd('/') ?? string.Empty) + '/' + (authSettings.Swagger.Tenant ?? string.Empty);
-                c.AddSecurityDefinition("oauth2", new OAuth2Scheme {
-                    Flow = "implicit",
-                    AuthorizationUrl = $"{authority}/oauth2/authorize"
+                    var authority = (authSettings.Swagger.SignInEndpoint?.AbsoluteUri?.TrimEnd('/') ?? string.Empty) + '/' + (authSettings.Swagger.Tenant ?? string.Empty);
+                    c.AddSecurityDefinition("oauth2", new OAuth2Scheme {
+                        Flow = "implicit",
+                        AuthorizationUrl = $"{authority}/oauth2/authorize"
+                    });
+                    c.OperationFilter<AuthorizeCheckOperationFilter>();
                 });
-                c.OperationFilter<AuthorizeCheckOperationFilter>();
-            });
         }
 
         public static IServiceCollection AddAllLinksCreators(this IServiceCollection services) {
@@ -123,13 +120,14 @@ namespace Dalion.Ringor.Startup {
         }
 
         public static IServiceCollection AddApiVersioning(this IServiceCollection services) {
-            return services.AddApiVersioning(options => {
-                options.UseApiBehavior = true; // Apply only on controllers with ApiControllerAttribute
-                options.AssumeDefaultVersionWhenUnspecified = true; // Don't require clients to specify which version they want
-                options.ApiVersionSelector = new CurrentImplementationApiVersionSelector(options); // When not specifying a version, use the latest version
-                options.ReportApiVersions = true; // Report supported API versions for requests to controllers having an ApiControllerAttribute
-                options.ApiVersionReader = new MediaTypeApiVersionReader(); // Versions are specified using the Accept-header
-            });
+            return services
+                .AddApiVersioning(options => {
+                    options.UseApiBehavior = true; // Apply only on controllers with ApiControllerAttribute
+                    options.AssumeDefaultVersionWhenUnspecified = true; // Don't require clients to specify which version they want
+                    options.ApiVersionSelector = new CurrentImplementationApiVersionSelector(options); // When not specifying a version, use the latest version
+                    options.ReportApiVersions = true; // Report supported API versions for requests to controllers having an ApiControllerAttribute
+                    options.ApiVersionReader = new MediaTypeApiVersionReader(); // Versions are specified using the Accept-header
+                });
         }
 
         public static IServiceCollection AddSerilog(this IServiceCollection services, IConfiguration configuration) {

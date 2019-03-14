@@ -5,6 +5,7 @@ using Dalion.Ringor.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -23,6 +24,7 @@ namespace Dalion.Ringor.Startup {
             // Mvc
             services
                 .AddApiVersioning()
+                .AddVersionedApiExplorer( options => options.GroupNameFormat = "'v'VVV" )
                 .AddRouting(options => options.LowercaseUrls = true)
                 .AddMvc()
                 .AddJsonOptions(config => PreConfiguredJsonSerializerSettings.Apply(config.SerializerSettings))
@@ -46,7 +48,9 @@ namespace Dalion.Ringor.Startup {
                 .UseAuthentication() // Very important that this is called before anything that will require authentication
                 .UseMvc()
                 .UseStaticFiles()
-                .UseSwagger(app.ApplicationServices.GetService<AuthenticationSettings>())
+                .UseSwagger(
+                    app.ApplicationServices.GetRequiredService<AuthenticationSettings>(), 
+                    app.ApplicationServices.GetRequiredService<IApiVersionDescriptionProvider>())
                 .UseApiVersioning();
         }
     }

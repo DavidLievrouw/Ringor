@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Dalion.Ringor.Swagger {
-    internal class AuthorizeCheckOperationFilter : IOperationFilter {
+namespace Dalion.Ringor.Api.Swagger {
+    public class AuthorizeCheckOperationFilter : IOperationFilter {
         public void Apply(Operation operation, OperationFilterContext context) {
             var hasAuthorizeAttribute = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
                 .Union(context.MethodInfo.GetCustomAttributes(true))

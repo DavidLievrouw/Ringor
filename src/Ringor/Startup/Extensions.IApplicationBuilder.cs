@@ -3,18 +3,23 @@ using System.Collections.Generic;
 using Dalion.Ringor.Configuration;
 using Dalion.Ringor.Logging;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace Dalion.Ringor.Startup {
     internal static partial class Extensions {
-        public static IApplicationBuilder UseSwagger(this IApplicationBuilder app, AuthenticationSettings authenticationSettings) {
+        public static IApplicationBuilder UseSwagger(this IApplicationBuilder app, AuthenticationSettings authenticationSettings, IApiVersionDescriptionProvider provider) {
             return app
-                .UseSwagger(c => { c.PreSerializeFilters.Add((swaggerDoc, httpRequest) => swaggerDoc.Host = httpRequest.Host.Value); })
-                .UseSwaggerUI(c => {
-                    var appVersion = typeof(Program).Assembly.GetName().Version;
-                    c.SwaggerEndpoint("/swagger/v" + appVersion.ToString(2) + "/swagger.json", "Ringor API v" + appVersion.ToString(2));
-                    c.OAuthClientId(authenticationSettings.Swagger.ClientId);
-                    c.OAuthAppName("Ringor Swagger UI");
-                    c.OAuthAdditionalQueryStringParams(new Dictionary<string, string> {
+                .UseSwagger(options => { options.PreSerializeFilters.Add((swaggerDoc, httpRequest) => swaggerDoc.Host = httpRequest.Host.Value); })
+                .UseSwaggerUI(options => {
+                    foreach (var description in provider.ApiVersionDescriptions) {
+                        options.SwaggerEndpoint(
+                            $"/swagger/{description.GroupName}/swagger.json",
+                            description.GroupName.ToUpperInvariant()
+                        );
+                    }
+                    options.OAuthClientId(authenticationSettings.Swagger.ClientId);
+                    options.OAuthAppName("Ringor Swagger UI");
+                    options.OAuthAdditionalQueryStringParams(new Dictionary<string, string> {
                         {"resource", authenticationSettings.AppIdUri}
                     });
                 });

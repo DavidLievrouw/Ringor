@@ -1,18 +1,11 @@
 import { IDictionary } from "../facades/IDictionary";
 import { IRequestSender } from '../facades/RequestSender';
 import { IUrlService } from './UrlService';
-
-export interface IApiClient {
-  get(url: string, queryParams?: IDictionary<string>, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
-  post(url: string, queryParams?: IDictionary<string>, data?: any, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
-  put(url: string, queryParams?: IDictionary<string>, data?: any, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
-  delete(url: string, queryParams?: IDictionary<string>, data?: any, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
-  patch(url: string, queryParams?: IDictionary<string>, data?: any, headers?: IDictionary<string>, mode?: RequestMode): Promise<Response>;
-}
+import { IApiClient } from './IApiClient';
 
 class ApiClient implements IApiClient {
-  private requestSender: IRequestSender;
-  private urlService: IUrlService;
+  protected requestSender: IRequestSender;
+  protected urlService: IUrlService;
 
   constructor(urlService: IUrlService, requestSender: IRequestSender) {
     this.requestSender = requestSender;

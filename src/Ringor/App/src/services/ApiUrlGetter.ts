@@ -1,4 +1,4 @@
-import { IApiClient } from './ApiClient';
+import { IApiClient } from "./IApiClient";
 
 export interface IApiUrlGetter {
   get(url: string): Promise<Object>;

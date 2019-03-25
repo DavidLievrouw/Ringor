@@ -1,5 +1,7 @@
 import UrlService, { IUrlService } from "./services/UrlService";
-import ApiClient, { IApiClient } from "./services/ApiClient";
+import ApiClient from "./services/ApiClient";
+import SecuredApiClient from "./services/SecuredApiClient";
+import { IApiClient } from "./services/IApiClient";
 
 import applicationInfo, { IApplicationInfo } from "./facades/applicationInfo";
 import RequestSender, { IRequestSender } from './facades/RequestSender';
@@ -8,14 +10,16 @@ import ApiUrlPasteHandler, { IApiUrlPasteHandler } from './services/ApiUrlPasteH
 
 const urlService = new UrlService(applicationInfo.urlInfo);
 const requestSender = new RequestSender();
-const apiClient = new ApiClient(urlService, requestSender);
-const apiUrlGetter = new ApiUrlGetter(apiClient);
+const anonymousApiClient = new ApiClient(urlService, requestSender);
+const securedApiClient = new SecuredApiClient(urlService, requestSender, applicationInfo.msalConfig);
+const apiUrlGetter = new ApiUrlGetter(securedApiClient);
 const apiUrlPasteHandler = new ApiUrlPasteHandler(urlService);
 
 export interface IServices {
   urlService: IUrlService;
   requestSender: IRequestSender;
-  apiClient: IApiClient;
+  anonymousApiClient: IApiClient;
+  securedApiClient: IApiClient;
   apiUrlGetter: IApiUrlGetter;
   apiUrlPasteHandler: IApiUrlPasteHandler;
 }
@@ -30,7 +34,8 @@ const composition : IComposition = {
   services: {
     urlService: urlService,
     requestSender: requestSender,
-    apiClient: apiClient,
+    anonymousApiClient: anonymousApiClient,
+    securedApiClient: securedApiClient,
     apiUrlGetter: apiUrlGetter,
     apiUrlPasteHandler: apiUrlPasteHandler
   }

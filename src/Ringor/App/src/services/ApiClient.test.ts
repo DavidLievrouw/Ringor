@@ -1,4 +1,5 @@
-import ApiClient, { IApiClient } from './ApiClient';
+import ApiClient from './ApiClient';
+import { IApiClient } from "./IApiClient";
 import { IRequestSender } from '../facades/RequestSender';
 import { IDictionary } from '../facades/IDictionary';
 import { IUrlService } from './UrlService';

@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 import ApiUrlGetter, { IApiUrlGetter } from './ApiUrlGetter';
-import { IApiClient } from './ApiClient';
+import { IApiClient } from "./IApiClient";
 import { IDictionary } from '../facades/IDictionary';
 
 let apiUrlGetter: IApiUrlGetter;

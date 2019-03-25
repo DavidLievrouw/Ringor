@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Dalion.Ringor.Api.Models;
 using FakeItEasy;
 using FluentAssertions;
@@ -7,16 +8,26 @@ using Xunit;
 
 namespace Dalion.Ringor.Api.Services {
     public class ApplicationInfoProviderTests {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ImplicitFlowAuthenticationSettings _authenticationSettings;
         private readonly Assembly _entryAssembly;
         private readonly string _environment;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ApplicationInfoProvider _sut;
 
         public ApplicationInfoProviderTests() {
             _entryAssembly = typeof(Program).Assembly;
             _environment = "UnitTests";
+            _authenticationSettings = new ImplicitFlowAuthenticationSettings {
+                Authority = new Uri("https://ringor.eu/auth"),
+                Tenant = "M2019Tests",
+                ClientId = "theClientId",
+                Scopes = new[] {
+                    "scope1",
+                    "scope2"
+                }
+            };
             FakeFactory.Create(out _httpContextAccessor);
-            _sut = new ApplicationInfoProvider(_httpContextAccessor, _entryAssembly, _environment);
+            _sut = new ApplicationInfoProvider(_httpContextAccessor, _entryAssembly, _environment, _authenticationSettings);
         }
 
         public class Provide : ApplicationInfoProviderTests {
@@ -52,6 +63,21 @@ namespace Dalion.Ringor.Api.Services {
             public void ReportsExpectedEnvironment() {
                 var actual = _sut.Provide();
                 actual.Environment.Should().Be(_environment);
+            }
+
+            [Fact]
+            public void ReportsExpectedAuthenticationInfo() {
+                var actual = _sut.Provide();
+                var expectedAuthenticationInfo = new ApplicationInfo.ApplicationAuthenticationInfo {
+                    Authority = new Uri("https://ringor.eu/auth"),
+                    Tenant = "M2019Tests",
+                    ClientId = "theClientId",
+                    Scopes = new[] {
+                        "scope1",
+                        "scope2"
+                    }
+                };
+                actual.AuthenticationInfo.Should().BeEquivalentTo(expectedAuthenticationInfo);
             }
 
             [Fact]

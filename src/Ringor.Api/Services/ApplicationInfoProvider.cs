@@ -8,11 +8,17 @@ namespace Dalion.Ringor.Api.Services {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly Assembly _entryAssembly;
         private readonly string _environment;
+        private readonly ImplicitFlowAuthenticationSettings _authenticationSettings;
 
-        public ApplicationInfoProvider(IHttpContextAccessor httpContextAccessor, Assembly entryAssembly, string environment) {
+        public ApplicationInfoProvider(
+            IHttpContextAccessor httpContextAccessor, 
+            Assembly entryAssembly, 
+            string environment,
+            ImplicitFlowAuthenticationSettings authenticationSettings) {
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
             _entryAssembly = entryAssembly ?? throw new ArgumentNullException(nameof(entryAssembly));
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _authenticationSettings = authenticationSettings ?? throw new ArgumentNullException(nameof(authenticationSettings));
         }
 
         public ApplicationInfo Provide() {
@@ -24,7 +30,13 @@ namespace Dalion.Ringor.Api.Services {
                 },
                 Company = _entryAssembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company,
                 Product = _entryAssembly.GetCustomAttribute<AssemblyProductAttribute>().Product,
-                Environment = _environment
+                Environment = _environment,
+                AuthenticationInfo = new ApplicationInfo.ApplicationAuthenticationInfo {
+                    ClientId = _authenticationSettings.ClientId,
+                    Tenant = _authenticationSettings.Tenant,
+                    Authority = _authenticationSettings.Authority,
+                    Scopes = _authenticationSettings.Scopes
+                }
             };
             
             return applicationInfo;

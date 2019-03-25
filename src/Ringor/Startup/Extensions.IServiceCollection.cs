@@ -47,20 +47,27 @@ namespace Dalion.Ringor.Startup {
                 .AddSingleton<IApplicationInfoProvider>(prov => new ApplicationInfoProvider(
                     prov.GetRequiredService<IHttpContextAccessor>(),
                     prov.GetRequiredService<BootstrapperSettings>().EntryAssembly,
-                    prov.GetRequiredService<BootstrapperSettings>().EnvironmentName));
+                    prov.GetRequiredService<BootstrapperSettings>().EnvironmentName,
+                    prov.GetRequiredService<ImplicitFlowAuthenticationSettings>()));
         }
 
         public static IServiceCollection AddAzureAdAuthentication(this IServiceCollection services, AuthenticationSettings authSettings) {
             if (authSettings == null) throw new ArgumentNullException(nameof(authSettings));
 
             services
+                .AddSingleton(serviceProvider => new ImplicitFlowAuthenticationSettings {
+                    Tenant = authSettings.Tenant,
+                    ClientId = authSettings.ClientId,
+                    Authority = authSettings.SignInEndpoint.WithRelativePath(authSettings.Tenant),
+                    Scopes = authSettings.Scopes?.Distinct().ToArray()
+                })
                 .AddAuthorization(options => {
                     options.AddPolicy(AuthorizationPolicies.RequireApiAccess, policy => policy.RequireClaim(ClaimTypes.Scope, "Api.FullAccess"));
                     options.DefaultPolicy = options.GetPolicy(AuthorizationPolicies.RequireApiAccess);
                 })
                 .AddAuthentication(o => { o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
                 .AddJwtBearer(o => {
-                    o.Authority = (authSettings.SignInEndpoint?.AbsoluteUri?.TrimEnd('/') ?? string.Empty) + '/' + (authSettings.Tenant ?? string.Empty);
+                    o.Authority = authSettings.SignInEndpoint.WithRelativePath(authSettings.Tenant).AbsoluteUri;
                     o.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters {
                         ValidAudiences = new List<string> {
                             authSettings.AppIdUri,
@@ -89,7 +96,7 @@ namespace Dalion.Ringor.Startup {
                     options.DescribeAllEnumsAsStrings();
                     options.DescribeStringEnumsInCamelCase();
 
-                    var authority = (authSettings.Swagger.SignInEndpoint?.AbsoluteUri?.TrimEnd('/') ?? string.Empty) + '/' + (authSettings.Swagger.Tenant ?? string.Empty);
+                    var authority = authSettings.SignInEndpoint.WithRelativePath(authSettings.Tenant);
                     options.AddSecurityDefinition("oauth2", new OAuth2Scheme {
                         Flow = "implicit",
                         AuthorizationUrl = $"{authority}/oauth2/authorize"

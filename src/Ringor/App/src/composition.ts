@@ -1,6 +1,6 @@
 import UrlService, { IUrlService } from "./services/UrlService";
 import ApiClient from "./services/ApiClient";
-import SecuredApiClient from "./services/SecuredApiClient";
+import SecuredApiClient, { ISecuredApiClient } from "./services/SecuredApiClient";
 import { IApiClient } from "./services/IApiClient";
 
 import applicationInfo, { IApplicationInfo } from "./facades/applicationInfo";
@@ -19,7 +19,7 @@ export interface IServices {
   urlService: IUrlService;
   requestSender: IRequestSender;
   anonymousApiClient: IApiClient;
-  securedApiClient: IApiClient;
+  securedApiClient: ISecuredApiClient;
   apiUrlGetter: IApiUrlGetter;
   apiUrlPasteHandler: IApiUrlPasteHandler;
 }

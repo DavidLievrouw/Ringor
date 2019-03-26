@@ -22,7 +22,10 @@ class SecuredApiClient extends ApiClient implements ISecuredApiClient {
       msalConfig.clientId,
       msalConfig.authority,
       () => { },
-      { cacheLocation: 'localStorage' });
+      { 
+        cacheLocation: 'localStorage',
+        navigateToLoginRequestUrl: false
+      });
   }
 
   getUser() {
@@ -50,11 +53,7 @@ class SecuredApiClient extends ApiClient implements ISecuredApiClient {
     .catch((failure: any) => {
       const userIsNotLoggedIn = failure === 'user_login_error|User login is required';
       const invalidToken = failure.status && failure.status === 401;
-      if (userIsNotLoggedIn || invalidToken) {
-        return this.userAgentApplication
-          .loginPopup(this.msalConfig.scopes)
-          .then(id_token => this.sendRequest(method, url, queryParams, data, headers, mode));
-      }
+      if (userIsNotLoggedIn || invalidToken) this.userAgentApplication.loginRedirect(this.msalConfig.scopes);
       throw failure;
     });
   }

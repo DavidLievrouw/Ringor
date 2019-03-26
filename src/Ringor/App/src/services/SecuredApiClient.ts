@@ -25,7 +25,8 @@ class SecuredApiClient extends ApiClient implements ISecuredApiClient {
       () => { },
       { 
         cacheLocation: 'localStorage',
-        navigateToLoginRequestUrl: false
+        navigateToLoginRequestUrl: false,
+        postLogoutRedirectUri: urlService.getAbsoluteUrl('')
       });
   }
 

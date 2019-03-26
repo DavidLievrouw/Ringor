@@ -9,6 +9,7 @@ import { IApiClient } from './IApiClient';
 export interface ISecuredApiClient extends IApiClient {
   logout(): void;
   getUser(): Msal.User;
+  isLoggedIn(): boolean;
 }
 
 class SecuredApiClient extends ApiClient implements ISecuredApiClient {
@@ -36,6 +37,10 @@ class SecuredApiClient extends ApiClient implements ISecuredApiClient {
     return this.userAgentApplication.logout();
   }
 
+  isLoggedIn() {
+    return !!this.getUser();
+  }
+  
   sendRequest(method: string, url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
     const tokenAcquisitionMethod = this.userAgentApplication.acquireTokenSilent.bind(this.userAgentApplication);
     return tokenAcquisitionMethod(

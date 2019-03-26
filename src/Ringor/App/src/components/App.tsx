@@ -22,10 +22,10 @@ export class App extends React.Component<IAppProps, IAppState> {
 
   render() {
     const applicationInfo = this.props.composition.applicationInfo;
-    const user = this.props.composition.services.securedApiClient.getUser();
+    const isLoggedIn = this.props.composition.services.securedApiClient.isLoggedIn();
 
     let logoutLink;
-    if (user) {
+    if (isLoggedIn) {
       logoutLink = <Link to="/logout" className="item">
         <i className="sign-out icon"></i>
         Log out

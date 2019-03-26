@@ -23,7 +23,7 @@ export class Logout extends React.Component<ILogoutProps, ILogoutState> {
   }
 
   componentWillMount() {
-    const isLoggedIn = !!this.props.securedApiClient.getUser();
+    const isLoggedIn = this.props.securedApiClient.isLoggedIn();
     this.setState({
       isLoggedIn: isLoggedIn
     });

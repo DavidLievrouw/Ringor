@@ -28,7 +28,7 @@ export class Logout extends React.Component<ILogoutProps, ILogoutState> {
       isLoggedIn: isLoggedIn
     });
     if (!isLoggedIn) {
-      const url = this.props.urlService.getAbsoluteUrl('/');
+      const url = this.props.urlService.getApplicationUrl();
       window.location.href = url;
     }
   }

@@ -45,4 +45,4 @@ function RunForTemplate {
   CreateNupkg -templateName $templateName
 }
 
-RunForTemplate -templateName -templateName "Dalion.WebApp" -sourceRoot (Get-Item -Path "..\src").FullName
+RunForTemplate -templateName "Dalion.WebApp" -sourceRoot (Get-Item -Path "..\src").FullName

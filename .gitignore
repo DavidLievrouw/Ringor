@@ -326,3 +326,4 @@ dist/
 # Node
 node_modules/
 **/wwwroot/App
+template/*/content/**

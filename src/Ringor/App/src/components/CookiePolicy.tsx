@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IApplicationInfo } from '../facades/applicationInfo';
+import applicationInfo, { IApplicationInfo } from '../facades/applicationInfo';
 
 export interface ICookiePolicyProps {
   applicationInfo: IApplicationInfo;
@@ -38,7 +38,7 @@ export class CookiePolicy extends React.Component<ICookiePolicyProps, ICookiePol
           <p>Hopefully that has clarified things for you and as was previously mentioned if there is something that you aren't sure whether you need or not it's usually safer to leave cookies enabled in case it does interact with one of the features you use on our site.</p>
           <p>However, if you are still looking for more information, then you can contact us through one of our preferred contact methods:</p>
           <ul>
-            <li>Email: info@dalion.eu</li>
+            <li>Email: {applicationInfo.email}</li>
           </ul>
         </div>
       </div>

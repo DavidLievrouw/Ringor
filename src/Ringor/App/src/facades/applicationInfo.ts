@@ -18,6 +18,7 @@ export interface IMsalConfig {
 export interface IApplicationInfo {
   company: string;
   product: string;
+  email: string;
   version: string;
   urlInfo: IUrlInfo;
   environment: string;

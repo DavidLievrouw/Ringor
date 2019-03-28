@@ -60,6 +60,12 @@ namespace Dalion.Ringor.Api.Services {
             }
 
             [Fact]
+            public void ReportsExpectedEmail() {
+                var actual = _sut.Provide();
+                actual.Email.Should().Be("info@dalion.eu");
+            }
+
+            [Fact]
             public void ReportsExpectedEnvironment() {
                 var actual = _sut.Provide();
                 actual.Environment.Should().Be(_environment);

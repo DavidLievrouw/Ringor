@@ -30,6 +30,7 @@ namespace Dalion.Ringor.Api.Services {
                 },
                 Company = _entryAssembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company,
                 Product = _entryAssembly.GetCustomAttribute<AssemblyProductAttribute>().Product,
+                Email = "info@dalion.eu",
                 Environment = _environment,
                 AuthenticationInfo = new ApplicationInfo.ApplicationAuthenticationInfo {
                     ClientId = _authenticationSettings.ClientId,

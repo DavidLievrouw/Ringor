@@ -95,11 +95,7 @@ namespace Dalion.Ringor.Startup {
 
         [Theory]
         [InlineData(typeof(IOptions<AuthenticationSettings>))]
-        [InlineData(typeof(IOptions<RingSettings>))]
-        [InlineData(typeof(IOptions<SftpSettings>))]
         [InlineData(typeof(AuthenticationSettings))]
-        [InlineData(typeof(RingSettings))]
-        [InlineData(typeof(SftpSettings))]
         public void CanResolveOptions(Type requestedOptionsType) {
             var instance = _serviceProvider.GetService(requestedOptionsType);
             instance.Should().NotBeNull().And.BeAssignableTo(requestedOptionsType);

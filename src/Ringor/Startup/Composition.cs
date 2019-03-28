@@ -12,8 +12,6 @@ namespace Dalion.Ringor.Startup {
             IConfiguration configuration,
             BootstrapperSettings bootstrapperSettings) {
             // Configuration
-            var ringSettings = services.ConfigureSettings<RingSettings>(configuration.GetSection("RingSettings"));
-            var sftpSettings = services.ConfigureSettings<SftpSettings>(configuration.GetSection("SftpSettings"));
             var authSettings = services.ConfigureSettings<AuthenticationSettings>(configuration.GetSection("Authentication"));
 
             // Features and services

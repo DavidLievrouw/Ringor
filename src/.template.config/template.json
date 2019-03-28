@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Dalion",
+  "classifications": [ "Dalion", "Web", "App" ],
+  "identity": "Dalion.WebApp",
+  "name": "Dalion Web App",
+  "shortName": "dalionwebapp",
+  "sourceName": "Ringor",
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [
+            "**/.vs/**",
+            "**/[Bb]in/**",
+            "**/[Oo]bj/**",
+            ".template.config/**/*",
+            "**/*.filelist",
+            "**/*.user",
+            "**/*.lock.json",
+            "**/node_modules/**/*",
+            "**/build/**/*"
+          ]
+        }
+      ]
+    }
+  ],
+  "symbols": {
+    "company": {
+	  "isRequired": "true",
+      "datatype": "string"
+      "replaces": "Dalion"
+    },   
+	"domain": {
+	  "isRequired": "true",
+      "datatype": "string"
+      "replaces": "dalion.eu"
+    },
+    "sourceNameLower": {
+      "type": "generated",
+      "generator": "casing",
+      "parameters": {
+        "source": "name",
+        "toLower": true
+      },
+      "replaces": "dalion"
+    }
+  }
+}

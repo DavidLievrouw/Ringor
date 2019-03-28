@@ -31,6 +31,25 @@ body {
 
 /** END APP WIDE **/
 
+/** BEGIN COOKIE NAG **/
+
+.cookie.nag {
+  position: relative;
+  z-index: 999;
+}
+
+.cookie.nag.hidden {
+  display: none;
+}
+
+.cookie.nag > .ui.message {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/** END COOKIE NAG **/
+
 /** BEGIN STICKY FOOTER **/
 
 footer {

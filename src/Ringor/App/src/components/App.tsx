@@ -22,6 +22,7 @@ export class App extends React.Component<IAppProps, IAppState> {
 
   render() {
     const applicationInfo = this.props.composition.applicationInfo;
+    const trackingConsent = this.props.composition.trackingConsent;
     const isLoggedIn = this.props.composition.services.securedApiClient.isLoggedIn();
 
     let logoutLink;
@@ -35,6 +36,15 @@ export class App extends React.Component<IAppProps, IAppState> {
     return (
       <Router>
         <div className="app">
+          <div className={`cookie nag ${trackingConsent.showNag ? '' : "hidden"}`}>
+            <div className="ui floating brown message">
+              <i className="close icon"></i>
+              <div className="header">
+                We use cookies
+              </div>
+              <p>We use cookies to ensure you get the best experience on our website</p>
+            </div>
+          </div>
           <div className="ui left fixed vertical labeled icon menu fixed-width-menu">
             <Link to="/" className="item">
               <i className="home icon"></i>

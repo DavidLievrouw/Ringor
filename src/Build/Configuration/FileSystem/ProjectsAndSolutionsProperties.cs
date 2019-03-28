@@ -2,14 +2,15 @@ using System;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Dalion.Ringor.Build.Configuration.FileSystem.ProjectsAndSolutions {
-    public class RingorProperties : Properties<RingorProperties> {
-        private readonly Configuration.RingorProperties _container;
+namespace Dalion.Ringor.Build.Configuration.FileSystem {
+    public class ProjectsAndSolutionsProperties : Properties<ProjectsAndSolutionsProperties> {
+        private readonly Configuration.AppProperties _container;
 
-        public RingorProperties(ICakeContext context, Configuration.RingorProperties container) : base(context) {
+        public ProjectsAndSolutionsProperties(ICakeContext context, Configuration.AppProperties container) : base(context) {
             _container = container ?? throw new ArgumentNullException(nameof(container));
         }
 
+        public FilePath ProductSolution => Context.GetAbsoluteFilePath(_container.FileSystem.SourceDirectory + "/Ringor.sln");
         public DirectoryPath ProjectDirectory => Context.GetAbsoluteDirectoryPath(_container.FileSystem.SourceDirectory + "/Ringor");
         public DirectoryPath ReactAppDirectory => Context.GetAbsoluteDirectoryPath(ProjectDirectory + "/App");
         public FilePath ProjectFile => Context.GetAbsoluteFilePath(ProjectDirectory + "/Ringor.csproj");

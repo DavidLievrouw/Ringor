@@ -3,8 +3,8 @@ using Dalion.Ringor.Build.Configuration.Arguments;
 using Dalion.Ringor.Build.Configuration.FileSystem;
 
 namespace Dalion.Ringor.Build.Configuration {
-    public class RingorProperties : Properties<RingorProperties> {
-        public RingorProperties(ICakeContext context) : base(context) {
+    public class AppProperties : Properties<AppProperties> {
+        public AppProperties(ICakeContext context) : base(context) {
             Arguments = new ArgumentsProperties(context, this);
             FileSystem = new FileSystemProperties(context, this);
             WorkingDirectory = context.Environment.WorkingDirectory.FullPath;

@@ -10,7 +10,7 @@ namespace Dalion.Ringor.Build.Tasks.Test {
     public sealed class UnitTestJs : FrostingTask<Context> {
         public override void Run(Context context) {
             void Configurator(NpmRunScriptSettings settings) {
-                settings.WorkingDirectory = context.Ringor.FileSystem.ProjectsAndSolutions.Ringor.ReactAppDirectory;
+                settings.WorkingDirectory = context.App.FileSystem.ProjectsAndSolutions.ReactAppDirectory;
             }
 
             context.NpmRunScript("tests", Configurator);

@@ -13,11 +13,11 @@ namespace Dalion.Ringor.Build.Tasks.Test {
     public sealed class UnitTestCSharp : FrostingTask<Context> {
         public override void Run(Context context) {
             // Clean directory first
-            context.CleanDirectory(context.Ringor.FileSystem.CSharpUnitTestTargetDirectory);
+            context.CleanDirectory(context.App.FileSystem.CSharpUnitTestTargetDirectory);
 
             // Find all test projects
             var testProjects = Directory.GetFiles(
-                context.Ringor.FileSystem.SourceDirectory.FullPath,
+                context.App.FileSystem.SourceDirectory.FullPath,
                 "*.Tests.csproj",
                 SearchOption.AllDirectories);
 
@@ -26,10 +26,10 @@ namespace Dalion.Ringor.Build.Tasks.Test {
                 var fileName = Path.GetFileNameWithoutExtension(testProject);
                 context.Information($"Running tests for {fileName}: {testProject}...");
                 var mainTestSettings = new DotNetCoreTestSettings {
-                    Configuration = context.Ringor.Arguments.Configuration,
-                    Verbosity = context.Ringor.Arguments.DotNetCoreVerbosity,
-                    OutputDirectory = context.Ringor.FileSystem.CSharpUnitTestTargetDirectory.FullPath + "/Ringor/" + fileName,
-                    Logger = "trx;LogFileName=" + context.Ringor.FileSystem.CSharpUnitTestTargetDirectory.FullPath + "\\UnitTest-" + fileName + ".trx",
+                    Configuration = context.App.Arguments.Configuration,
+                    Verbosity = context.App.Arguments.DotNetCoreVerbosity,
+                    OutputDirectory = context.App.FileSystem.CSharpUnitTestTargetDirectory.FullPath + "/Ringor/" + fileName,
+                    Logger = "trx;LogFileName=" + context.App.FileSystem.CSharpUnitTestTargetDirectory.FullPath + "\\UnitTest-" + fileName + ".trx",
                     NoRestore = true
                 };
                 context.DotNetCoreTest(

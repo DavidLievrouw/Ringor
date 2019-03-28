@@ -12,7 +12,7 @@ namespace Dalion.Ringor.Build.Tasks.Publish {
     public sealed class PublishAzureFiles : FrostingTask<Context> {
         public override void Run(Context context) {
             var msBuildSettings = new DotNetCoreMSBuildSettings();
-            msBuildSettings.Properties.Add("PublishEnvironment", new[] {context.Ringor.Arguments.Environment});
+            msBuildSettings.Properties.Add("PublishEnvironment", new[] {context.App.Arguments.Environment});
             msBuildSettings.Properties.Add("PublishProfile", new[] {"Properties\\PublishProfiles\\AzureFiles.pubxml"});
 
             // Suppress warning for conflicting dependency versions. 
@@ -20,18 +20,18 @@ namespace Dalion.Ringor.Build.Tasks.Publish {
             msBuildSettings.WarningCodesAsMessage.Add("MSB3277");
 
             context.DotNetCoreClean(
-                context.Ringor.FileSystem.ProjectsAndSolutions.Ringor.ProjectFile.FullPath,
+                context.App.FileSystem.ProjectsAndSolutions.ProjectFile.FullPath,
                 new DotNetCoreCleanSettings {
-                    Verbosity = context.Ringor.Arguments.DotNetCoreVerbosity,
-                    Configuration = context.Ringor.Arguments.Configuration
+                    Verbosity = context.App.Arguments.DotNetCoreVerbosity,
+                    Configuration = context.App.Arguments.Configuration
                 });
             context.DotNetCorePublish(
-                context.Ringor.FileSystem.ProjectsAndSolutions.Ringor.ProjectFile.FullPath,
+                context.App.FileSystem.ProjectsAndSolutions.ProjectFile.FullPath,
                 new DotNetCorePublishSettings {
-                    Configuration = context.Ringor.Arguments.Configuration,
-                    OutputDirectory = context.Ringor.FileSystem.ProjectsAndSolutions.Ringor.PublishDirectoryAzure,
+                    Configuration = context.App.Arguments.Configuration,
+                    OutputDirectory = context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryAzure,
                     MSBuildSettings = msBuildSettings,
-                    Verbosity = context.Ringor.Arguments.DotNetCoreVerbosity,
+                    Verbosity = context.App.Arguments.DotNetCoreVerbosity,
                     ArgumentCustomization = args => args.Append("--no-restore")
                 });
         }

@@ -1,13 +1,12 @@
 using System;
 using Cake.Core;
 using Cake.Core.IO;
-using Dalion.Ringor.Build.Configuration.FileSystem.ProjectsAndSolutions;
 
 namespace Dalion.Ringor.Build.Configuration.FileSystem {
     public class FileSystemProperties : Properties<FileSystemProperties> {
-        private readonly RingorProperties _container;
+        private readonly AppProperties _container;
 
-        public FileSystemProperties(ICakeContext context, RingorProperties container) : base(context) {
+        public FileSystemProperties(ICakeContext context, AppProperties container) : base(context) {
             _container = container ?? throw new ArgumentNullException(nameof(container));
             ProjectsAndSolutions = new ProjectsAndSolutionsProperties(context, container);
         }
@@ -26,7 +25,7 @@ namespace Dalion.Ringor.Build.Configuration.FileSystem {
 
         public DirectoryPath ReleaseTargetDirectory => Context.GetAbsoluteDirectoryPath(DistDirectory + "/Release");
 
-        public FilePath VersionFile => Context.GetAbsoluteFilePath(ProjectsAndSolutions.Ringor.ProjectDirectory + "/version.txt");
+        public FilePath VersionFile => Context.GetAbsoluteFilePath(ProjectsAndSolutions.ProjectDirectory + "/version.txt");
 
         public ProjectsAndSolutionsProperties ProjectsAndSolutions { get; }
     }

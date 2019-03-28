@@ -4,9 +4,9 @@ using Cake.Core;
 
 namespace Dalion.Ringor.Build.Configuration.Arguments {
     public class ArgumentsProperties : Properties<ArgumentsProperties> {
-        private readonly RingorProperties _container;
+        private readonly AppProperties _container;
 
-        public ArgumentsProperties(ICakeContext context, RingorProperties container) : base(context) {
+        public ArgumentsProperties(ICakeContext context, AppProperties container) : base(context) {
             _container = container ?? throw new ArgumentNullException(nameof(container));
         }
         

@@ -8,10 +8,10 @@ namespace Dalion.Ringor.Build.Tasks.Restore {
     public sealed class RestorePackagesCSharp : FrostingTask<Context> {
         public override void Run(Context context) {
             context.DotNetCoreRestore(
-                context.Ringor.FileSystem.ProjectsAndSolutions.ProductSolution.FullPath,
+                context.App.FileSystem.ProjectsAndSolutions.ProductSolution.FullPath,
                 new DotNetCoreRestoreSettings {
                     IgnoreFailedSources = true,
-                    Verbosity = context.Ringor.Arguments.DotNetCoreVerbosity,
+                    Verbosity = context.App.Arguments.DotNetCoreVerbosity,
                     ArgumentCustomization = args => args.Append("--force")
                 });
         }

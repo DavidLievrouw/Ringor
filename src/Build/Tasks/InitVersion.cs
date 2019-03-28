@@ -6,15 +6,15 @@ namespace Dalion.Ringor.Build.Tasks {
     [TaskName(nameof(InitVersion))]
     public sealed class InitVersion : FrostingTask<Context> {
         public override void Run(Context context) {
-            var productVersion = context.FileReadText(context.Ringor.FileSystem.VersionFile);
+            var productVersion = context.FileReadText(context.App.FileSystem.VersionFile);
             var assemblyVersion = $"{productVersion}.0";
 
             context.Information("Product version       = " + productVersion);
             context.Information("Assembly version      = " + assemblyVersion);
 
             // Set versions in Context
-            context.Ringor.ProductVersion = productVersion;
-            context.Ringor.AssemblyVersion = assemblyVersion;
+            context.App.ProductVersion = productVersion;
+            context.App.AssemblyVersion = assemblyVersion;
         }
     }
 }

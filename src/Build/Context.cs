@@ -5,9 +5,9 @@ using Dalion.Ringor.Build.Configuration;
 namespace Dalion.Ringor.Build {
     public class Context : FrostingContext {
         public Context(ICakeContext context) : base(context) {
-            Ringor = new RingorProperties(context);
+            App = new AppProperties(context);
         }
 
-        public RingorProperties Ringor { get; }
+        public AppProperties App { get; }
     }
 }

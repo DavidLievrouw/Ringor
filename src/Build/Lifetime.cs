@@ -7,7 +7,7 @@ namespace Dalion.Ringor.Build {
             base.Setup(context);
 
             // Print out context properties, for debugging purposes
-            context.Information(context.Ringor.ToString());
+            context.Information(context.App.ToString());
         }
     }
 }

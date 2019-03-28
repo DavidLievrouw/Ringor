@@ -9,15 +9,15 @@ namespace Dalion.Ringor.Build.Tasks {
     [Dependency(typeof(Publish.Publish))]
     public sealed class CreateRelease : FrostingTask<Context> {
         public override void Run(Context context) {
-            context.CleanDirectory(context.Ringor.FileSystem.ReleaseTargetDirectory);
+            context.CleanDirectory(context.App.FileSystem.ReleaseTargetDirectory);
 
             // Compress published targets
             context.Debug("Compressing Azure application...");
             context.ZipCompress(
-                context.Ringor.FileSystem.ProjectsAndSolutions.Ringor.PublishDirectoryAzure, 
-                context.Ringor.FileSystem.ReleaseTargetDirectory + "/AzureApplication.zip");
+                context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryAzure, 
+                context.App.FileSystem.ReleaseTargetDirectory + "/AzureApplication.zip");
 
-            context.Information($"Release archive created at: {context.Ringor.FileSystem.ReleaseTargetDirectory}");
+            context.Information($"Release archive created at: {context.App.FileSystem.ReleaseTargetDirectory}");
         }
     }
 }

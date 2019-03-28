@@ -7,7 +7,7 @@ namespace Dalion.Ringor.Build.Tasks.Restore {
     public sealed class RestorePackagesNpm : FrostingTask<Context> {
         public override void Run(Context context) {
             void Configurator(NpmInstallSettings settings) {
-                settings.WorkingDirectory = context.Ringor.FileSystem.ProjectsAndSolutions.Ringor.ReactAppDirectory;
+                settings.WorkingDirectory = context.App.FileSystem.ProjectsAndSolutions.ReactAppDirectory;
             }
 
             context.NpmInstall(Configurator);

@@ -4,6 +4,7 @@ import SecuredApiClient, { ISecuredApiClient } from "./services/SecuredApiClient
 import { IApiClient } from "./services/IApiClient";
 
 import applicationInfo, { IApplicationInfo } from "./facades/applicationInfo";
+import trackingConsent, { ITrackingConsent } from "./facades/trackingConsent";
 import RequestSender, { IRequestSender } from './facades/RequestSender';
 import ApiUrlGetter, { IApiUrlGetter } from './services/ApiUrlGetter';
 import ApiUrlPasteHandler, { IApiUrlPasteHandler } from './services/ApiUrlPasteHandler';
@@ -26,11 +27,13 @@ export interface IServices {
 
 export interface IComposition {
   applicationInfo: IApplicationInfo;
+  trackingConsent: ITrackingConsent;
   services: IServices;
 }
 
 const composition : IComposition = {
   applicationInfo: applicationInfo,
+  trackingConsent: trackingConsent,
   services: {
     urlService: urlService,
     requestSender: requestSender,

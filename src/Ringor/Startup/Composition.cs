@@ -25,7 +25,8 @@ namespace Dalion.Ringor.Startup {
                 .AddSerilog(configuration)
                 .AddPreconfiguredJsonSerializer()
                 .AddApplicationInfo()
-                .AddAllLinksCreators();
+                .AddAllLinksCreators()
+                .ConfigureCookiePolicy();
         }
     }
 }

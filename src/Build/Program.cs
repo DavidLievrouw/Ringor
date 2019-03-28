@@ -8,9 +8,9 @@ namespace Dalion.Ringor.Build {
     public class Program {
         public static int Main(string[] args) {
             using (new TemporaryConsoleColor(ConsoleColor.Green)) {
-                Console.WriteLine("**************************************");
-                Console.WriteLine("             RINGOR.BUILD             ");
-                Console.WriteLine("**************************************");
+                Console.WriteLine("*******************************");
+                Console.WriteLine("             BUILD             ");
+                Console.WriteLine("*******************************");
             }
 
             return Parser.Default.ParseArguments<Options>(args)

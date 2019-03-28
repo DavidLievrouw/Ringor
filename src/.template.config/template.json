@@ -27,13 +27,15 @@
   ],
   "symbols": {
     "company": {
+      "type": "parameter",
+      "datatype": "string",
 	  "isRequired": "true",
-      "datatype": "string"
       "replaces": "Dalion"
     },   
 	"domain": {
+      "type": "parameter",
+      "datatype": "string",
 	  "isRequired": "true",
-      "datatype": "string"
       "replaces": "dalion.eu"
     },
     "sourceNameLower": {

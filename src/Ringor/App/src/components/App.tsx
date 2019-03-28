@@ -13,16 +13,29 @@ export interface IAppProps {
   composition: IComposition
 }
 
-export interface IAppState { }
+export interface IAppState { 
+  hasConsent: boolean;
+}
 
 export class App extends React.Component<IAppProps, IAppState> {
   constructor(props: IAppProps) {
     super(props);
+
+    this.state = {
+      hasConsent: !props.composition.trackingConsent.showNag
+    }
+
+    this.consentToCookieTracking = this.consentToCookieTracking.bind(this);
+  }
+
+  consentToCookieTracking() {
+    const trackingConsent = this.props.composition.trackingConsent;
+    document.cookie = trackingConsent.cookieString;
+    this.setState({hasConsent: true});
   }
 
   render() {
     const applicationInfo = this.props.composition.applicationInfo;
-    const trackingConsent = this.props.composition.trackingConsent;
     const isLoggedIn = this.props.composition.services.securedApiClient.isLoggedIn();
 
     let logoutLink;
@@ -36,9 +49,9 @@ export class App extends React.Component<IAppProps, IAppState> {
     return (
       <Router>
         <div className="app">
-          <div className={`cookie nag ${trackingConsent.showNag ? '' : "hidden"}`}>
+          <div className={`cookie nag ${this.state.hasConsent ? "hidden" : ""}`}>
             <div className="ui floating brown message">
-              <i className="close icon"></i>
+              <i className="close icon" onClick={this.consentToCookieTracking}></i>
               <div className="header">
                 We use cookies
               </div>

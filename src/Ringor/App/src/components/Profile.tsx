@@ -71,8 +71,16 @@ export class Profile extends React.Component<IProfileProps, IProfileState> {
     return (
       <div className="padded-content">
         <BigHeader icon="id card" header="Profile" />
-        {form}
-        {redirector}
+        <div className="ui middle aligned center aligned full-height padded padded-content grid">
+          <div className="five wide input column">
+            <div className="ui left aligned padded grid">
+              <div className="sixteen wide column">
+                {form}
+              </div>
+            </div>
+            {redirector}
+          </div>
+        </div>
       </div>
     );
   }

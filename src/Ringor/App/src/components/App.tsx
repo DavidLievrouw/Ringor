@@ -99,7 +99,7 @@ export class App extends React.Component<IAppProps, IAppState> {
               Swagger UI
             </Link>
             <Link to="/apinav" className="item">
-              <img src="/api.png" />
+              <i className="file code icon"></i>
               Navigate the API
             </Link>
             <Link to="/profile" className="item">

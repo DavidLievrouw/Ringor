@@ -2,6 +2,9 @@ import * as React from "react";
 import { IApplicationInfo } from '../facades/applicationInfo';
 import { ISecuredApiClient } from '../services/SecuredApiClient';
 import { Redirect } from 'react-router';
+import { IDictionary } from '../facades/IDictionary';
+import { CompanyLogo } from './CompanyLogo';
+import { BigHeader } from './BigHeader';
 
 export interface IProfileProps {
   applicationInfo: IApplicationInfo;
@@ -46,32 +49,30 @@ export class Profile extends React.Component<IProfileProps, IProfileState> {
 
     let form = null;
     if (user) {
+      const account = user.name;
+      const idTokenDictionary = user.idToken as IDictionary<string>;
+      const preferredUserName = idTokenDictionary["preferred_username"];
+
       form = (
         <form className="ui form">
           <div className="field">
             <label>Account</label>
-            <input placeholder={user.userIdentifier} type="text" readOnly />
+            <input placeholder={account} type="text" readOnly />
           </div>
           <div className="field">
-            <label>Name</label>
-            <input placeholder={user.name} type="text" readOnly />
+            <label>Preferred user name</label>
+            <input placeholder={preferredUserName} type="text" readOnly />
           </div>
+          <div className="ui submit button" onClick={this.logOut}>Log out</div>
         </form>
       );
     }
 
-    let logOutButton = null;
-    if (user) {
-      logOutButton = <button className="ui button" onClick={this.logOut}>Log out</button>;
-    }
-
     return (
-      <div className="ui middle aligned center aligned full-height padded padded-content grid">
-        <div className="five wide input column">
-          {form}
-          {logOutButton}
-          {redirector}
-        </div>
+      <div className="padded-content">
+        <BigHeader icon="id card" header="Profile" />
+        {form}
+        {redirector}
       </div>
     );
   }

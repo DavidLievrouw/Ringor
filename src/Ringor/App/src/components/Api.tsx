@@ -3,6 +3,7 @@ import { IApiUrlGetter } from '../services/ApiUrlGetter';
 import ReactJson from 'react-json-view';
 import { IUrlService } from '../services/UrlService';
 import { IApiUrlPasteHandler } from '../services/ApiUrlPasteHandler';
+import { BigHeader } from './BigHeader';
 
 export interface IApiProps {
   apiUrlGetter: IApiUrlGetter;
@@ -164,6 +165,7 @@ export class Api extends React.Component<IApiProps, IApiState> {
     return (
       <div className="padded-content fillbox">
         <div className="row header">
+          <BigHeader icon="file code" header="Navigate the API" />
           <table className="ui basic table">
             <tbody>
               <tr>

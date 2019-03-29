@@ -1,3 +1,4 @@
+import 'jspolyfill-array.prototype.findIndex'; // For IE11 compatibility
 import { IUrlService } from './UrlService';
 
 export interface IApiUrlPasteHandler {
@@ -25,8 +26,8 @@ class ApiUrlPasteHandler implements IApiUrlPasteHandler {
   }
 
   private static trimByChar(str: string, character: string) {
-    const first = [...str].findIndex(char => char !== character);
-    const last = [...str].reverse().findIndex(char => char !== character);
+    const first = str.split('').findIndex(char => char !== character);
+    const last = str.split('').reverse().findIndex(char => char !== character);
     return str.substring(first, str.length - last);
   }
 }

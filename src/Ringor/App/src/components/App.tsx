@@ -28,6 +28,15 @@ export class App extends React.Component<IAppProps, IAppState> {
 
     this.consentToCookieTracking = this.consentToCookieTracking.bind(this);
     this.showCookiePolicy = this.showCookiePolicy.bind(this);
+    this.toggleNag = this.toggleNag.bind(this);
+    this.resetNag = this.resetNag.bind(this);
+  }
+
+  componentDidMount() {
+    this.resetNag();
+    if (!this.state.hasConsent) {
+      setTimeout(() => this.toggleNag(), 1000);
+    }
   }
 
   showCookiePolicy() {
@@ -38,7 +47,20 @@ export class App extends React.Component<IAppProps, IAppState> {
   consentToCookieTracking() {
     const trackingConsent = this.props.composition.trackingConsent;
     document.cookie = trackingConsent.cookieString;
+
     this.setState({ hasConsent: true });
+
+    this.toggleNag();
+  }
+
+  toggleNag() {
+    const nag : any = $('.cookie.nag');
+    nag.transition('fly down');
+  }
+
+  resetNag() {
+    const nag : any = $('.cookie.nag');
+    nag.transition('hide');
   }
 
   render() {
@@ -56,7 +78,7 @@ export class App extends React.Component<IAppProps, IAppState> {
     return (
       <Router>
         <div className="app">
-          <div className={`cookie nag ${this.state.hasConsent ? "hidden" : ""}`}>
+          <div className="cookie nag">
             <div className="ui floating message">
               <i className="close icon" onClick={this.consentToCookieTracking}></i>
               <div className="header">

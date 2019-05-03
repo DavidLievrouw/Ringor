@@ -67,7 +67,7 @@ class ApiClient implements IApiClient {
         if (o.hasOwnProperty(origKey)) {
           newKey = (origKey.charAt(0).toLowerCase() + origKey.slice(1) || origKey).toString();
           value = o[origKey];
-          if (value instanceof Array || (value !== null && value.constructor === Object)) {
+          if (value !== undefined && value !== null && (value instanceof Array || value.constructor === Object)) {
             value = ApiClient.toCamelCasedProps(value);
           }
           newO[newKey] = value;

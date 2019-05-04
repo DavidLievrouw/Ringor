@@ -13,7 +13,8 @@
       "launchBrowser": true,
       "launchUrl": "http://localhost:51647",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DISABLE_HTTPSREDIRECTION": "true"
       }
     },
     "Ringor": {
@@ -21,7 +22,8 @@
       "launchBrowser": true,
       "launchUrl": "https://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DISABLE_HTTPSREDIRECTION": "false"
       },
       "applicationUrl": "https://localhost:5000"
     }

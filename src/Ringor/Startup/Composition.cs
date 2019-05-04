@@ -19,10 +19,6 @@ namespace Dalion.Ringor.Startup {
             // Features and services
             services
                 .AddFileProviders()
-                .AddHttpsRedirection(options => {
-                    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                    options.HttpsPort = networkSettings.HttpsPort;
-                })
                 .AddAzureAdAuthentication(authSettings)
                 .AddSwagger(bootstrapperSettings, authSettings)
                 .AddSerilog(configuration)
@@ -30,6 +26,13 @@ namespace Dalion.Ringor.Startup {
                 .AddApplicationInfo()
                 .AddAllLinksCreators()
                 .ConfigureCookiePolicy();
+
+            if (!bootstrapperSettings.DisableHttpsRedirection) {
+                services.AddHttpsRedirection(options => {
+                    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                    options.HttpsPort = networkSettings.HttpsPort;
+                });
+            }
         }
     }
 }

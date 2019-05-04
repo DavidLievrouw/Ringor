@@ -21,10 +21,14 @@ namespace Dalion.Ringor.Startup {
         }
 
         public static int RunDevelopment(string[] args) {
+            if (!bool.TryParse(Environment.GetEnvironmentVariable("DISABLE_HTTPSREDIRECTION"), out var disableHttpRedirection)) {
+                disableHttpRedirection = false;
+            }
             var bootstrapperSettings = new BootstrapperSettings {
                 EnvironmentName = EnvironmentName.Development,
                 EntryAssembly = EntryAssembly,
-                UseDetailedErrors = true
+                UseDetailedErrors = true,
+                DisableHttpsRedirection = disableHttpRedirection
             };
             var configuration = Configuration.BuildConfiguration(bootstrapperSettings, args);
             var webHost = BuildWebHost(configuration, bootstrapperSettings);
@@ -33,10 +37,14 @@ namespace Dalion.Ringor.Startup {
         }
 
         private static int RunProduction(string[] args) {
+            if (!bool.TryParse(Environment.GetEnvironmentVariable("DISABLE_HTTPSREDIRECTION"), out var disableHttpRedirection)) {
+                disableHttpRedirection = false;
+            }
             var bootstrapperSettings = new BootstrapperSettings {
                 EnvironmentName = EnvironmentName.Production,
                 EntryAssembly = EntryAssembly,
-                UseDetailedErrors = false
+                UseDetailedErrors = false,
+                DisableHttpsRedirection = disableHttpRedirection
             };
             var configuration = Configuration.BuildConfiguration(bootstrapperSettings, args);
 

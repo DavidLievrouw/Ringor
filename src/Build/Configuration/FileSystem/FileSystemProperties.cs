@@ -11,14 +11,10 @@ namespace Dalion.Ringor.Build.Configuration.FileSystem {
             ProjectsAndSolutions = new ProjectsAndSolutionsProperties(context, container);
         }
 
-        public DirectoryPath RepoRootDirectory => Context.GetAbsoluteDirectoryPath(".");
-
-        public DirectoryPath SourceDirectory => Context.GetAbsoluteDirectoryPath(RepoRootDirectory + "/src");
-
-        public DirectoryPath AssetsDirectory => Context.GetAbsoluteDirectoryPath(RepoRootDirectory + "/Assets");
+        public DirectoryPath SourceDirectory => Context.GetAbsoluteDirectoryPath(".");
 
         public DirectoryPath DistDirectory => string.IsNullOrWhiteSpace(_container.Arguments.PublishDirectory)
-            ? Context.GetAbsoluteDirectoryPath(RepoRootDirectory + "/dist")
+            ? Context.GetAbsoluteDirectoryPath(SourceDirectory + "/dist")
             : Context.GetAbsoluteDirectoryPath(_container.Arguments.PublishDirectory);
 
         public DirectoryPath CSharpUnitTestTargetDirectory => Context.GetAbsoluteDirectoryPath(DistDirectory + "/Test");

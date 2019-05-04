@@ -2,8 +2,8 @@
 
 setlocal & pushd .
 
-set "DIR=%~dp0"
-cd %~dp0
+set DIR=%~dp0
+cd %DIR%/src
 TITLE Ringor -- Build
-dotnet run --project "./src/Build/Build.csproj" --interactive
+dotnet run --project "./Build/Build.csproj" --interactive --publishDirectory %DIR%dist
 if errorlevel 2 pause

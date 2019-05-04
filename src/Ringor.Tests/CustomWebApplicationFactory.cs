@@ -7,7 +7,7 @@ namespace Dalion.Ringor {
     public class CustomWebApplicationFactory : WebApplicationFactory<WebHostStartup> {
         protected override IWebHostBuilder CreateWebHostBuilder() {
             var bootstrapperSettings = new BootstrapperSettings {
-                EnvironmentName = EnvironmentName.Staging,
+                EnvironmentName = EnvironmentName.Development,
                 EntryAssembly = typeof(Bootstrapper).Assembly,
                 UseDetailedErrors = true
             };

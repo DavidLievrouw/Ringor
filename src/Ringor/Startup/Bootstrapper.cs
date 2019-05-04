@@ -15,8 +15,6 @@ namespace Dalion.Ringor.Startup {
             switch (environment) {
                 case nameof(EnvironmentName.Development):
                     return RunDevelopment(args);
-                case nameof(EnvironmentName.Staging):
-                    return RunStaging(args);
                 default:
                     return RunProduction(args);
             }
@@ -34,19 +32,11 @@ namespace Dalion.Ringor.Startup {
             return 0;
         }
 
-        public static int RunProduction(string[] args) {
-            return RunStagingOrProduction(args, EnvironmentName.Production);
-        }
-
-        public static int RunStaging(string[] args) {
-            return RunStagingOrProduction(args, EnvironmentName.Staging);
-        }
-
-        private static int RunStagingOrProduction(string[] args, string environmentName) {
+        private static int RunProduction(string[] args) {
             var bootstrapperSettings = new BootstrapperSettings {
-                EnvironmentName = environmentName,
+                EnvironmentName = EnvironmentName.Production,
                 EntryAssembly = EntryAssembly,
-                UseDetailedErrors = environmentName != EnvironmentName.Production
+                UseDetailedErrors = false
             };
             var configuration = Configuration.BuildConfiguration(bootstrapperSettings, args);
 

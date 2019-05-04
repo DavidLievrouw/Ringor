@@ -47,7 +47,6 @@ namespace Dalion.Ringor.Build.Startup {
 
     public enum EnvironmentOptions {
         Development,
-        Staging,
         Production
     }
 }

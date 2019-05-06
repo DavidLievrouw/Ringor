@@ -40,7 +40,7 @@ export class Profile extends React.Component<IProfileProps, IProfileState> {
   }
 
   render() {
-    const user = this.props.securedApiClient.getUser();
+    const account = this.props.securedApiClient.getAccount();
 
     let redirector = null;
     if (this.state.requestsLogOut) {
@@ -48,20 +48,16 @@ export class Profile extends React.Component<IProfileProps, IProfileState> {
     }
 
     let form = null;
-    if (user) {
-      const account = user.name;
-      const idTokenDictionary = user.idToken as IDictionary<string>;
-      const preferredUserName = idTokenDictionary["preferred_username"];
-
+    if (account) {
       form = (
         <form className="ui form">
           <div className="field">
             <label>Account</label>
-            <input placeholder={account} type="text" readOnly />
+            <input placeholder={account.name} type="text" readOnly />
           </div>
           <div className="field">
             <label>Preferred user name</label>
-            <input placeholder={preferredUserName} type="text" readOnly />
+            <input placeholder={account.userName} type="text" readOnly />
           </div>
           <div className="ui submit button" onClick={this.logOut}>Log out</div>
         </form>

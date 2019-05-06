@@ -70,7 +70,7 @@ namespace Dalion.Ringor.Startup {
                 .AddJwtBearer(o => {
                     o.Authority = authSettings.SignInEndpoint.WithRelativePath(authSettings.Tenant).AbsoluteUri;
                     o.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters {
-                        ValidAudiences = new List<string> {
+                        ValidAudiences = new [] {
                             authSettings.AppIdUri,
                             authSettings.ClientId
                         }

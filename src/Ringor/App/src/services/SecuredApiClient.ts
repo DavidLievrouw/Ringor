@@ -8,8 +8,8 @@ import { IApiClient } from './IApiClient';
 
 export interface ISecuredApiClient extends IApiClient {
   logout(): void;
-  getUser(): Msal.User;
   isLoggedIn(): boolean;
+  getAccount(): Msal.Account;
 }
 
 class SecuredApiClient extends ApiClient implements ISecuredApiClient {
@@ -19,49 +19,76 @@ class SecuredApiClient extends ApiClient implements ISecuredApiClient {
   constructor(urlService: IUrlService, requestSender: IRequestSender, msalConfig: IMsalConfig) {
     super(urlService, requestSender);
     this.msalConfig = msalConfig;
-    this.userAgentApplication = new Msal.UserAgentApplication(
-      msalConfig.clientId,
-      msalConfig.authority,
-      () => { },
-      { 
-        cacheLocation: 'localStorage',
-        navigateToLoginRequestUrl: false,
-        postLogoutRedirectUri: urlService.getApplicationUrl()
-      });
+    this.userAgentApplication = new Msal.UserAgentApplication({
+      auth: {
+        clientId: this.msalConfig.clientId,
+        authority: this.msalConfig.authority,
+        postLogoutRedirectUri: urlService.getApplicationUrl(),
+        navigateToLoginRequestUrl: false
+      },
+      cache: {
+        cacheLocation: "localStorage",
+        storeAuthStateInCookie: false
+      }
+    });
+    this.userAgentApplication.handleRedirectCallback(this.authCallback.bind(this));
   }
 
-  getUser() {
-    return this.userAgentApplication.getUser();
+  authCallback(authErr: Msal.AuthError, response?: Msal.AuthResponse) {
+    if (authErr) {
+      console.log('Authentication failed.');
+      throw authErr;
+    }
+    if (response) {
+      console.log('Authentication succeeded.');
+    }
   }
-  
+
   logout() {
     return this.userAgentApplication.logout();
   }
 
-  isLoggedIn() {
-    return !!this.getUser();
+  getAccount() {
+    return this.userAgentApplication.getAccount();
   }
-  
+
+  isLoggedIn() {
+    return !!this.userAgentApplication.getAccount();
+  }
+
   sendRequest(method: string, url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
     const tokenAcquisitionMethod = this.userAgentApplication.acquireTokenSilent.bind(this.userAgentApplication);
-    return tokenAcquisitionMethod(
-      this.msalConfig.scopes,
-      this.msalConfig.authority,
-      this.userAgentApplication.getUser(),
-      undefined,
-      this.msalConfig.clientId
-    )
-    .then((token: string) => {
-      if (!headers) headers = {};
-      headers['authorization'] = "Bearer " + token;
-      return super.sendRequest(method, url, queryParams, data, headers, mode);
-    })
-    .catch((failure: any) => {
-      const userIsNotLoggedIn = failure === 'user_login_error|User login is required';
-      const invalidToken = failure.status && failure.status === 401;
-      if (userIsNotLoggedIn || invalidToken) this.userAgentApplication.loginRedirect(this.msalConfig.scopes);
-      throw failure;
-    });
+
+    const authParameters : any = {
+      scopes: this.msalConfig.scopes,
+      authority: this.msalConfig.authority,
+      account: this.userAgentApplication.getAccount()
+    };
+
+    return tokenAcquisitionMethod(authParameters)
+      .then((tokenResponse: Msal.AuthResponse) => {
+        if (!headers) headers = {};
+        if (!tokenResponse.accessToken) throw new Error('No access token was received from the identity provider.');
+        headers['authorization'] = "Bearer " + tokenResponse.accessToken;
+        return super.sendRequest(method, url, queryParams, data, headers, mode);
+      })
+      .catch((failure: any) => {
+        const errorMessage = failure.errorMessage;
+
+        const userInteractionRequired = errorMessage && (
+          errorMessage.indexOf("login_required") !== -1 || 
+          errorMessage.indexOf("consent_required") !== -1 || 
+          errorMessage.indexOf("interaction_required") !== -1 || 
+          errorMessage.lastIndexOf('AADSTS50058', 0) === 0 ||
+          errorMessage.lastIndexOf('AADSTS16000', 0) === 0);
+        const invalidToken = failure.status && failure.status === 401;
+
+        if (userInteractionRequired || invalidToken) {
+          this.userAgentApplication.loginRedirect(authParameters);
+        } else {
+          throw failure;
+        }
+      });
   }
 }
 

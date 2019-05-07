@@ -18,6 +18,8 @@ IF %ERRORLEVEL% NEQ 0 (
 :: Setup
 :: -----
 
+SET WEBSITE_NODE_DEFAULT_VERSION=10.15.2
+
 setlocal enabledelayedexpansion
 
 SET ARTIFACTS=%~dp0%..\artifacts

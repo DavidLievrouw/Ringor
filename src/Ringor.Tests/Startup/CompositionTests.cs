@@ -104,12 +104,5 @@ namespace Dalion.Ringor.Startup {
             var instance = _serviceProvider.GetService(requestedOptionsType);
             instance.Should().NotBeNull().And.BeAssignableTo(requestedOptionsType);
         }
-
-        //[Theory]
-        //[InlineData(typeof(IAccessTokenAcquirer), typeof(CachingAccessTokenAcquirer))]
-        //public void CanRegisterDecorators(Type requestedType, Type expectedType) {
-        //    var instance = _serviceProvider.GetService(requestedType);
-        //    instance.Should().NotBeNull().And.BeOfType(expectedType);
-        //}
     }
 }

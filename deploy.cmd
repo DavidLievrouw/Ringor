@@ -67,7 +67,7 @@ SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 echo Handling ASP.NET Core Web Application deployment.
 
 :: 1. Run build project
-dotnet run --project "%DEPLOYMENT_SOURCE%\src\Build\Build.csproj" --no-launch-profile -- --workingDirectory "%DEPLOYMENT_SOURCE%\src" --target Publish --configuration Release --environment Production --publishDirectory "%DEPLOYMENT_TEMP%" --verbosity Verbose
+dotnet run --project "%DEPLOYMENT_SOURCE%\src\Build\Build.csproj" --no-launch-profile -- --workingDirectory "%DEPLOYMENT_SOURCE%\src" --target Publish --configuration Release --environment Production --publishDirectory "%DEPLOYMENT_TEMP%" --verbosity Normal
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. KuduSync

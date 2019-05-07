@@ -20,6 +20,9 @@ namespace Dalion.Ringor.Build.Startup {
         [Option('i', "interactive", Required = false, Default = false, HelpText = "Ask the user interactively for options")]
         public bool Interactive { get; set; }
 
+        [Option('w', "workingDirectory", Required = false, Default = ".", HelpText = "The working directory of the build process")]
+        public string WorkingDirectory { get; set; }
+
         public Options Clone() {
             return new Options {
                 Interactive = Interactive,
@@ -27,7 +30,8 @@ namespace Dalion.Ringor.Build.Startup {
                 Environment = Environment,
                 Verbosity = Verbosity,
                 Target = Target,
-                PublishDirectory = PublishDirectory
+                PublishDirectory = PublishDirectory,
+                WorkingDirectory = WorkingDirectory
             };
         }
     }

@@ -18,7 +18,7 @@ namespace Dalion.Ringor.Build.Tasks.Publish {
             // Suppress warning for conflicting dependency versions. 
             // This warning is not applicable for NETSTANDARD projects, apparently.
             msBuildSettings.WarningCodesAsMessage.Add("MSB3277");
-
+            
             context.DotNetCoreClean(
                 context.App.FileSystem.ProjectsAndSolutions.ProjectFile.FullPath,
                 new DotNetCoreCleanSettings {

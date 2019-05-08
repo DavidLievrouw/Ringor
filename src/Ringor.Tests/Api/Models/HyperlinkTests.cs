@@ -41,7 +41,7 @@ namespace Dalion.Ringor.Api.Models {
                 var actual = new Hyperlink<DummyRel>(HttpMethod.Options, "/api/document", DummyRel.DummyType2);
                 actual.Method.Should().Be(HttpMethod.Options.Method);
                 actual.Rel.Should().Be(DummyRel.DummyType2);
-                actual.Href.Should().Be("/api/document");
+                actual.Href.Should().Be("/api/document2");
             }
 
             [Fact]

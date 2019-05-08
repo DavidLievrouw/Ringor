@@ -7,8 +7,8 @@ namespace Dalion.Ringor.Build.Startup {
             var possibleActions = new (string Label, Action Invoke)[] {
                 ("Quit", o => null),
                 ("Restore packages", RestorePackages),
-                ("Publish Azure files", PublishAzureFiles),
-                ("Publish MSDeploy", PublishMSDeploy),
+                ("Publish for Azure files", PublishAzureFiles),
+                ("Publish for Web Deploy", PublishWebDeploy),
                 ("Run unit tests", RunTests)
             };
 
@@ -42,8 +42,8 @@ namespace Dalion.Ringor.Build.Startup {
             return options;
         }
 
-        private static Options PublishMSDeploy(Options options) {
-            options.Target = nameof(Tasks.Publish.PublishMSDeploy);
+        private static Options PublishWebDeploy(Options options) {
+            options.Target = nameof(Tasks.Publish.PublishWebDeploy);
             return options;
         }
 

@@ -15,6 +15,6 @@ namespace Dalion.Ringor.Build.Configuration.FileSystem {
         public DirectoryPath ReactAppDirectory => Context.GetAbsoluteDirectoryPath(ProjectDirectory + "/App");
         public FilePath ProjectFile => Context.GetAbsoluteFilePath(ProjectDirectory + "/Ringor.csproj");
         public DirectoryPath PublishDirectoryAzure => Context.GetAbsoluteDirectoryPath(_container.FileSystem.PublishDirectory + "/Azure");
-        public DirectoryPath PublishDirectoryMSDeploy => Context.GetAbsoluteDirectoryPath(_container.FileSystem.PublishDirectory + "/MSDeploy");
+        public DirectoryPath PublishDirectoryWebDeploy => Context.GetAbsoluteDirectoryPath(_container.FileSystem.PublishDirectory + "/WebDeploy");
     }
 }

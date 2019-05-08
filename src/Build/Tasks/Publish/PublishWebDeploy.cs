@@ -7,20 +7,20 @@ using Cake.Frosting;
 using Dalion.Ringor.Build.Tasks.Restore;
 
 namespace Dalion.Ringor.Build.Tasks.Publish {
-    [TaskName(nameof(PublishMSDeploy))]
+    [TaskName(nameof(PublishWebDeploy))]
     [Dependency(typeof(RestorePackages))]
-    public sealed class PublishMSDeploy : FrostingTask<Context> {
+    public sealed class PublishWebDeploy : FrostingTask<Context> {
         public override void Run(Context context) {
             var msBuildSettings = new DotNetCoreMSBuildSettings();
             msBuildSettings.Properties.Add("PublishEnvironment", new[] {context.App.Arguments.Environment});
             msBuildSettings.Properties.Add("IsPublishing", new[] {"true"});
             msBuildSettings.Properties.Add("DeployOnBuild", new[] {"true"});
             msBuildSettings.Properties.Add("WebPublishMethod", new[] {"Package"});
-            msBuildSettings.Properties.Add("PackageLocation", new[] {context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryMSDeploy.FullPath});
+            msBuildSettings.Properties.Add("PackageLocation", new[] {context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryWebDeploy.FullPath});
             msBuildSettings.Properties.Add("PackageAsSingleFile", new[] {"true"});
             msBuildSettings.NoLogo = true;
             
-            context.CleanDirectory(context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryMSDeploy);
+            context.CleanDirectory(context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryWebDeploy);
             context.DotNetCoreClean(
                 context.App.FileSystem.ProjectsAndSolutions.ProjectFile.FullPath,
                 new DotNetCoreCleanSettings {

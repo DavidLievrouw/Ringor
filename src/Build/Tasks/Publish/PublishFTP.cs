@@ -7,15 +7,16 @@ using Cake.Frosting;
 using Dalion.Ringor.Build.Tasks.Restore;
 
 namespace Dalion.Ringor.Build.Tasks.Publish {
-    [TaskName(nameof(PublishAzureFiles))]
+    [TaskName(nameof(PublishFTP))]
     [Dependency(typeof(RestorePackages))]
-    public sealed class PublishAzureFiles : FrostingTask<Context> {
+    public sealed class PublishFTP : FrostingTask<Context> {
         public override void Run(Context context) {
             var msBuildSettings = new DotNetCoreMSBuildSettings();
             msBuildSettings.Properties.Add("PublishEnvironment", new[] {context.App.Arguments.Environment});
-            msBuildSettings.Properties.Add("PublishProfile", new[] {"Properties\\PublishProfiles\\AzureFiles.pubxml"});
-            
-            context.CleanDirectory(context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryAzure);
+            msBuildSettings.Properties.Add("IsPublishing", new[] {"true"});
+            msBuildSettings.NoLogo = true;
+
+            context.CleanDirectory(context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryFTP);
             context.DotNetCoreClean(
                 context.App.FileSystem.ProjectsAndSolutions.ProjectFile.FullPath,
                 new DotNetCoreCleanSettings {
@@ -26,7 +27,7 @@ namespace Dalion.Ringor.Build.Tasks.Publish {
                 context.App.FileSystem.ProjectsAndSolutions.ProjectFile.FullPath,
                 new DotNetCorePublishSettings {
                     Configuration = context.App.Arguments.Configuration,
-                    OutputDirectory = context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryAzure,
+                    OutputDirectory = context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryFTP,
                     MSBuildSettings = msBuildSettings,
                     Verbosity = context.App.Arguments.DotNetCoreVerbosity,
                     NoRestore = true

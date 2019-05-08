@@ -14,7 +14,7 @@ namespace Dalion.Ringor.Build.Configuration.Arguments {
         }
 
         public string Target => Context.Arguments.HasArgument("target") ? Context.Arguments.GetArgument("target") : "Default";
-        public string Configuration => Context.Arguments.HasArgument("configuration") ? Context.Arguments.GetArgument("configuration") : "ReleaseWithJs";
+        public string Configuration => Context.Arguments.HasArgument("configuration") ? Context.Arguments.GetArgument("configuration") : "Release";
         public string Environment => Context.Arguments.HasArgument("environment") ? Context.Arguments.GetArgument("environment") : "Production";
         public string PublishDirectory => Context.Arguments.HasArgument("publishDirectory") ? Context.Arguments.GetArgument("publishDirectory") : null;
 

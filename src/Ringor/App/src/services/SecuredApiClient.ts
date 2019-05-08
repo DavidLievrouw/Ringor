@@ -24,24 +24,22 @@ class SecuredApiClient extends ApiClient implements ISecuredApiClient {
         clientId: this.msalConfig.clientId,
         authority: this.msalConfig.authority,
         postLogoutRedirectUri: urlService.getApplicationUrl(),
-        navigateToLoginRequestUrl: false
+        navigateToLoginRequestUrl: true
       },
       cache: {
         cacheLocation: "localStorage",
         storeAuthStateInCookie: false
       }
     });
-    this.userAgentApplication.handleRedirectCallback(this.authCallback.bind(this));
-  }
-
-  authCallback(authErr: Msal.AuthError, response?: Msal.AuthResponse) {
-    if (authErr) {
-      console.log('Authentication failed.');
-      throw authErr;
-    }
-    if (response) {
-      console.log('Authentication succeeded.');
-    }
+    this.userAgentApplication.handleRedirectCallback(
+      tokenResponse => {
+        console.log('Token acquisition succeeded: ' + tokenResponse.account.userName + '.');
+      },
+      errorResponse => {
+        const errorMessage = errorResponse.errorMessage;
+        console.error('Access token acquisition for web extension failed: ' + (errorMessage || errorResponse ));
+        throw errorResponse;
+      });
   }
 
   logout() {
@@ -59,7 +57,7 @@ class SecuredApiClient extends ApiClient implements ISecuredApiClient {
   sendRequest(method: string, url: string, queryParams: IDictionary<string> = undefined, data: any = undefined, headers: IDictionary<string> = undefined, mode: RequestMode = 'same-origin'): Promise<Response> {
     const tokenAcquisitionMethod = this.userAgentApplication.acquireTokenSilent.bind(this.userAgentApplication);
 
-    const authParameters : any = {
+    const authParameters: any = {
       scopes: this.msalConfig.scopes,
       authority: this.msalConfig.authority,
       account: this.userAgentApplication.getAccount()
@@ -78,14 +76,14 @@ class SecuredApiClient extends ApiClient implements ISecuredApiClient {
 
         const userInteractionRequired = (
           errorMessage && (
-            errorMessage.indexOf("login_required") !== -1 || 
-            errorMessage.indexOf("consent_required") !== -1 || 
-            errorMessage.indexOf("interaction_required") !== -1 || 
+            errorMessage.indexOf("login_required") !== -1 ||
+            errorMessage.indexOf("consent_required") !== -1 ||
+            errorMessage.indexOf("interaction_required") !== -1 ||
             errorMessage.lastIndexOf('AADSTS50058', 0) === 0 ||
             errorMessage.lastIndexOf('AADSTS16000', 0) === 0) ||
           errorCode && (
             errorCode === 'interaction_required')
-          );
+        );
         const invalidToken = failure.status && failure.status === 401;
 
         if (userInteractionRequired || invalidToken) {

@@ -65,7 +65,7 @@ describe('ApiUrlPasteHandler', () => {
 
     test("should not strip anythig from pasted text when the application url is not there", () => {
       const input = 'https://dalionnotdalion.eu/ringor/quote/param';
-      const expected = 'https://dalionnotdalion.eu/ringor/quote/param2';
+      const expected = 'https://dalionnotdalion.eu/ringor/quote/param';
       return expect(apiUrlPasteHandler.sanitizePastedUrl(input))
         .toBe(expected);
     });

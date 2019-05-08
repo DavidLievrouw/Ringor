@@ -3,8 +3,6 @@ import { IComposition } from '../composition';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Landing } from './Landing';
 import { Login } from './Login';
-import { Swagger } from './Swagger';
-import { Api } from './Api';
 import { NotFound } from './NotFound';
 import { Logout } from './Logout';
 import { Profile } from './Profile';
@@ -94,14 +92,6 @@ export class App extends React.Component<IAppProps, IAppState> {
               <i className="home icon"></i>
               Home
             </Link>
-            <Link to="/swaggerui" className="item">
-              <img src="/swagger.png" />
-              Swagger UI
-            </Link>
-            <Link to="/apinav" className="item">
-              <i className="file code icon"></i>
-              Navigate the API
-            </Link>
             <Link to="/profile" className="item">
               <i className="id card icon"></i>
               Your profile
@@ -111,12 +101,6 @@ export class App extends React.Component<IAppProps, IAppState> {
           <div className="app-content">
             <Switch>
               <Route exact path="/" render={(routeProps) => <Landing applicationInfo={this.props.composition.applicationInfo} />} />
-              <Route path="/swaggerui" render={(routeProps) => <Swagger />} />
-              <Route path="/apinav" render={(routeProps) => <Api
-                apiUrlGetter={this.props.composition.services.apiUrlGetter}
-                urlService={this.props.composition.services.urlService}
-                apiUrlPasteHandler={this.props.composition.services.apiUrlPasteHandler} />}
-              />
               <Route path="/login" render={(routeProps) => <Login applicationInfo={this.props.composition.applicationInfo} />} />
               <Route path="/profile" render={(routeProps) => <Profile
                 applicationInfo={this.props.composition.applicationInfo}
@@ -130,7 +114,6 @@ export class App extends React.Component<IAppProps, IAppState> {
           </div>
           <footer>
             <div className="ui label">{applicationInfo.company} {applicationInfo.product} v{applicationInfo.version}</div>
-            <div className="ui label">{applicationInfo.environment}</div>
           </footer>
         </div>
       </Router>

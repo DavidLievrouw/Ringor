@@ -74,13 +74,18 @@ class SecuredApiClient extends ApiClient implements ISecuredApiClient {
       })
       .catch((failure: any) => {
         const errorMessage = failure.errorMessage;
+        const errorCode = failure.errorCode;
 
-        const userInteractionRequired = errorMessage && (
-          errorMessage.indexOf("login_required") !== -1 || 
-          errorMessage.indexOf("consent_required") !== -1 || 
-          errorMessage.indexOf("interaction_required") !== -1 || 
-          errorMessage.lastIndexOf('AADSTS50058', 0) === 0 ||
-          errorMessage.lastIndexOf('AADSTS16000', 0) === 0);
+        const userInteractionRequired = (
+          errorMessage && (
+            errorMessage.indexOf("login_required") !== -1 || 
+            errorMessage.indexOf("consent_required") !== -1 || 
+            errorMessage.indexOf("interaction_required") !== -1 || 
+            errorMessage.lastIndexOf('AADSTS50058', 0) === 0 ||
+            errorMessage.lastIndexOf('AADSTS16000', 0) === 0) ||
+          errorCode && (
+            errorCode === 'interaction_required')
+          );
         const invalidToken = failure.status && failure.status === 401;
 
         if (userInteractionRequired || invalidToken) {

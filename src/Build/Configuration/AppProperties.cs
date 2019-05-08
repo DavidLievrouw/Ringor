@@ -11,7 +11,6 @@ namespace Dalion.Ringor.Build.Configuration {
         }
 
         public string WorkingDirectory { get; }
-        public string ProductName { get; } = "Dalion.Ringor";
         public string ProductVersion { get; set; } = "1.0.0";
         public string AssemblyVersion { get; set; } = "1.0.0.0";
 

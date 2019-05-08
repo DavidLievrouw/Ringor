@@ -7,9 +7,9 @@ namespace Dalion.Ringor.Build.Startup {
             var possibleActions = new (string Label, Action Invoke)[] {
                 ("Quit", o => null),
                 ("Restore packages", RestorePackages),
-                ("Publish", Publish),
-                ("Run unit tests", RunTests),
-                ("Create release", CreateRelease)
+                ("Publish Azure files", PublishAzureFiles),
+                ("Publish MSDeploy", PublishMSDeploy),
+                ("Run unit tests", RunTests)
             };
 
             using (new TemporaryConsoleColor(ConsoleColor.Cyan)) {
@@ -37,8 +37,13 @@ namespace Dalion.Ringor.Build.Startup {
             return options;
         }
 
-        private static Options Publish(Options options) {
-            options.Target = nameof(Tasks.Publish);
+        private static Options PublishAzureFiles(Options options) {
+            options.Target = nameof(Tasks.Publish.PublishAzureFiles);
+            return options;
+        }
+
+        private static Options PublishMSDeploy(Options options) {
+            options.Target = nameof(Tasks.Publish.PublishMSDeploy);
             return options;
         }
 
@@ -47,13 +52,7 @@ namespace Dalion.Ringor.Build.Startup {
             options.Configuration = ConfigurationOptions.Debug;
             return options;
         }
-
-        private static Options CreateRelease(Options options) {            
-            options.Target = nameof(Tasks.CreateRelease);
-            options.Configuration = ConfigurationOptions.Release;
-            return options;
-        }
-
+        
         private delegate Options Action(Options options);
     }
 }

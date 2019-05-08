@@ -1,32 +1,36 @@
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.MSBuild;
-using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Frosting;
 using Dalion.Ringor.Build.Tasks.Restore;
 
 namespace Dalion.Ringor.Build.Tasks.Publish {
-    [TaskName(nameof(PublishAzureFiles))]
+    [TaskName(nameof(PublishMSDeploy))]
     [Dependency(typeof(RestorePackages))]
-    public sealed class PublishAzureFiles : FrostingTask<Context> {
+    public sealed class PublishMSDeploy : FrostingTask<Context> {
         public override void Run(Context context) {
             var msBuildSettings = new DotNetCoreMSBuildSettings();
             msBuildSettings.Properties.Add("PublishEnvironment", new[] {context.App.Arguments.Environment});
-            msBuildSettings.Properties.Add("PublishProfile", new[] {"Properties\\PublishProfiles\\AzureFiles.pubxml"});
+            msBuildSettings.Properties.Add("IsPublishing", new[] {"true"});
+            msBuildSettings.Properties.Add("DeployOnBuild", new[] {"true"});
+            msBuildSettings.Properties.Add("WebPublishMethod", new[] {"Package"});
+            msBuildSettings.Properties.Add("PackageLocation", new[] {context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryMSDeploy.FullPath});
+            msBuildSettings.Properties.Add("PackageAsSingleFile", new[] {"true"});
+            msBuildSettings.NoLogo = true;
             
-            context.CleanDirectory(context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryAzure);
+            context.CleanDirectory(context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryMSDeploy);
             context.DotNetCoreClean(
                 context.App.FileSystem.ProjectsAndSolutions.ProjectFile.FullPath,
                 new DotNetCoreCleanSettings {
                     Verbosity = context.App.Arguments.DotNetCoreVerbosity,
                     Configuration = context.App.Arguments.Configuration
                 });
-            context.DotNetCorePublish(
+            context.DotNetCoreBuild(
                 context.App.FileSystem.ProjectsAndSolutions.ProjectFile.FullPath,
-                new DotNetCorePublishSettings {
+                new DotNetCoreBuildSettings {
                     Configuration = context.App.Arguments.Configuration,
-                    OutputDirectory = context.App.FileSystem.ProjectsAndSolutions.PublishDirectoryAzure,
                     MSBuildSettings = msBuildSettings,
                     Verbosity = context.App.Arguments.DotNetCoreVerbosity,
                     NoRestore = true

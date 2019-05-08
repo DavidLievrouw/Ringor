@@ -10,16 +10,16 @@ namespace Dalion.Ringor.Build.Configuration.FileSystem {
             _container = container ?? throw new ArgumentNullException(nameof(container));
             ProjectsAndSolutions = new ProjectsAndSolutionsProperties(context, container);
         }
+        
+        public DirectoryPath RepoRootDirectory => Context.GetAbsoluteDirectoryPath("..");
 
         public DirectoryPath SourceDirectory => Context.GetAbsoluteDirectoryPath(".");
 
-        public DirectoryPath DistDirectory => string.IsNullOrWhiteSpace(_container.Arguments.PublishDirectory)
-            ? Context.GetAbsoluteDirectoryPath(SourceDirectory + "/dist")
+        public DirectoryPath PublishDirectory => string.IsNullOrWhiteSpace(_container.Arguments.PublishDirectory)
+            ? Context.GetAbsoluteDirectoryPath(RepoRootDirectory + "/dist")
             : Context.GetAbsoluteDirectoryPath(_container.Arguments.PublishDirectory);
 
-        public DirectoryPath CSharpUnitTestTargetDirectory => Context.GetAbsoluteDirectoryPath(DistDirectory + "/Test");
-
-        public DirectoryPath ReleaseTargetDirectory => Context.GetAbsoluteDirectoryPath(DistDirectory + "/Release");
+        public DirectoryPath CSharpUnitTestTargetDirectory => Context.GetAbsoluteDirectoryPath(RepoRootDirectory + "/tests");
 
         public FilePath VersionFile => Context.GetAbsoluteFilePath(ProjectsAndSolutions.ProjectDirectory + "/version.txt");
 

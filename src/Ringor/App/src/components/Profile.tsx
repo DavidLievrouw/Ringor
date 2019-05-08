@@ -28,7 +28,7 @@ export class Profile extends React.Component<IProfileProps, IProfileState> {
 
   componentDidMount() {
     // Make an API call to force authentication
-    this.props.securedApiClient.get('api/claims')
+    this.props.securedApiClient.get('api/userinfo')
       .then(response => {
         if (!response.ok) throw new Error(`Call to get profile information failed: ${response.status} - ${response.statusText}.`);
         return response.json();

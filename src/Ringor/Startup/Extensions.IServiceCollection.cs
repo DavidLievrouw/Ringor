@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Dalion.Ringor.Api.Controllers;
@@ -12,6 +11,7 @@ using Dalion.Ringor.Logging;
 using Dalion.Ringor.Serialization;
 using Dalion.Ringor.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -62,9 +62,10 @@ namespace Dalion.Ringor.Startup {
                     Authority = authSettings.SignInEndpoint.WithRelativePath(authSettings.Tenant),
                     Scopes = authSettings.Scopes?.Distinct().ToArray()
                 })
+                .AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>()
                 .AddAuthorization(options => {
-                    options.AddPolicy(AuthorizationPolicies.RequireApiAccess, policy => policy.RequireClaim(ClaimTypes.Scope, "Api.FullAccess"));
-                    options.DefaultPolicy = options.GetPolicy(AuthorizationPolicies.RequireApiAccess);
+                    options.AddPolicy(Api.Security.Constants.AuthorizationPolicies.RequireApiAccess, policy => policy.RequirePermissions(new[] { Api.Security.Constants.Scopes.ApiFullAccess }));
+                    options.DefaultPolicy = options.GetPolicy(Api.Security.Constants.AuthorizationPolicies.RequireApiAccess);
                 })
                 .AddAuthentication(o => { o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
                 .AddJwtBearer(o => {

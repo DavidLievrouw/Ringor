@@ -16,6 +16,7 @@ namespace Dalion.Ringor.Startup {
             // Configuration
             var authSettings = services.ConfigureSettings<AuthenticationSettings>(configuration.GetSection("Authentication"));
             var networkSettings = services.ConfigureSettings<NetworkSettings>(configuration.GetSection("Network"));
+            var secretsSettings = services.ConfigureSettings<SecretsSettings>(configuration.GetSection("Secrets"));
             var ringSettings = services.ConfigureSettings<RingSettings>(configuration.GetSection("RingSettings"));
             var sftpSettings = services.ConfigureSettings<SftpSettings>(configuration.GetSection("SftpSettings"));
 

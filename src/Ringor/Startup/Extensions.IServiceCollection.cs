@@ -62,9 +62,14 @@ namespace Dalion.Ringor.Startup {
                     Authority = authSettings.SignInEndpoint.WithRelativePath(authSettings.Tenant),
                     Scopes = authSettings.Scopes?.Distinct().ToArray()
                 })
-                .AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>()
+                .AddSingleton<IAuthorizationHandler, DelegatedPermissionRequirementHandler>()
+                .AddSingleton<IAuthorizationHandler, ApplicationPermissionRequirementHandler>()
                 .AddAuthorization(options => {
-                    options.AddPolicy(Api.Security.Constants.AuthorizationPolicies.RequireApiAccess, policy => policy.RequirePermissions(new[] { Api.Security.Constants.Scopes.ApiFullAccess }));
+                    options.AddPolicy(Api.Security.Constants.AuthorizationPolicies.RequireApiAccess, policy => policy
+                        .RequireAuthenticatedUser()
+                        .Any(anyPolicy => anyPolicy
+                            .RequireDelegatedPermissions(Api.Security.Constants.Scopes.ApiFullAccess)
+                            .RequireApplicationPermissions(Api.Security.Constants.Roles.ApiFullAccess)));
                     options.DefaultPolicy = options.GetPolicy(Api.Security.Constants.AuthorizationPolicies.RequireApiAccess);
                 })
                 .AddAuthentication(o => { o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })

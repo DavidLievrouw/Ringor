@@ -62,8 +62,8 @@ namespace Dalion.Ringor.Startup {
                     Authority = authSettings.SignInEndpoint.WithRelativePath(authSettings.Tenant),
                     Scopes = authSettings.Scopes?.Distinct().ToArray()
                 })
-                .AddSingleton<IAuthorizationHandler, DelegatedPermissionRequirementHandler>()
-                .AddSingleton<IAuthorizationHandler, ApplicationPermissionRequirementHandler>()
+                .AddSingleton<IAuthorizationHandler, DelegatedPermissionRequirement>()
+                .AddSingleton<IAuthorizationHandler, ApplicationPermissionRequirement>()
                 .AddAuthorization(options => {
                     options.AddPolicy(Api.Security.Constants.AuthorizationPolicies.RequireApiAccess, policy => policy
                         .RequireAuthenticatedUser()

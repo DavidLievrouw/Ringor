@@ -1,0 +1,67 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+variables:
+  Dalion.BuildConfiguration: Release
+  Dalion.Environment: Production
+  Dalion.AppName: Ringor
+  Dalion.PublishToAzure: true
+
+trigger: [ master ]
+
+jobs:
+- job: Publish
+  displayName: 'Publish Ringor'
+  pool:
+    name: Hosted VS2017
+    demands: npm
+  dependsOn: []
+  workspace:
+    clean: all
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet restore'
+    inputs:
+      command: restore
+      projects: '**/*.csproj'
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet test'
+    inputs:
+      command: test
+      projects: '**/*.Tests.csproj'
+      arguments: '--configuration $(Dalion.BuildConfiguration) --no-restore'
+  
+  - task: Npm@1
+    displayName: 'npm install'
+    inputs:
+      workingDir: 'src/$(Dalion.AppName)/App'
+      verbose: false
+  
+  - task: Npm@1
+    displayName: 'npm test'
+    inputs:
+      command: custom
+      workingDir: 'src/$(Dalion.AppName)/App'
+      verbose: false
+      customCommand: 'run tests'
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet Package for Web Deploy'
+    inputs:
+      command: run
+      arguments: '--project $(Build.SourcesDirectory)/src/Build/Build.csproj --no-launch-profile -- --workingDirectory ./src --target PublishWebDeploy --configuration $(Dalion.BuildConfiguration) --environment $(Dalion.Environment) --publishDirectory $(Build.ArtifactStagingDirectory)'
+  
+  - task: AzureRmWebAppDeployment@4
+    displayName: 'Deploy $(Dalion.AppName) to Azure'
+    inputs:
+      azureSubscription: 'MPN_DavidLievrouw_SV (bbff518e-a4ea-4c87-a958-f9f3bfa492df)'
+      WebAppName: Ringor
+      packageForLinux: '$(Build.ArtifactStagingDirectory)/WebDeploy/$(Dalion.AppName).zip'
+      enableCustomDeployment: true
+      RemoveAdditionalFilesFlag: true
+      AdditionalArguments: '-retryAttempts:6 -retryInterval:10000 -skip:Directory=.well-known'
+    condition: and(succeeded(), eq(variables['Dalion.PublishToAzure'], 'True'))
+  
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+  

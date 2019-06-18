@@ -58,6 +58,12 @@ namespace Dalion.Ringor.Startup {
 
         [Fact]
         public void CanRegisterAllMvcControllers() {
+
+
+            true.Should().BeFalse();
+
+
+
             var apiAssembly = typeof(DefaultController).Assembly;
             var apiControllers = apiAssembly.GetTypes()
                 .Where(t => typeof(Controller).IsAssignableFrom(t))

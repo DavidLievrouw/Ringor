@@ -12,13 +12,15 @@
 <html>
 <head>
   <title>@title</title>
+  <link rel="manifest" href="~/manifest.json">
   <environment include="Development">
-    <link asp-append-version="true" href="~/css/semantic-ui/semantic.css" rel="stylesheet"/>
+    <link asp-append-version="true" href="~/css/semantic-ui/semantic.css" rel="stylesheet" />
   </environment>
   <environment exclude="Development">
-    <link asp-append-version="true" href="~/css/semantic-ui/semantic.min.css" rel="stylesheet"/>
+    <link asp-append-version="true" href="~/css/semantic-ui/semantic.min.css" rel="stylesheet" />
   </environment>
-  <link rel="stylesheet" type="text/css" href="~/App/ringor-bundle.css" asp-append-version="true"/>
+  <link rel="stylesheet" type="text/css" href="~/App/ringor-bundle.css" asp-append-version="true" />
+  <script type="text/javascript" src="~/pwabuilder-sw-register.js"></script>
 </head>
 <body>
 

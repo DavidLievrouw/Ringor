@@ -24,6 +24,7 @@
 <html>
 <head>
   <title>@title</title>
+  <link rel="manifest" href="~/manifest.json">
   <environment include="Development">
     <link asp-append-version="true" href="~/css/semantic-ui/semantic.css" rel="stylesheet"/>
   </environment>
@@ -56,6 +57,7 @@
       cookieString: "@cookieString"
     };
   </script>
+  <script type="text/javascript" src="~/pwabuilder-sw-register.js"></script>
 </head>
 <body>
 

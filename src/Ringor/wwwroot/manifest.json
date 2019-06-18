@@ -1,0 +1,22 @@
+{
+  "dir": "ltr",
+  "lang": "tl",
+  "name": "Ringor",
+  "scope": "/",
+  "display": "browser",
+  "start_url": "https://ringor.dalion.eu/",
+  "short_name": "Ringor",
+  "theme_color": "transparent",
+  "description": "Dalion Ringor",
+  "orientation": "any",
+  "background_color": "transparent",
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "generated": "true",
+  "icons": [
+    {
+      "src": "https://ringor.dalion.eu/favicon.ico",
+      "sizes": "16x16 24x24 32x32 48x48 64x64"
+    }
+  ]
+}

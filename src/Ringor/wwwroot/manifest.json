@@ -3,7 +3,7 @@
   "lang": "tl",
   "name": "Ringor",
   "scope": "/",
-  "display": "browser",
+  "display": "standalone",
   "start_url": "https://ringor.dalion.eu/",
   "short_name": "Ringor",
   "theme_color": "transparent",
@@ -15,8 +15,14 @@
   "generated": "true",
   "icons": [
     {
-      "src": "https://ringor.dalion.eu/favicon.ico",
-      "sizes": "16x16 24x24 32x32 48x48 64x64"
+      "src": "/dalion192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/dalion512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ]
 }

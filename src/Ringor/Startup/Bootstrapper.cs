@@ -67,6 +67,7 @@ namespace Dalion.Ringor.Startup {
                 .CaptureStartupErrors(true)
                 .UseSetting(WebHostDefaults.DetailedErrorsKey, settings.UseDetailedErrors.ToString())
                 .UseConfiguration(configuration)
+                .ConfigureAppConfiguration((context, config) => context.HostingEnvironment.EnvironmentName = settings.EnvironmentName)
                 .ReadSecretsFromAzureKeyVault()
                 .ConfigureServices((context, services) => {
                     services.AddSingleton(context.Configuration);

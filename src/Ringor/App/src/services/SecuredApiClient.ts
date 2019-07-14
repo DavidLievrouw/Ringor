@@ -76,6 +76,7 @@ class SecuredApiClient extends ApiClient implements ISecuredApiClient {
 
         const userInteractionRequired = (
           errorMessage && (
+            errorMessage.indexOf('User login is required') !== -1 || 
             errorMessage.indexOf("login_required") !== -1 ||
             errorMessage.indexOf("consent_required") !== -1 ||
             errorMessage.indexOf("interaction_required") !== -1 ||

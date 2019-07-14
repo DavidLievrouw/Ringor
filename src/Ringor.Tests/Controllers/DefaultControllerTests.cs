@@ -40,23 +40,35 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("/Login/")]
             [InlineData("/login?debug=true")]
             [InlineData("/login/?debug=true")]
-            [InlineData("/swaggerui")]
-            [InlineData("/swaggerui/")]
-            [InlineData("/Swaggerui/")]
-            [InlineData("/Swaggerui")]
-            [InlineData("/swaggerui?debug=true")]
-            [InlineData("/swaggerui/?debug=true")]
-            [InlineData("/apinav")]
-            [InlineData("/apinav/")]
-            [InlineData("/ApiNav/")]
-            [InlineData("/ApiNav")]
-            [InlineData("/apinav?debug=true")]
-            [InlineData("/apinav/?debug=true")]
-            [InlineData("/home")]
-            [InlineData("/home/")]
-            [InlineData("/home?debug=true")]
-            [InlineData("/home/?debug=true")]
-            public async Task MatchesWildcardRoutes(string url) {
+            public async Task MatchesLoginRoutes(string url) {
+                var response = await _client.GetAsync(url);
+                response.Should().Match<HttpResponseMessage>(_ => IsCallToSPA(_));
+            }
+
+            [Theory]
+            [InlineData("")]
+            [InlineData("/")]
+            [InlineData("/logout")]
+            [InlineData("/logout/")]
+            [InlineData("/Logout")]
+            [InlineData("/Logout/")]
+            [InlineData("/logout?debug=true")]
+            [InlineData("/logout/?debug=true")]
+            public async Task MatchesLogoutRoutes(string url) {
+                var response = await _client.GetAsync(url);
+                response.Should().Match<HttpResponseMessage>(_ => IsCallToSPA(_));
+            }
+
+            [Theory]
+            [InlineData("")]
+            [InlineData("/")]
+            [InlineData("/profile")]
+            [InlineData("/profile/")]
+            [InlineData("/Profile")]
+            [InlineData("/Profile/")]
+            [InlineData("/profile?debug=true")]
+            [InlineData("/profile/?debug=true")]
+            public async Task MatchesProfileRoutes(string url) {
                 var response = await _client.GetAsync(url);
                 response.Should().Match<HttpResponseMessage>(_ => IsCallToSPA(_));
             }
@@ -65,9 +77,6 @@ namespace Dalion.Ringor.Controllers {
             [InlineData("/login/page")]
             [InlineData("/login/page/segment")]
             [InlineData("/login/page?debug=true")]
-            [InlineData("/swaggerui/page")]
-            [InlineData("/swaggerui/page/segment")]
-            [InlineData("/swaggerui/page?debug=true")]
             public async Task DoesNotMatchUrlsWithMultipleSegments(string url) {
                 var response = await _client.GetAsync(url);
                 response.Should().Match<HttpResponseMessage>(_ => !IsCallToSPA(_));

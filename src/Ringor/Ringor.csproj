@@ -32,13 +32,19 @@
     <Compile Remove="App\**" />
     <Content Remove="App\**" />
     <EmbeddedResource Remove="App\**" />
-    <None Remove="App\**" />
+    <None Remove="App\**" />    
+    <Content Update="web.Development.config">
+      <DependentUpon>web.config</DependentUpon>
+    </Content>
+    <Content Update="web.Production.config">
+      <DependentUpon>web.config</DependentUpon>
+    </Content>
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsPublishing)' == 'true'">
     <!-- Workaround to refresh the default content items, built by npm, later -->
     <!-- https://github.com/aspnet/websdk/issues/162 -->
-    <Content Update="wwwroot\App\**" CopyToPublishDirectory="Never" />
+    <Content Update="wwwroot\App\**" CopyToPublishDirectory="false" />
     <Content Remove="wwwroot\App\**" />
   </ItemGroup>
   <Target Name="BuildWebPackIfNeeded" BeforeTargets="BeforeBuild" Condition="!Exists('wwwroot\App') Or '$(IsPublishing)' == 'true'">
@@ -50,7 +56,7 @@
     <!-- https://github.com/aspnet/websdk/issues/162 -->
     <ItemGroup>
       <AppFiles Include="wwwroot\App\**\*" />
-      <Content Include="@(AppFiles)" CopytoPublishDirectory="Always" />
+      <Content Include="@(AppFiles)" CopyToPublishDirectory="true" />
       <ResolvedFileToPublish Include="@(AppFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(AppFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -63,6 +69,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="'$(PublishEnvironment)'!='' And '$(PublishEnvironment)'!='Development'">Never</CopyToPublishDirectory>
       <CopyToPublishDirectory Condition="'$(PublishEnvironment)'=='Development'">Always</CopyToPublishDirectory>
+      <DependentUpon>appsettings.json</DependentUpon>
     </Content>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -72,6 +79,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="'$(PublishEnvironment)'!='' And '$(PublishEnvironment)'!='Production'">Never</CopyToPublishDirectory>
       <CopyToPublishDirectory Condition="'$(PublishEnvironment)'=='Production'">Always</CopyToPublishDirectory>
+      <DependentUpon>appsettings.json</DependentUpon>
     </Content>
   </ItemGroup>
 

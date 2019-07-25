@@ -8,10 +8,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dalion.Ringor.Api.Controllers {
+    /// <summary>
+    /// The entry point of the Api.
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api")]
-    [DisplayName("ApiHome")]
+    [DisplayName("Api home")]
     [AllowAnonymous]
     public class DefaultController : Controller {
         private readonly IApplicationInfoProvider _applicationInfoProvider;

@@ -11,10 +11,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dalion.Ringor.Api.Controllers {
+    /// <summary>
+    /// Allows acquiring information about the requesting user.
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/userinfo")]
-    [DisplayName("UserInfo")]
+    [DisplayName("User info")]
     [Authorize]
     public class UserInfoController : Controller {
         private readonly IClaimLinksCreatorFactory _claimLinksCreatorFactory;
